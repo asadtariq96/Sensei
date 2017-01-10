@@ -1,0 +1,134 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginRight="4dp"
+    android:layout_marginTop="4dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/color"
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dp"
+            android:background="@color/md_purple_400" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/remaining_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:fontFamily="sans-serif-light"
+                android:text="starts in 3 hours 15 mins!"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp"
+                android:textStyle="italic|bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/course_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Linear Circuit Analysis"
+                    android:textColor="@color/primary_text_material_light"
+                    android:textSize="24sp" />
+
+
+                <TextView
+                    android:id="@+id/class_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:text="Lecture"
+                    android:textColor="@color/secondary_text_material_light"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_image_timelapse"
+                    android:drawablePadding="2dp"
+                    android:fontFamily="sans-serif-light"
+                    android:padding="4dp"
+                    android:text="50 mins"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="12dp" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_device_access_time"
+                    android:drawablePadding="2dp"
+                    android:fontFamily="sans-serif-light"
+                    android:padding="4dp"
+                    android:text="8:00 a.m. to 8:50 a.m."
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="12dp" />
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_location"
+                    android:drawablePadding="2dp"
+                    android:fontFamily="sans-serif-light"
+                    android:padding="4dp"
+                    android:text="CRC16"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="12dp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "490046406670",
+    "firebase_url": "https://sensei-d83d5.firebaseio.com",
+    "project_id": "sensei-d83d5",
+    "storage_bucket": "sensei-d83d5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490046406670:android:b9c20ccc098d3382",
+        "android_client_info": {
+          "package_name": "com.sensei"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490046406670-njv1rn90jcv7dpsolg6ab7upa4k4vhc0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKnmZ5uXCnEhuCV4pvqskwtzDdXGG61uo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

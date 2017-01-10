@@ -1,0 +1,718 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:contentInsetEnd="0dp"
+                android:contentInsetLeft="0dp"
+                android:contentInsetRight="0dp"
+                android:contentInsetStart="0dp"
+                app:contentInsetEnd="0dp"
+                app:contentInsetEndWithActions="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetRight="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp">
+
+
+            </android.support.v7.widget.Toolbar>
+
+
+
+
+        </android.support.design.widget.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/course_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+
+                    app:hintTextAppearance="@style/TextLabel">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/course_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="Course Name"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+
+
+                        android:textColor="@color/primary_text_material_light"
+                        android:textColorHint="@color/secondary_text_material_light"
+
+                        android:textSize="24sp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+
+                    app:hintTextAppearance="@style/TextLabel">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/course_abbreviation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="Course Abbreviation"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+
+                        android:textColor="@color/primary_text_material_light"
+                        android:textColorHint="@color/secondary_text_material_light"
+
+                        android:textSize="24sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
+
+
+                <LinearLayout
+                    android:id="@+id/color_chooser"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:clickable="true"
+                    android:foreground="?android:selectableItemBackground"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Color"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="24sp" />
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" />
+
+                    <View
+                        android:id="@+id/color_box"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="8dp"
+                        android:background="@color/colorPrimary">
+
+                    </View>
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="15dp"
+                        android:fontFamily="sans-serif-light"
+                        android:text="Add Classes"
+                        android:textColor="@color/secondary_text_material_light"
+                        android:textSize="24sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <android.support.v4.widget.Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <ToggleButton
+                            android:id="@+id/toggle_mon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/toggle_selector"
+                            android:textColor="@drawable/toggle_text_color_selector"
+                            android:textOff="Mon"
+                            android:textOn="Mon"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <android.support.v4.widget.Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+
+                        <ToggleButton
+                            android:id="@+id/toggle_tue"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/toggle_selector"
+                            android:textColor="@drawable/toggle_text_color_selector"
+                            android:textOff="TUE"
+                            android:textOn="TUE"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <android.support.v4.widget.Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+
+                        <ToggleButton
+                            android:id="@+id/toggle_wed"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/toggle_selector"
+                            android:textColor="@drawable/toggle_text_color_selector"
+                            android:textOff="WED"
+                            android:textOn="WED"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <android.support.v4.widget.Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+
+                        <ToggleButton
+                            android:id="@+id/toggle_thu"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/toggle_selector"
+                            android:textColor="@drawable/toggle_text_color_selector"
+                            android:textOff="THU"
+                            android:textOn="THU"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <android.support.v4.widget.Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+
+                        <ToggleButton
+                            android:id="@+id/toggle_fri"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/toggle_selector"
+                            android:textColor="@drawable/toggle_text_color_selector"
+                            android:textOff="FRI"
+                            android:textOn="FRI"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <android.support.v4.widget.Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <ToggleButton
+                            android:id="@+id/toggle_sat"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/toggle_selector"
+                            android:textColor="@drawable/toggle_text_color_selector"
+                            android:textOff="SAT"
+                            android:textOn="SAT"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <!--<android.support.v4.widget.Space-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_weight="1" />-->
+
+                        <!--<ToggleButton-->
+                        <!--android:id="@+id/toggle_sun"-->
+                        <!--android:layout_width="40dp"-->
+                        <!--android:layout_height="40dp"-->
+                        <!--android:background="@drawable/toggle_selector"-->
+                        <!--android:textColor="@drawable/toggle_text_color_selector"-->
+                        <!--android:textOff="SUN"-->
+                        <!--android:textOn="SUN"-->
+                        <!--android:textSize="10sp"-->
+                        <!--android:textStyle="bold" />-->
+
+                        <android.support.v4.widget.Space
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:animateLayoutChanges="true"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/monday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginStart="16dp"
+                                android:fontFamily="sans-serif-light"
+                                android:text="Monday"
+                                android:textColor="@color/colorPrimaryText"
+                                android:textSize="18sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                android:background="@color/md_grey_400" />
+
+                            <LinearLayout
+                                android:id="@+id/monday_class_linear_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical">
+
+
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/monday_add"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/transparent"
+                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="16dp"
+                                android:text="Add a class"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/tuesday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginStart="16dp"
+                                android:fontFamily="sans-serif-light"
+                                android:text="Tuesday"
+
+                                android:textColor="@color/colorPrimaryText"
+                                android:textSize="18sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                android:background="@color/md_grey_400" />
+
+                            <LinearLayout
+                                android:id="@+id/tuesday_class_linear_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical">
+
+
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/tuesday_add"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/transparent"
+                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="16dp"
+                                android:text="Add a class"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/wednesday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginStart="16dp"
+                                android:fontFamily="sans-serif-light"
+                                android:text="Wednesday"
+
+                                android:textColor="@color/colorPrimaryText"
+                                android:textSize="18sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                android:background="@color/md_grey_400" />
+
+                            <LinearLayout
+                                android:id="@+id/wednesday_class_linear_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical">
+
+
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/wednesday_add"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/transparent"
+                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="16dp"
+                                android:text="Add a class"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/thursday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginStart="16dp"
+                                android:fontFamily="sans-serif-light"
+                                android:text="Thursday"
+
+                                android:textColor="@color/colorPrimaryText"
+                                android:textSize="18sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                android:background="@color/md_grey_400" />
+
+                            <LinearLayout
+                                android:id="@+id/thursday_class_linear_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical">
+
+
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/thursday_add"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/transparent"
+                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="16dp"
+                                android:text="Add a class"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/friday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginStart="16dp"
+                                android:fontFamily="sans-serif-light"
+                                android:text="Friday"
+
+                                android:textColor="@color/colorPrimaryText"
+                                android:textSize="18sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                android:background="@color/md_grey_400" />
+
+                            <LinearLayout
+                                android:id="@+id/friday_class_linear_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical">
+
+
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/friday_add"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/transparent"
+                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="16dp"
+                                android:text="Add a class"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/saturday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginStart="16dp"
+                                android:fontFamily="sans-serif-light"
+                                android:text="Saturday"
+
+                                android:textColor="@color/colorPrimaryText"
+                                android:textSize="18sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                android:background="@color/md_grey_400" />
+
+                            <LinearLayout
+                                android:id="@+id/saturday_class_linear_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical">
+
+
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/saturday_add"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/transparent"
+                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="16dp"
+                                android:text="Add a class"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/sunday"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginStart="16dp"
+                                android:fontFamily="sans-serif-light"
+                                android:text="Sunday"
+
+                                android:textColor="@color/colorPrimaryText"
+                                android:textSize="18sp" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:layout_marginBottom="4dp"
+                                android:layout_marginLeft="16dp"
+                                android:layout_marginRight="16dp"
+                                android:background="@color/md_grey_400" />
+
+                            <LinearLayout
+                                android:id="@+id/sunday_class_linear_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:animateLayoutChanges="true"
+                                android:orientation="vertical">
+
+
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/sunday_add"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/transparent"
+                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="16dp"
+                                android:text="Add a class"
+                                android:textColor="@color/colorSecondaryText"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

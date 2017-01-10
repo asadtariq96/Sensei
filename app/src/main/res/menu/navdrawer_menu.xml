@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/dashboard"
+            android:checked="true"
+            android:icon="@drawable/ic_navdrawer_dashboard"
+            android:title="Dashboard" />
+        <item
+            android:id="@+id/classes"
+            android:icon="@drawable/ic_navdrawer_class"
+            android:title="Classes" />
+        <item
+            android:id="@+id/timetable"
+            android:icon="@drawable/ic_navdrawer_timetable"
+            android:title="Time Table" />
+        <item
+            android:id="@+id/courses"
+            android:icon="@drawable/ic_navdrawer_courses"
+            android:title="Courses" />
+
+        <item
+            android:id="@+id/quizzes"
+            android:icon="@drawable/ic_navdrawer_quiz"
+            android:title="Quizzes" />
+
+        <item
+            android:id="@+id/assignments"
+            android:icon="@drawable/ic_assignment_black_24dp"
+            android:title="Assignments" />
+
+        <item
+            android:id="@+id/homework"
+            android:icon="@drawable/ic_navdrawer_homework"
+            android:title="Homework" />
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
+    </group>
+
+
+</menu>

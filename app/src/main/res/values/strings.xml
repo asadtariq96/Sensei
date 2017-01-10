@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Sensei</string>
+    <string name="nextWeek">Next %1$s</string>
+    <string name="color_palette">Colors</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+
+
+</resources>

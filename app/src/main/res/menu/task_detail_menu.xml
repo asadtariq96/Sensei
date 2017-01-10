@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/reminder"
+        android:icon="@drawable/ic_alarm_white_24dp"
+        android:title="Add reminder"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/pin"
+        android:icon="@drawable/ic_bookmark_border_white_24dp"
+        android:title="Pin"
+        app:showAsAction="always" />
+
+
+</menu>

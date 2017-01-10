@@ -1,0 +1,267 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:contentInsetEnd="0dp"
+                android:contentInsetLeft="0dp"
+                android:contentInsetRight="0dp"
+                android:contentInsetStart="0dp"
+                app:contentInsetEnd="0dp"
+                app:contentInsetEndWithActions="0dp"
+                app:contentInsetLeft="0dp"
+                app:contentInsetRight="0dp"
+                app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp">
+
+
+            </android.support.v7.widget.Toolbar>
+
+
+        </android.support.design.widget.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/course_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+
+                    app:hintTextAppearance="@style/TextLabel">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/course"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="Course"
+
+                        android:textColor="@color/primary_text_material_light"
+                        android:textColorHint="@color/secondary_text_material_light"
+
+                        android:textSize="24sp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+
+                    app:hintTextAppearance="@style/TextLabel">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/due_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="Due Date"
+
+                        android:textColor="@color/primary_text_material_light"
+                        android:textColorHint="@color/secondary_text_material_light"
+
+                        android:textSize="24sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+
+                    app:hintTextAppearance="@style/TextLabel">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/due_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="Due Time"
+
+                        android:textColor="@color/primary_text_material_light"
+                        android:textColorHint="@color/secondary_text_material_light"
+
+                        android:textSize="24sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/reminder_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+
+                    app:hintTextAppearance="@style/TextLabel">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/reminder"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="Reminder"
+
+                        android:textColor="@color/primary_text_material_light"
+                        android:textColorHint="@color/secondary_text_material_light"
+
+                        android:textSize="24sp" />
+                </android.support.design.widget.TextInputLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+
+                    app:hintTextAppearance="@style/TextLabel">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="Title"
+
+                        android:textColor="@color/primary_text_material_light"
+                        android:textColorHint="@color/secondary_text_material_light"
+
+                        android:textSize="24sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+
+                    app:hintTextAppearance="@style/TextLabel">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="Description"
+
+                        android:textColor="@color/primary_text_material_light"
+                        android:textColorHint="@color/secondary_text_material_light"
+
+                        android:textSize="24sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
+
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

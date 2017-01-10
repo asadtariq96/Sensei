@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.sensei.NDSpinner
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="center_vertical"
+        app:ms_arrowColor="@color/secondary_text_material_light"
+        app:ms_arrowSize="8dp"
+        app:ms_baseColor="@color/colorAccent"
+        app:ms_enableFloatingLabel="false">
+
+    </com.sensei.NDSpinner>
+
+    <com.sensei.NDSpinner
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:gravity="center_vertical"
+        app:ms_arrowColor="@color/secondary_text_material_light"
+        app:ms_arrowSize="8dp"
+        app:ms_baseColor="@color/colorAccent"
+        app:ms_enableFloatingLabel="false">
+
+    </com.sensei.NDSpinner>
+
+</LinearLayout>
