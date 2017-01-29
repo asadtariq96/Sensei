@@ -1,14 +1,17 @@
 package com.sensei.DataModelClasses;
 
+import com.airbnb.epoxy.EpoxyModel;
 import com.google.firebase.database.Exclude;
+import com.sensei.R;
 
 import org.joda.time.LocalTime;
 import org.joda.time.Minutes;
 
+import java.io.Serializable;
+
 /**
  * Created by Asad on 01-Jan-17.
  */
-
 public class ClassDataModel {
     private int dayOfWeek;
     private String startTime;
@@ -18,6 +21,8 @@ public class ClassDataModel {
 
     public ClassDataModel() {
     }
+
+
 
     public ClassDataModel(int dayOfWeek, String startTime, String endTime, String location, ClassType classType) {
         this.startTime = startTime;
@@ -54,6 +59,7 @@ public class ClassDataModel {
         return (endTime == null) ? null : new LocalTime().parse(endTime);
     }
 
+    @Exclude
     public String getDuration() {
         int minutes = Minutes.minutesBetween(getStartTimeOriginal(), getEndTimeOriginal()).getMinutes();
         return String.valueOf(minutes) + " mins";
@@ -93,5 +99,55 @@ public class ClassDataModel {
         LAB
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//
+//        ClassDataModel that = (ClassDataModel) o;
+//
+//        if (dayOfWeek != that.dayOfWeek) return false;
+//        if (!startTime.equals(that.startTime)) return false;
+//        if (!endTime.equals(that.endTime)) return false;
+//        if (!location.equals(that.location)) return false;
+//        return classType == that.classType;
+//
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int result = dayOfWeek;
+//        result = 31 * result + startTime.hashCode();
+//        result = 31 * result + endTime.hashCode();
+//        result = 31 * result + location.hashCode();
+//        result = 31 * result + classType.hashCode();
+//        return result;
+//    }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ClassDataModel that = (ClassDataModel) o;
+
+        if (dayOfWeek != that.dayOfWeek) return false;
+        if (!startTime.equals(that.startTime)) return false;
+        if (!endTime.equals(that.endTime)) return false;
+        if (location != null ? !location.equals(that.location) : that.location != null)
+            return false;
+        return classType == that.classType;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = dayOfWeek;
+        result = 31 * result + startTime.hashCode();
+        result = 31 * result + endTime.hashCode();
+        result = 31 * result + (location != null ? location.hashCode() : 0);
+        result = 31 * result + classType.hashCode();
+        return result;
+    }
 }

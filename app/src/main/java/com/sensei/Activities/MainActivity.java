@@ -16,7 +16,7 @@ import java.util.List;
 
 import com.sensei.Fragments.AssignmentsFragment;
 import com.sensei.Fragments.CoursesFragment;
-import com.sensei.Fragments.DashboardTasksFragment;
+import com.sensei.Activities.Dashboard.DashboardTasksFragment;
 import com.sensei.Fragments.QuizzesFragment;
 import com.sensei.Fragments.TaskFragment;
 import com.sensei.R;

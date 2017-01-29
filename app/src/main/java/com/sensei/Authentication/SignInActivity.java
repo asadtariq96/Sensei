@@ -1,13 +1,11 @@
-package com.sensei.Activities;
+package com.sensei.Authentication;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -18,15 +16,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.sensei.Activities.Dashboard.DashboardActivity;
 import com.sensei.R;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import timber.log.Timber;
 
 import static com.sensei.Application.MyApplication.mAuth;
-import static com.sensei.Application.MyApplication.mAuthListener;
 
 
 public class SignInActivity extends AppCompatActivity {
@@ -129,14 +124,17 @@ public class SignInActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+                        Timber.d("signInWithEmail:onComplete:" + task.isSuccessful());
+//                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
                         if (task.isSuccessful()) {
                             startActivity(new Intent(SignInActivity.this, DashboardActivity.class));
                             SignInActivity.this.finish();
                             materialDialog.dismiss();
                         } else {
-                            Log.w(TAG, "signInWithEmail:failed", task.getException());
+//                            Log.w(TAG, "signInWithEmail:failed", task.getException());
+                            Timber.d("signInWithEmail:failed"+ task.getException());
+
                             Toast.makeText(SignInActivity.this, "Authentication Failed",
                                     Toast.LENGTH_SHORT).show();
                             materialDialog.dismiss();

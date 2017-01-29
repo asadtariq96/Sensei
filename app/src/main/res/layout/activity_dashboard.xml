@@ -58,21 +58,29 @@
 
         <com.github.clans.fab.FloatingActionMenu xmlns:fab="http://schemas.android.com/apk/res-auto"
             android:id="@+id/fab_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="6dp"
+
             android:layout_gravity="bottom|end"
             android:paddingBottom="8dp"
             android:paddingRight="8dp"
             fab:layout_behavior="com.sensei.ScrollBehaviour.ScrollFAMBehaviour"
             fab:menu_animationDelayPerItem="10"
             fab:menu_colorNormal="@color/colorPrimary"
+            fab:menu_backgroundColor="#eeF5F5F5"
             fab:menu_colorPressed="@color/colorPrimary"
+            fab:menu_labels_colorNormal="@color/white"
+            fab:menu_labels_colorPressed="@color/md_grey_300"
+            fab:menu_colorRipple="@color/md_grey_500"
+            fab:menu_labels_textColor="@color/colorSecondaryText"
             fab:menu_fab_size="normal"
             fab:menu_icon="@drawable/ic_add_white_24dp">
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_course"
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_white_24dp"
                 fab:fab_label="Course"

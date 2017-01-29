@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sensei">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".Application.MyApplication"
         android:allowBackup="true"
@@ -13,13 +15,13 @@
         <activity android:name=".Activities.TaskDetailActivity" />
         <activity android:name=".Activities.QuizDetailActivity" />
         <activity android:name=".Activities.AssignmentDetailActivity" />
-        <activity android:name=".Activities.DashboardActivity" />
-        <activity android:name=".Activities.AddCourseActivity" />
-        <activity android:name=".Activities.AddQuizActivity" />
-        <activity android:name=".Activities.AddAssignmentActivity" />
+        <activity android:name=".Activities.Dashboard.DashboardActivity" />
+        <activity android:name=".Activities.Courses.AddCourseActivity" />
+        <activity android:name=".Activities.Quizzes.AddQuizActivity" />
+        <activity android:name=".Activities.Assignments.AddAssignmentActivity" />
         <activity android:name=".Activities.AddHomeworkActivity" />
-        <activity android:name=".Activities.ClassesActivity" />
-        <activity android:name=".Activities.SignInActivity" />
+        <activity android:name=".Activities.Classes.ClassesActivity" />
+        <activity android:name=".Authentication.SignInActivity" />
         <activity
             android:name=".Startup.SplashActivity"
             android:theme="@style/Theme.Transparent">
@@ -29,8 +31,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.CoursesActivity" />
-        <activity android:name=".Activities.TimetableActivity"></activity>
+        <activity android:name=".Activities.Courses.CoursesListActivity" />
+        <activity android:name=".Activities.TimeTable.TimetableActivity" />
+        <activity android:name=".Activities.Classes.ClassDetailsActivity" />
+        <activity android:name=".Activities.Classes.EditClassDetailsActivity" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="d4659649c877e794c35b931e81c8720b6dcf951a" />
+
+        <activity android:name=".Activities.Courses.CourseDetailActivity" />
+        <activity android:name=".Activities.Classes.AddClassActivity" />
+        <activity android:name=".Activities.Quizzes.QuizzesListActivity" />
+        <activity android:name=".Activities.Assignments.AssignmentsListActivity"></activity>
     </application>
 
 </manifest>

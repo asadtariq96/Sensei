@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.sensei.NDSpinner;
+import com.sensei.Utils.NDSpinner;
 
 import static android.view.View.GONE;
 import static com.sensei.R.id.date;

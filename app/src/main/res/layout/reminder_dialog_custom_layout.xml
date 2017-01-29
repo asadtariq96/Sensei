@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.sensei.NDSpinner
+    <com.sensei.Utils.NDSpinner
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,9 +17,9 @@
         app:ms_baseColor="@color/colorAccent"
         app:ms_enableFloatingLabel="false">
 
-    </com.sensei.NDSpinner>
+    </com.sensei.Utils.NDSpinner>
 
-    <com.sensei.NDSpinner
+    <com.sensei.Utils.NDSpinner
         android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,6 +31,6 @@
         app:ms_baseColor="@color/colorAccent"
         app:ms_enableFloatingLabel="false">
 
-    </com.sensei.NDSpinner>
+    </com.sensei.Utils.NDSpinner>
 
 </LinearLayout>

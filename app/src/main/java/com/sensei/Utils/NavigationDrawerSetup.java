@@ -19,13 +19,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.sensei.Activities.ClassesActivity;
-import com.sensei.Activities.CoursesActivity;
-import com.sensei.Activities.DashboardActivity;
-import com.sensei.Activities.TimetableActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.sensei.Activities.Assignments.AssignmentsListActivity;
+import com.sensei.Activities.Classes.ClassesActivity;
+import com.sensei.Activities.Courses.CoursesListActivity;
+import com.sensei.Activities.Dashboard.DashboardActivity;
+import com.sensei.Activities.Quizzes.QuizzesListActivity;
+import com.sensei.Activities.TimeTable.TimetableActivity;
+import com.sensei.Authentication.SignInActivity;
 import com.sensei.R;
 
+import org.w3c.dom.Text;
+
 import static com.sensei.Application.MyApplication.firebaseUser;
+import static com.sensei.Application.MyApplication.mAuth;
 
 /**
  * Created by asad on 7/13/16.
@@ -92,7 +99,7 @@ public class NavigationDrawerSetup extends AppCompatActivity {
                                         @Override
                                         public void run() {
 
-                                            Intent intent = new Intent(HostActivity, CoursesActivity.class);
+                                            Intent intent = new Intent(HostActivity, CoursesListActivity.class);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                             intent.putExtra("NavDrawer", true);
                                             HostActivity.startActivity(intent);
@@ -112,6 +119,53 @@ public class NavigationDrawerSetup extends AppCompatActivity {
                                             intent.putExtra("NavDrawer", true);
                                             HostActivity.startActivity(intent);
 //                                            HostActivity.finish();
+                                        }
+                                    }, 300);
+
+                                    break;
+
+
+                                case R.id.quizzes:
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            Intent intent = new Intent(HostActivity, QuizzesListActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                            intent.putExtra("NavDrawer", true);
+                                            HostActivity.startActivity(intent);
+//                                            HostActivity.finish();
+                                        }
+                                    }, 300);
+
+                                    break;
+
+                                case R.id.assignments:
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            Intent intent = new Intent(HostActivity, AssignmentsListActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                            intent.putExtra("NavDrawer", true);
+                                            HostActivity.startActivity(intent);
+//                                            HostActivity.finish();
+                                        }
+                                    }, 300);
+
+                                    break;
+
+                                case R.id.signout:
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            Intent intent = new Intent(HostActivity, SignInActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                            intent.putExtra("NavDrawer", true);
+                                            HostActivity.startActivity(intent);
+                                            HostActivity.finish();
+                                            mAuth.signOut();
                                         }
                                     }, 300);
 
@@ -184,7 +238,17 @@ public class NavigationDrawerSetup extends AppCompatActivity {
 //
 //
         TextView nav_header_email = (TextView) headerView.findViewById(R.id.nav_header_email);
-        nav_header_email.setText(firebaseUser.getEmail());
+        if (firebaseUser != null)
+            nav_header_email.setText(firebaseUser.getEmail());
+
+        TextView nav_header_name = (TextView) headerView.findViewById(R.id.nav_header_name);
+        if (firebaseUser != null)
+            if (firebaseUser.getDisplayName() != null) {
+                nav_header_name.setVisibility(View.VISIBLE);
+                nav_header_name.setText(firebaseUser.getDisplayName());
+            } else {
+                nav_header_name.setVisibility(View.GONE);
+            }
 
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(HostActivity, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {

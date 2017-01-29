@@ -79,7 +79,7 @@ public class DayOfWeekClassesAdapter extends RecyclerView.Adapter<RecyclerView.V
         ClassDataModel classDataModel = classesList.get(position);
         CourseDataModel parentCourse = null;
         for (CourseDataModel courseDataModel : getCourseDataInstance().CoursesList) {
-            if (courseDataModel.getClassesList().contains(classDataModel)) {
+            if (courseDataModel.getClasses().contains(classDataModel)) {
                 parentCourse = courseDataModel;
                 break;
             }
@@ -91,6 +91,8 @@ public class DayOfWeekClassesAdapter extends RecyclerView.Adapter<RecyclerView.V
         viewHolder.mTime.setText(classDataModel.getStartTimeOriginal().toString("h:mm a")
                 + " to "
                 + classDataModel.getEndTimeOriginal().toString("h:mm a"));
+
+        //todo fix this
         viewHolder.mLocation.setText(classDataModel.getLocation());
 //        LocalTime localTime = new LocalTime();
 //        int minutes = Minutes.minutesBetween(localTime, classDataModel.getStartTimeOriginal()).getMinutes();

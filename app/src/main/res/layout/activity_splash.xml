@@ -12,14 +12,16 @@
     tools:context="com.sensei.Startup.SplashActivity">
 
     <LinearLayout
-        android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:orientation="vertical">
 
         <com.lb.auto_fit_textview.AutoResizeTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp"
             android:fontFamily="sans-serif-thin"
             android:text="SENSEI"
             android:textColor="@color/colorPrimary"
@@ -30,6 +32,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"
             android:maxLines="1"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             android:text="Your School Assistant"
             android:textColor="@color/colorPrimary"
             android:textSize="40dp" />

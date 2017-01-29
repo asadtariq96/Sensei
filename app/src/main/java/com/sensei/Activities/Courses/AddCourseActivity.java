@@ -1,4 +1,4 @@
-package com.sensei.Activities;
+package com.sensei.Activities.Courses;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -50,6 +50,7 @@ import static com.sensei.Application.Constants.COLORS_LIST;
 import static com.sensei.Application.Constants.DEFAULT_START_TIME;
 import static com.sensei.Application.MyApplication.UID;
 import static com.sensei.Application.MyApplication.databaseReference;
+import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 import static com.sensei.R.id.friday_class_linear_layout;
 import static com.sensei.R.id.monday_class_linear_layout;
 import static com.sensei.R.id.saturday_class_linear_layout;
@@ -97,21 +98,21 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Toast.makeText(AddCourseActivity.this, "onDataChange Fired", Toast.LENGTH_SHORT).show();                // ...
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("AddCourseActivity", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-        DatabaseReference courses = databaseReference.child("courses");
-        courses.addValueEventListener(valueEventListener);
+//        ValueEventListener valueEventListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Toast.makeText(AddCourseActivity.this, "onDataChange Fired", Toast.LENGTH_SHORT).show();                // ...
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                // Getting Post failed, log a message
+//                Log.w("AddCourseActivity", "loadPost:onCancelled", databaseError.toException());
+//                // ...
+//            }
+//        };
+//        DatabaseReference courses = databaseReference.child("courses");
+//        courses.addValueEventListener(valueEventListener);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -303,6 +304,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
                     classDataModel.setStartTime(getStartTimeOfNewClass(ButtonsList.indexOf(button) + 1).toString());
                     classDataModel.setEndTime(classDataModel.getStartTimeOriginal().plusMinutes(Constants.DEFAULT_CLASS_LENGTH).toString());
                     classDataModel.setClassType(ClassDataModel.ClassType.LECTURE.toString());
+                    classDataModel.setLocation("");
 
                     ((TextView) classView.findViewById(R.id.start_time)).setText(classDataModel.getStartTimeOriginal().toString("h:mm a"));
                     ((TextView) classView.findViewById(R.id.end_time)).setText(classDataModel.getEndTimeOriginal().toString("h:mm a"));
@@ -321,7 +323,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
                             if (charSequence.length() != 0)
                                 classDataModel.setLocation(charSequence.toString());
                             else
-                                classDataModel.setLocation(null);
+                                classDataModel.setLocation("");
 
                         }
 
@@ -435,26 +437,31 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
                 this.finish();
                 break;
 
-            case R.id.save_course:
-                String CID = getRandomID(); //get random course id
-                Log.d("AddCourseActivityRandom", CID);
+            case R.id.save_item:
 
-                String courseID = databaseReference.child("courses").push().getKey();
 
                 CourseDataModel courseDataModel = new CourseDataModel(CourseName.getText().toString().trim(),
                         CourseAbbreviation.getText().toString().trim(),
                         ((ColorDrawable) ColorBox.getBackground()).getColor());
 
 
-                databaseReference.child("courses")
-                        .child(UID)
-                        .child(courseID)
-                        .setValue(courseDataModel);
+                getCourseDataInstance().addCourse(courseDataModel, ClassesList);
 
-                for (ClassDataModel classDataModel : ClassesList) {
-                    String ClassID = databaseReference.child("courses").child(UID).child(courseID).child("classes").push().getKey();
-                    databaseReference.child("courses").child(UID).child(courseID).child("classes").child(ClassID).setValue(classDataModel);
-                }
+
+//                databaseReference.child("courses")
+//                        .child(UID)
+//                        .child(courseID)
+//                        .setValue(courseDataModel);
+//
+//                for (ClassDataModel classDataModel : ClassesList) {
+//
+//                    getCourseDataInstance().addClassToCourse(courseID, classDataModel);
+////                    String ClassID = databaseReference.child("courses").child(UID).child(courseID).child("classes").push().getKey();
+////                    databaseReference.child("courses").child(UID).child(courseID).child("classes").child(ClassID).setValue(classDataModel);
+//
+//                }
+
+                AddCourseActivity.this.finish();
 
 
         }

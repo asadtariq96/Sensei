@@ -1,4 +1,4 @@
-package com.sensei;
+package com.sensei.Utils;
 
 import android.content.Context;
 import android.util.AttributeSet;

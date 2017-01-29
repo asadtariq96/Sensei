@@ -27,10 +27,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.sensei.Activities.AddAssignmentActivity;
-import com.sensei.Activities.AddQuizActivity;
+import com.sensei.Activities.Assignments.AddAssignmentActivity;
+import com.sensei.Activities.Quizzes.AddQuizActivity;
 import com.sensei.Activities.AddHomeworkActivity;
-import com.sensei.NDSpinner;
 
 import static com.sensei.R.id.date;
 import static com.sensei.Utils.PhoneUtils.convertDpToPixel;
@@ -553,7 +552,7 @@ public class DateTimeDialogBuilder {
     public void DueDatePicker(final TextInputEditText DueDate, final AddQuizActivity activity) {
         DatePickerDialog.OnDateSetListener onDateSetListener;
 
-        onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        onDateSetListener =new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePickerDialog datePickerDialog, int year, int monthOfYear, int dayOfMonth) {

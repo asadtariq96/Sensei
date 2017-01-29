@@ -39,6 +39,13 @@
             android:id="@+id/settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Settings" />
+
+        <item
+            android:id="@+id/signout"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
+            android:title="Sign Out" />
+
+
     </group>
 
 

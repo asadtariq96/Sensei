@@ -1,11 +1,10 @@
-package com.sensei.Activities;
+package com.sensei.Activities.TimeTable;
 
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ViewTreeObserver;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
@@ -18,20 +17,17 @@ import com.sensei.R;
 import com.sensei.Utils.NavigationDrawerSetup;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import static com.sensei.Application.Constants.DEFAULT_START_TIME;
 import static com.sensei.Application.Constants.getDayLength;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
-import static org.joda.time.DateTimeFieldType.dayOfWeek;
 
 public class TimetableActivity extends AppCompatActivity implements MonthLoader.MonthChangeListener {
     private DrawerLayout drawerLayout;
@@ -82,7 +78,6 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
             public void onGlobalLayout() {
                 int width = weekView.getMeasuredWidth();
                 int height = weekView.getMeasuredHeight();
-                Log.d("HEIGHT", String.valueOf(height));
                 //TODO calculate hours dynamically
                 weekView.setHourHeight(height / getDayLength());
 
@@ -109,7 +104,7 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
         List<WeekViewEvent> eventsList = new ArrayList<>();
 
         for (CourseDataModel courseDataModel : getCourseDataInstance().CoursesList) {
-            for (ClassDataModel classDataModel : courseDataModel.getClassesList()) {
+            for (ClassDataModel classDataModel : courseDataModel.getClasses()) {
                 {
                     DateTime startOfThisMonth = new DateTime().dayOfMonth().withMinimumValue().withTimeAtStartOfDay();
                     DateTime startofNextMonth = startOfThisMonth.plusMonths(1).dayOfMonth().withMinimumValue().withTimeAtStartOfDay();
@@ -164,6 +159,7 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
     }
 
     private boolean eventMatches(WeekViewEvent event, int year, int month) {
+        //noinspection WrongConstant
         return (event.getStartTime().get(Calendar.YEAR) == year && event.getStartTime().get(Calendar.MONTH) == month - 1)
                 || (event.getEndTime().get(Calendar.YEAR) == year && event.getEndTime().get(Calendar.MONTH) == month - 1);
     }

@@ -22,7 +22,8 @@ import org.joda.time.DateTime;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.Utils.DateTimeDialogBuilder;
 
-import static com.sensei.Application.MyApplication.CourseList;
+import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
+
 
 public class AddHomeworkActivity extends AppCompatActivity {
 
@@ -57,13 +58,13 @@ public class AddHomeworkActivity extends AppCompatActivity {
                 final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(new MaterialSimpleListAdapter.Callback() {
                     @Override
                     public void onMaterialListItemSelected(MaterialDialog dialog, int index, MaterialSimpleListItem item) {
-                        CourseName.setText(CourseList.get(index).getCourseName());
+                        CourseName.setText(getCourseDataInstance().CoursesList.get(index).getCourseName());
                         CourseName.setTextColor(ActivityCompat.getColor(getApplicationContext(), R.color.primary_text_material_light));
                         dialog.dismiss();
                     }
                 });
 
-                for (CourseDataModel item : CourseList) {
+                for (CourseDataModel item : getCourseDataInstance().CoursesList) {
                     adapter.add(new MaterialSimpleListItem.Builder(AddHomeworkActivity.this)
                             .content(item.getCourseName())
                             .icon(new ColorCircleDrawable(item.getCourseColorCode()))

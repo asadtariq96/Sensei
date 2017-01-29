@@ -1,6 +1,7 @@
-package com.sensei.Activities;
+package com.sensei.Activities.Dashboard;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -19,12 +20,12 @@ import com.github.clans.fab.FloatingActionMenu;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sensei.Fragments.DashboardClassesFragment;
-import com.sensei.Fragments.DashboardTasksFragment;
+import com.sensei.Activities.Assignments.AddAssignmentActivity;
+import com.sensei.Activities.AddHomeworkActivity;
+import com.sensei.Activities.Quizzes.AddQuizActivity;
+import com.sensei.Activities.Courses.AddCourseActivity;
 import com.sensei.R;
 import com.sensei.Utils.NavigationDrawerSetup;
-
-import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 public class DashboardActivity extends AppCompatActivity implements View.OnClickListener {
     FloatingActionMenu floatingActionMenu;
@@ -51,7 +52,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Dashboard");
 
-        getCourseDataInstance().addChildListener();
+//        getCourseDataInstance().addChildListener();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -65,6 +66,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         tabLayout.setupWithViewPager(viewPager);
 
         floatingActionMenu = (FloatingActionMenu) findViewById(R.id.fab_menu);
+        floatingActionMenu.setClosedOnTouchOutside(true);
         course = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_course);
         quiz = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_quiz);
         homework = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_homework);
@@ -99,7 +101,9 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (floatingActionMenu.isOpened())
+            floatingActionMenu.close(true);
+        else if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else
             DashboardActivity.this.moveTaskToBack(true);
@@ -108,24 +112,47 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onClick(View view) {
+        final Handler handler = new Handler();
+
         switch (view.getId()) {
+
             case R.id.fab_course:
-                startActivity(new Intent(DashboardActivity.this, AddCourseActivity.class));
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(DashboardActivity.this, AddCourseActivity.class));
+                    }
+                }, 300);
                 break;
             case R.id.fab_quiz:
-                startActivity(new Intent(DashboardActivity.this, AddQuizActivity.class));
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(DashboardActivity.this, AddQuizActivity.class));
+                    }
+                }, 300);
                 break;
             case R.id.fab_assignment:
-                startActivity(new Intent(DashboardActivity.this, AddAssignmentActivity.class));
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(DashboardActivity.this, AddAssignmentActivity.class));
+                    }
+                }, 300);
                 break;
             case R.id.fab_homework:
-                startActivity(new Intent(DashboardActivity.this, AddHomeworkActivity.class));
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(DashboardActivity.this, AddQuizActivity.class));
+                    }
+                }, 300);
                 break;
         }
-        floatingActionMenu.close(false);
+        floatingActionMenu.close(true);
     }
 
-    static class Adapter extends FragmentPagerAdapter {
+    public static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 

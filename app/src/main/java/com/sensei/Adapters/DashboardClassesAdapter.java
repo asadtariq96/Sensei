@@ -11,13 +11,11 @@ import com.sensei.DataModelClasses.ClassDataModel;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.Minutes;
 
-import java.util.List;
-
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
-import static com.sensei.R.id.course;
 
 /**
  * Created by asad on 7/19/16.
@@ -26,6 +24,8 @@ import static com.sensei.R.id.course;
 public class DashboardClassesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context context;
+    private static final int VIEW_TYPE_EMPTY_LIST_PLACEHOLDER = 0;
+    private static final int VIEW_TYPE_OBJECT_VIEW = 1;
 
     private class ClassViewHolder extends RecyclerView.ViewHolder {
         Context context;
@@ -54,69 +54,108 @@ public class DashboardClassesAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     }
 
+    private class EmptyViewHolder extends RecyclerView.ViewHolder {
+
+        EmptyViewHolder(View itemView, Context context) {
+            super(itemView);
+        }
+    }
+
 
     public DashboardClassesAdapter(Context context) {
         this.context = context;
 
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (getCourseDataInstance().getListOfClassesForCurrentDay().isEmpty()) {
+            return VIEW_TYPE_EMPTY_LIST_PLACEHOLDER;
+        } else {
+            return VIEW_TYPE_OBJECT_VIEW;
+        }
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-
-        Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.class_layout, parent, false);
-        return new ClassViewHolder(view, context);
+        RecyclerView.ViewHolder viewHolder = null;
+        switch (viewType) {
+            case VIEW_TYPE_EMPTY_LIST_PLACEHOLDER:
+                viewHolder = new EmptyViewHolder(inflater.inflate(R.layout.no_class_placeholder, parent, false), context);
+                break;
+            case VIEW_TYPE_OBJECT_VIEW:
+                viewHolder = new ClassViewHolder(inflater.inflate(R.layout.class_layout, parent, false), context);
+                break;
+        }
+
+        return viewHolder;
+
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-
-        ClassViewHolder viewHolder = (ClassViewHolder) holder;
-        ClassDataModel classDataModel = getCourseDataInstance().getListOfClassesForCurrentDay().get(position);
-        CourseDataModel parentCourse = null;
-        for (CourseDataModel courseDataModel : getCourseDataInstance().CoursesList) {
-            if (courseDataModel.getClassesList().contains(classDataModel)) {
-                parentCourse = courseDataModel;
-                break;
+        int viewType = getItemViewType(position);
+        if (viewType == VIEW_TYPE_OBJECT_VIEW) {
+            ClassViewHolder viewHolder = (ClassViewHolder) holder;
+            ClassDataModel classDataModel = getCourseDataInstance().getListOfClassesForCurrentDay().get(position);
+            CourseDataModel parentCourse = null;
+            for (CourseDataModel courseDataModel : getCourseDataInstance().CoursesList) {
+                if (courseDataModel.getClasses().contains(classDataModel)) {
+                    parentCourse = courseDataModel;
+                    break;
+                }
             }
+
+            viewHolder.courseName.setText(parentCourse.getCourseName());
+            viewHolder.colorView.setBackgroundColor(parentCourse.getCourseColorCode());
+            viewHolder.mDuration.setText(classDataModel.getDuration());
+            viewHolder.mTime.setText(classDataModel.getStartTimeOriginal().toString("h:mm a")
+                    + " to "
+                    + classDataModel.getEndTimeOriginal().toString("h:mm a"));
+            viewHolder.mLocation.setText(classDataModel.getLocation());
+            LocalTime localTime = new LocalTime();
+            viewHolder.RemainingTime.setVisibility(View.VISIBLE);
+
+            LocalTime now = LocalTime.now();
+
+            //if current time ahead of starting time
+            if (now.isAfter(classDataModel.getStartTimeOriginal())) {
+                //if current time before ending time
+                if (now.isBefore(classDataModel.getEndTimeOriginal())) {
+                    viewHolder.RemainingTime.setText("Class in progress!");
+                    //current time after ending time
+                } else
+                    viewHolder.RemainingTime.setVisibility(View.INVISIBLE);
+            } else if (Minutes.minutesBetween(now, classDataModel.getStartTimeOriginal()).getMinutes() < 60) {
+                viewHolder.RemainingTime.setText("Class starting in "
+                        + String.valueOf(Minutes.minutesBetween(now, classDataModel.getStartTimeOriginal()).getMinutes() + 1)
+                        + " minutes");
+            } else {
+                int hours = Minutes.minutesBetween(now, classDataModel.getStartTimeOriginal()).getMinutes() / 60;
+                if (hours <= 16)
+                    viewHolder.RemainingTime.setText("Class starting in "
+                            + String.valueOf(hours)
+                            + " hours "
+                            + String.valueOf(Minutes.minutesBetween(now, classDataModel.getStartTimeOriginal()).getMinutes() % 60)
+                            + " mins ");
+                else
+                    viewHolder.RemainingTime.setVisibility(View.GONE);
+            }
+
+            viewHolder.classType.setText(classDataModel.getClassType());
         }
 
-        viewHolder.courseName.setText(parentCourse.getCourseName());
-        viewHolder.colorView.setBackgroundColor(parentCourse.getCourseColorCode());
-        viewHolder.mDuration.setText(classDataModel.getDuration());
-        viewHolder.mTime.setText(classDataModel.getStartTimeOriginal().toString("h:mm a")
-                + " to "
-                + classDataModel.getEndTimeOriginal().toString("h:mm a"));
-        viewHolder.mLocation.setText(classDataModel.getLocation());
-        LocalTime localTime = new LocalTime();
-        viewHolder.RemainingTime.setVisibility(View.VISIBLE);
-
-        int minutes = Minutes.minutesBetween(localTime, classDataModel.getStartTimeOriginal()).getMinutes();
-        if (minutes < 0) {
-            viewHolder.RemainingTime.setText("Class in progress!");
-
-        } else if (minutes < 60)
-            viewHolder.RemainingTime.setText("Class starting in " + String.valueOf(minutes) + " minutes");
-        else {
-            int hours = minutes / 60;
-            minutes = minutes % 60;
-            if (hours <= 12)
-                viewHolder.RemainingTime.setText("Class starting in " + String.valueOf(hours) + " hours " + String.valueOf(minutes) + " mins ");
-            else
-                viewHolder.RemainingTime.setText("");
-        }
-
-        viewHolder.classType.setText(classDataModel.getClassType().toLowerCase());
 
     }
 
 
     @Override
     public int getItemCount() {
-        return getCourseDataInstance().getListOfClassesForCurrentDay().size();
+        return getCourseDataInstance().getListOfClassesForCurrentDay().size() > 0 ? getCourseDataInstance().getListOfClassesForCurrentDay().size() : 1;
     }
+
+
 }

@@ -1,4 +1,4 @@
-package com.sensei.Activities;
+package com.sensei.Activities.Classes;
 
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -8,38 +8,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
-import com.sensei.DataHandlers.ClassDataHandler;
-import com.sensei.DataModelClasses.CourseDataModel;
-import com.sensei.Fragments.ClassesActivityFragments.FridayFragment;
-import com.sensei.Fragments.ClassesActivityFragments.MondayFragment;
-import com.sensei.Fragments.ClassesActivityFragments.SaturdayFragment;
-import com.sensei.Fragments.ClassesActivityFragments.ThursdayFragment;
-import com.sensei.Fragments.ClassesActivityFragments.TuesdayFragment;
-import com.sensei.Fragments.ClassesActivityFragments.WednesdayFragment;
-import com.sensei.Fragments.DashboardClassesFragment;
-import com.sensei.Fragments.DashboardTasksFragment;
+import com.sensei.Activities.Dashboard.DashboardActivity;
+import com.sensei.Activities.Classes.ClassesActivityFragments.FridayFragment;
+import com.sensei.Activities.Classes.ClassesActivityFragments.MondayFragment;
+import com.sensei.Activities.Classes.ClassesActivityFragments.ThursdayFragment;
+import com.sensei.Activities.Classes.ClassesActivityFragments.TuesdayFragment;
+import com.sensei.Activities.Classes.ClassesActivityFragments.WednesdayFragment;
 import com.sensei.R;
 import com.sensei.Utils.NavigationDrawerSetup;
 
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.sensei.Application.MyApplication.UID;
-import static com.sensei.Application.MyApplication.databaseReference;
+import timber.log.Timber;
 
 public class ClassesActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
-
 
 
     @Override
@@ -61,18 +47,21 @@ public class ClassesActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
         tabLayout.setupWithViewPager(viewPager);
 
-        viewPager.setCurrentItem(new LocalDate().getDayOfWeek());
+        Timber.d("setCurrentItem " + (new LocalDate().getDayOfWeek() - 1));
+
+        viewPager.setCurrentItem(new LocalDate().getDayOfWeek() - 1);
 
     }
 
     private void setupViewPager(ViewPager viewPager) {
+        Timber.d("setupViewPager");
         DashboardActivity.Adapter adapter = new DashboardActivity.Adapter(getSupportFragmentManager());
         adapter.addFragment(new MondayFragment(), "Mon");
         adapter.addFragment(new TuesdayFragment(), "Tue");
         adapter.addFragment(new WednesdayFragment(), "Wed");
         adapter.addFragment(new ThursdayFragment(), "Thu");
         adapter.addFragment(new FridayFragment(), "Fri");
-        adapter.addFragment(new SaturdayFragment(), "Sat");
+//        adapter.addFragment(new SaturdayFragment(), "Sat");
         viewPager.setAdapter(adapter);
 
     }
