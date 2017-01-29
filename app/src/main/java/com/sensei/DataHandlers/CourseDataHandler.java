@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import timber.log.Timber;
 
 import static com.sensei.Application.MyApplication.UID;
+import static com.sensei.Application.MyApplication.database;
 import static com.sensei.Application.MyApplication.databaseReference;
 
 /**
@@ -343,6 +344,13 @@ public class CourseDataHandler {
         return tempList;
     }
 
+    public List<QuizDataModel> getListOfIncompleteQuizzes() {
+        List<QuizDataModel> tempList = new ArrayList<>();
+        for (CourseDataModel courseDataModel : CoursesList)
+            tempList.addAll(courseDataModel.getIncompleteQuizzes());
+        return tempList;
+    }
+
     public List<AssignmentDataModel> getListOfAssignments() {
         List<AssignmentDataModel> tempList = new ArrayList<>();
         for (CourseDataModel courseDataModel : CoursesList)
@@ -376,6 +384,15 @@ public class CourseDataHandler {
 
     public String getClassID(ClassDataModel value) {
         for (Map.Entry<String, ClassDataModel> entry : ClassesID.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    public String getQuizID(QuizDataModel value) {
+        for (Map.Entry<String, QuizDataModel> entry : QuizzesID.entrySet()) {
             if (Objects.equals(value, entry.getValue())) {
                 return entry.getKey();
             }
@@ -448,11 +465,28 @@ public class CourseDataHandler {
         for (ClassDataModel classDataModel : classesList) {
 
 
-
             addClassToCourse(courseID, classDataModel);
 
         }
 
+    }
+
+    public void updateTaskCompleted(QuizDataModel quizDataModel, boolean isCompleted) {
+        getCourse(quizDataModel)
+                .getQuizzes()
+                .get(getCourse(quizDataModel)
+                        .getQuizzes()
+                        .indexOf(quizDataModel))
+                .setCompleted(isCompleted);
+
+        String quizID = getQuizID(quizDataModel);
+        databaseReference.child("courses")
+                .child(UID)
+                .child(getCourseID(getCourse(quizDataModel)))
+                .child("quizzes")
+                .child(quizID)
+                .child("completed")
+                .setValue(isCompleted);
     }
 
     public void moveFirebaseRecord(DatabaseReference fromPath, final DatabaseReference toPath) {

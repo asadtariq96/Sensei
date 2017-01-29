@@ -1,5 +1,8 @@
 package com.sensei.Adapters;
 
+import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,6 +18,7 @@ import java.util.List;
 
 import cn.refactor.library.SmoothCheckBox;
 
+import static com.sensei.Application.MyApplication.getContext;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 /**
@@ -29,7 +33,7 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
 
 
     @Override
-    protected void convert(BaseViewHolder baseViewHolder, QuizDataModel quizDataModel) {
+    protected void convert(final BaseViewHolder baseViewHolder, final QuizDataModel quizDataModel) {
 
         View colorView;
         TextView courseName;
@@ -47,6 +51,8 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
         dueTime = baseViewHolder.getView(R.id.due_time);
         dueWhen = baseViewHolder.getView(R.id.due_when);
         markAsDone = baseViewHolder.getView(R.id.done_checkbox);
+
+        baseViewHolder.addOnClickListener(markAsDone.getId());
 
 
         CourseDataModel parentCourse = getCourseDataInstance().getCourse(quizDataModel);
@@ -77,6 +83,7 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
 
         if (quizDataModel.getDueDate() != null) {
             int quizDay = quizDataModel.getDueDateOriginal().getDayOfYear();
+            dueWhen.setVisibility(View.VISIBLE);
 
             if (today.getDayOfYear() > quizDay)
                 dueWhen.setText("Overdue!");
@@ -92,9 +99,20 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
 
         }
 
-        markAsDone.setChecked(quizDataModel.getCompleted());
+        markAsDone.setChecked(quizDataModel.getCompleted(), false);
 
+        if (quizDataModel.getCompleted()) {
+            dueWhen.setVisibility(View.GONE);
+        } else {
+            dueWhen.setVisibility(View.VISIBLE);
+        }
 
+        markAsDone.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(SmoothCheckBox smoothCheckBox, boolean b) {
+                getCourseDataInstance().updateTaskCompleted(quizDataModel, b);
+            }
+        });
     }
 
 

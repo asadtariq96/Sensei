@@ -107,11 +107,11 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
             for (ClassDataModel classDataModel : courseDataModel.getClasses()) {
                 {
                     DateTime startOfThisMonth = new DateTime().dayOfMonth().withMinimumValue().withTimeAtStartOfDay();
-                    DateTime startofNextMonth = startOfThisMonth.plusMonths(1).dayOfMonth().withMinimumValue().withTimeAtStartOfDay();
+                    DateTime endOfNextMonth = startOfThisMonth.plusMonths(1).dayOfMonth().withMaximumValue().withTimeAtStartOfDay();
                     int dayOfWeek = classDataModel.getDayOfWeek();
 
                     for (DateTime loopVar = startOfThisMonth;
-                         loopVar.isBefore(startofNextMonth) || loopVar.isEqual(startofNextMonth);
+                         loopVar.isBefore(endOfNextMonth) || loopVar.isEqual(endOfNextMonth);
                          loopVar = loopVar.plusDays(1)) {
 
                         if (loopVar.getDayOfWeek() == dayOfWeek) {

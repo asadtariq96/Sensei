@@ -92,7 +92,9 @@ public class DashboardAssignmentAdapter extends BaseQuickAdapter<AssignmentDataM
 
         }
 
-        markAsDone.setChecked(assignmentDataModel.getCompleted());
+        markAsDone.setChecked(assignmentDataModel.getCompleted(), false);
+
+
 
 
     }

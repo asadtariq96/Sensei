@@ -242,6 +242,8 @@ public class AddQuizActivity extends AppCompatActivity {
                 .child(getCourseDataInstance().getCourseID(courseDataModel))
                 .child("quizzes").push().getKey();
 
+        getCourseDataInstance().QuizzesID.put(QuizID,quizDataModel);
+
         databaseReference
                 .child("courses")
                 .child(UID)

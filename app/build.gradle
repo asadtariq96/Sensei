@@ -73,6 +73,8 @@ android {
         compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.7.7'
         compile 'com.rengwuxian.materialedittext:library:2.1.4'
         compile 'com.github.andyxialm:SmoothCheckBox:4d4825562b'
+        compile 'jp.wasabeef:recyclerview-animators:2.2.5'
+
 
 
 

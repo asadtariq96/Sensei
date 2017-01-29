@@ -1,6 +1,8 @@
 package com.sensei.Activities.Dashboard;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -8,10 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.sensei.Adapters.DashboardAssignmentAdapter;
 import com.sensei.Adapters.DashboardQuizAdapter;
+import com.sensei.DataModelClasses.CourseDataModel;
+import com.sensei.DataModelClasses.QuizDataModel;
 import com.sensei.R;
+
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
@@ -55,13 +64,33 @@ public class DashboardTasksFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
 
         quizRecyclerview = (RecyclerView) view.findViewById(R.id.quiz_recyclerview);
+//        quizRecyclerview.setItemAnimator(new SlideInLeftAnimator());
+//        quizRecyclerview.getItemAnimator().setRemoveDuration(200);
+
         quizAdapter = new DashboardQuizAdapter(R.layout.quiz_layout, getCourseDataInstance().getListOfQuizzes());
 //        quizAdapter.addFooterView(footerView);
         quizAdapter.addHeaderView(quizHeaderView);
 
+
+//        quizRecyclerview.addOnItemTouchListener(new OnItemChildClickListener() {
+//            @Override
+//            public void onSimpleItemChildClick(final BaseQuickAdapter baseQuickAdapter, final View childView, final int i) {
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(getActivity(), "Quiz marked as completed!", Toast.LENGTH_SHORT).show();
+//                        QuizDataModel quizDataModel = (QuizDataModel) baseQuickAdapter.getItem(i);
+//                        getCourseDataInstance().updateTaskCompleted(quizDataModel, true);
+//                        quizAdapter.remove(i);
+//
+//                    }
+//                }, 600);
+//            }
+//        });
 
         assignmmentRecyclerview = (RecyclerView) view.findViewById(R.id.assignment_recyclerview);
         assignmentAdapter = new DashboardAssignmentAdapter(R.layout.quiz_layout, getCourseDataInstance().getListOfAssignments());
@@ -83,10 +112,10 @@ public class DashboardTasksFragment extends Fragment {
         super.onStart();
 
 
-        quizAdapter.setNewData(getCourseDataInstance().getListOfQuizzes());
+        quizAdapter.setNewData(getCourseDataInstance().getListOfIncompleteQuizzes());
         quizAdapter.notifyDataSetChanged();
 
-        quizRecyclerview.setVisibility(getCourseDataInstance().getListOfQuizzes().isEmpty() ? View.GONE : View.VISIBLE);
+        quizRecyclerview.setVisibility(getCourseDataInstance().getListOfIncompleteQuizzes().isEmpty() ? View.GONE : View.VISIBLE);
 
         assignmentAdapter.setNewData(getCourseDataInstance().getListOfAssignments());
         assignmentAdapter.notifyDataSetChanged();

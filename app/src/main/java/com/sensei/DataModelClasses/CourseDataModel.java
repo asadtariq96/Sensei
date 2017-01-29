@@ -75,6 +75,15 @@ public class CourseDataModel {
         return quizzes;
     }
 
+    public List<QuizDataModel> getIncompleteQuizzes() {
+        List<QuizDataModel> temp = new ArrayList<>();
+        for (QuizDataModel quiz : quizzes)
+            if (!quiz.getCompleted())
+                temp.add(quiz);
+
+        return temp;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

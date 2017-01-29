@@ -46,12 +46,6 @@ public class QuizzesListActivity extends AppCompatActivity {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(new OnItemClickListener() {
-            @Override
-            public void onSimpleItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                startActivity(new Intent(QuizzesListActivity.this, QuizDetailActivity.class));
-            }
-        });
     }
 
     public void onStart() {

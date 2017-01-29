@@ -1,5 +1,6 @@
 package com.sensei.Application;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -33,7 +34,9 @@ import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 public class MyApplication extends android.app.Application {
 
-//    public static List<CourseDataModel> CourseList;
+    //    public static List<CourseDataModel> CourseList;
+    private static Context mContext;
+
     public static FirebaseAuth mAuth;
     public static FirebaseUser firebaseUser;
     public static FirebaseAuth.AuthStateListener mAuthListener;
@@ -42,19 +45,22 @@ public class MyApplication extends android.app.Application {
     public static String UID;
     public static Bus bus;
 
+    public static Context getContext() {
+        return mContext;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext = this;
+
         Fabric.with(this, new Crashlytics());
         Iconify.with(new FontAwesomeModule());
         JodaTimeAndroid.init(this);
 
 
-
         if (BuildConfig.DEBUG) {
-            Timber.plant(new Timber.DebugTree()
-            {
+            Timber.plant(new Timber.DebugTree() {
                 @Override
                 protected String createStackElementTag(StackTraceElement element) {
                     return super.createStackElementTag(element) + ":" + element.getLineNumber();
