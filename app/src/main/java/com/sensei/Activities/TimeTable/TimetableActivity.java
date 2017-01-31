@@ -77,7 +77,7 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
             @Override
             public void onGlobalLayout() {
                 int width = weekView.getMeasuredWidth();
-                int height = weekView.getMeasuredHeight();
+                int height = weekView.getHeight();
                 //TODO calculate hours dynamically
                 weekView.setHourHeight(height / getDayLength());
 

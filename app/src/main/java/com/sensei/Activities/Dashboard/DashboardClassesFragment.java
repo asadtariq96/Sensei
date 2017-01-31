@@ -98,9 +98,9 @@ public class DashboardClassesFragment extends Fragment {
 
     public void onStart() {
         super.onStart();
+        getCourseDataInstance().registerDashboardClassesFragment(DashboardClassesFragment.this);
         adapter.setNewData(getCourseDataInstance().getListOfClassesForCurrentDay());
         adapter.notifyDataSetChanged();
-        getCourseDataInstance().registerDashboardClassesFragment(DashboardClassesFragment.this);
 //        if (getCourseDataInstance().getListOfClassesForCurrentDay().isEmpty())
 //            placeHolder.setVisibility(View.VISIBLE);
 //        else

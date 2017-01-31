@@ -4,6 +4,10 @@ import android.graphics.Color;
 
 import org.joda.time.LocalTime;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -64,5 +68,32 @@ public class Constants {
         return DEFAULT_END_TIME.getHourOfDay() - DEFAULT_START_TIME.getHourOfDay();
 
     }
+
+    public static List<String> GradesListStandard = new ArrayList<String>() {
+        {
+            add("A");
+            add("B+");
+            add("B");
+            add("C+");
+            add("C");
+            add("D+");
+            add("D");
+        }
+    };
+
+
+    public static Map<String, Float> gradesMap = new HashMap<String, Float>() {
+        {
+            put("A", 4f);
+            put("B+", 3.5f);
+            put("B", 3f);
+            put("C+", 2.5f);
+            put("C", 2f);
+            put("D+", 1.5f);
+            put("D", 1f);
+
+        }
+    };
+
 
 }

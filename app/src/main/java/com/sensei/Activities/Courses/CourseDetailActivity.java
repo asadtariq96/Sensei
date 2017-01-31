@@ -22,6 +22,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemLongClickListener;
 import com.sensei.Activities.Classes.AddClassActivity;
 import com.sensei.Activities.Classes.ClassDetailsActivity;
+import com.sensei.Activities.Classes.EditClassDetailsActivity;
 import com.sensei.Adapters.CourseClassesAdapter;
 import com.sensei.DataHandlers.CourseDataHandler;
 import com.sensei.DataModelClasses.ClassDataModel;
@@ -34,7 +35,9 @@ import java.util.Collections;
 import timber.log.Timber;
 
 import static android.media.CamcorderProfile.get;
+import static android.view.View.GONE;
 import static com.sensei.Application.Constants.REQUEST_CODE_EDIT_CLASS;
+import static com.sensei.Application.Constants.REQUEST_CODE_EDIT_COURSE;
 import static com.sensei.Application.Constants.RESULT_CODE_FINISH_ACTIVITY;
 import static com.sensei.Application.MyApplication.bus;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
@@ -46,6 +49,10 @@ public class CourseDetailActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     CourseClassesAdapter adapter;
 
+    TextView CourseName;
+    TextView CourseInstructor;
+    TextView CreditHours;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +63,17 @@ public class CourseDetailActivity extends AppCompatActivity {
         courseID = intent.getStringExtra("courseID");
         courseDataModel = getCourseDataInstance().CoursesID.get(courseID);
 
-        findViewById(R.id.toolbar).setBackgroundColor(courseDataModel.getCourseColorCode());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(courseDataModel.getDarkerColor());
-        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Course Details");
         getSupportActionBar().setSubtitle(courseDataModel.getCourseAbbreviation());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        CourseName = (TextView) findViewById(R.id.course_name);
+        CourseInstructor = (TextView) findViewById(R.id.course_instructor);
+        CreditHours = (TextView) findViewById(R.id.credit_hours);
+
 
 
         recyclerView = (RecyclerView) findViewById(R.id.classes_recyclerview);
@@ -137,10 +144,13 @@ public class CourseDetailActivity extends AppCompatActivity {
                 break;
 
             case R.id.edit_class:
-//                adapter.addData(courseDataModel.getClasses().get(0));
+                Intent intent = new Intent(CourseDetailActivity.this, EditCourseDetailsActivity.class);
+                intent.putExtra("courseID", courseID);
+                startActivityForResult(intent, REQUEST_CODE_EDIT_COURSE);
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -152,7 +162,29 @@ public class CourseDetailActivity extends AppCompatActivity {
     public void onStart() {
         Timber.d("onstart, calling updateFields");
         super.onStart();
+        findViewById(R.id.toolbar).setBackgroundColor(courseDataModel.getCourseColorCode());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(courseDataModel.getDarkerColor());
+        }
         adapter.setNewData(getCourseDataInstance().getListOfClassesForCourse(courseDataModel));
+        CourseName.setText(courseDataModel.getCourseName());
+        if (courseDataModel.getInstructor().isEmpty())
+            ((View) CourseInstructor.getParent().getParent()).setVisibility(GONE);
+        else {
+            ((View) CourseInstructor.getParent().getParent()).setVisibility(View.VISIBLE);
+            CourseInstructor.setText(courseDataModel.getInstructor());
+
+        }
+
+        if (courseDataModel.getCreditHours() == 0)
+            ((View) CreditHours.getParent().getParent()).setVisibility(GONE);
+        else {
+            ((View) CreditHours.getParent().getParent()).setVisibility(View.VISIBLE);
+            CreditHours.setText(String.valueOf(courseDataModel.getCreditHours()));
+
+        }
     }
 
     @Override
@@ -160,6 +192,12 @@ public class CourseDetailActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_EDIT_CLASS) {
             if (resultCode == RESULT_CODE_FINISH_ACTIVITY)
                 finish();
+        }
+
+        if (requestCode == REQUEST_CODE_EDIT_COURSE) {
+            if (resultCode == RESULT_CODE_FINISH_ACTIVITY) {
+                finish();
+            }
         }
     }
 }

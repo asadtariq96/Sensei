@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.R.attr.factor;
+import static android.R.attr.installLocation;
 
 /**
  * Created by Asad on 17-Dec-16.
@@ -17,6 +18,8 @@ public class CourseDataModel {
     private String CourseName;
     private String CourseAbbreviation;
     private int CourseColorCode;
+    private String Instructor;
+    private int CreditHours;
     private List<ClassDataModel> classes = new ArrayList<>();
     private List<QuizDataModel> quizzes = new ArrayList<>();
     private List<AssignmentDataModel> assignments = new ArrayList<>();
@@ -25,10 +28,12 @@ public class CourseDataModel {
     public CourseDataModel() {
     }
 
-    public CourseDataModel(String CourseName, String courseAbbreviation, int CourseColorCode) {
+    public CourseDataModel(String CourseName, String courseAbbreviation, int CourseColorCode, String CourseInstructor, int CreditHours) {
         this.CourseName = CourseName;
         this.CourseColorCode = CourseColorCode;
         this.CourseAbbreviation = courseAbbreviation;
+        this.Instructor = CourseInstructor;
+        this.CreditHours = CreditHours;
     }
 
     public String getCourseName() {
@@ -65,6 +70,22 @@ public class CourseDataModel {
 
     public void setCourseColorCode(int courseColorCode) {
         CourseColorCode = courseColorCode;
+    }
+
+    public String getInstructor() {
+        return Instructor;
+    }
+
+    public void setInstructor(String instructor) {
+        Instructor = instructor;
+    }
+
+    public int getCreditHours() {
+        return CreditHours;
+    }
+
+    public void setCreditHours(int creditHours) {
+        CreditHours = creditHours;
     }
 
     public List<ClassDataModel> getClasses() {

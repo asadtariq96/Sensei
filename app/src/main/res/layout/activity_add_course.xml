@@ -72,7 +72,7 @@
                         android:fontFamily="sans-serif-light"
                         android:hint="Course Name"
                         android:imeOptions="actionNext"
-                        android:inputType="text"
+                        android:inputType="textCapWords"
 
 
                         android:textColor="@color/primary_text_material_light"
@@ -107,8 +107,8 @@
                         android:background="@color/transparent"
                         android:fontFamily="sans-serif-light"
                         android:hint="Course Abbreviation"
-                        android:imeOptions="actionDone"
-                        android:inputType="text"
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapWords"
 
                         android:textColor="@color/primary_text_material_light"
                         android:textColorHint="@color/secondary_text_material_light"
@@ -143,8 +143,8 @@
                         android:background="@color/transparent"
                         android:fontFamily="sans-serif-light"
                         android:hint="Course Instructor"
-                        android:imeOptions="actionDone"
-                        android:inputType="text"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPersonName"
 
                         android:textColor="@color/primary_text_material_light"
                         android:textColorHint="@color/secondary_text_material_light"
@@ -161,6 +161,41 @@
                     android:layout_marginRight="8dp"
                     android:background="@color/md_grey_300" />
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="8dp"
+
+                    app:hintTextAppearance="@style/TextLabel">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/credit_hours"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif-light"
+                        android:hint="Credit Hours"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:maxLength="1"
+
+                        android:textColor="@color/primary_text_material_light"
+                        android:textColorHint="@color/secondary_text_material_light"
+
+                        android:textSize="24sp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:background="@color/md_grey_300" />
 
                 <LinearLayout
                     android:id="@+id/color_chooser"
@@ -381,7 +416,7 @@
                                 android:layout_marginBottom="4dp"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:background="@color/md_grey_400" />
+                                android:background="@color/colorPrimaryText" />
 
                             <LinearLayout
                                 android:id="@+id/monday_class_linear_layout"
@@ -394,17 +429,21 @@
                             </LinearLayout>
 
                             <Button
+
                                 android:id="@+id/monday_add"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/transparent"
-                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:drawableLeft="@drawable/ic_add_circle_outline_black_24dp"
+                                android:drawablePadding="8dp"
+
+                                android:fontFamily="sans-serif"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 android:gravity="center_vertical"
-                                android:paddingLeft="8dp"
+                                android:paddingLeft="16dp"
                                 android:paddingRight="16dp"
                                 android:text="Add a class"
-                                android:textColor="@color/colorSecondaryText"
+                                android:textColor="@color/colorPrimaryText"
                                 android:textSize="16sp" />
 
                         </LinearLayout>
@@ -434,7 +473,7 @@
                                 android:layout_marginBottom="4dp"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:background="@color/md_grey_400" />
+                                android:background="@color/colorPrimaryText" />
 
                             <LinearLayout
                                 android:id="@+id/tuesday_class_linear_layout"
@@ -447,17 +486,21 @@
                             </LinearLayout>
 
                             <Button
+
                                 android:id="@+id/tuesday_add"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/transparent"
-                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:drawableLeft="@drawable/ic_add_circle_outline_black_24dp"
+                                android:drawablePadding="8dp"
+
+                                android:fontFamily="sans-serif"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 android:gravity="center_vertical"
-                                android:paddingLeft="8dp"
+                                android:paddingLeft="16dp"
                                 android:paddingRight="16dp"
                                 android:text="Add a class"
-                                android:textColor="@color/colorSecondaryText"
+                                android:textColor="@color/colorPrimaryText"
                                 android:textSize="16sp" />
 
                         </LinearLayout>
@@ -487,7 +530,7 @@
                                 android:layout_marginBottom="4dp"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:background="@color/md_grey_400" />
+                                android:background="@color/colorPrimaryText" />
 
                             <LinearLayout
                                 android:id="@+id/wednesday_class_linear_layout"
@@ -500,17 +543,21 @@
                             </LinearLayout>
 
                             <Button
+
                                 android:id="@+id/wednesday_add"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/transparent"
-                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:drawableLeft="@drawable/ic_add_circle_outline_black_24dp"
+                                android:drawablePadding="8dp"
+
+                                android:fontFamily="sans-serif"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 android:gravity="center_vertical"
-                                android:paddingLeft="8dp"
+                                android:paddingLeft="16dp"
                                 android:paddingRight="16dp"
                                 android:text="Add a class"
-                                android:textColor="@color/colorSecondaryText"
+                                android:textColor="@color/colorPrimaryText"
                                 android:textSize="16sp" />
 
                         </LinearLayout>
@@ -540,7 +587,7 @@
                                 android:layout_marginBottom="4dp"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:background="@color/md_grey_400" />
+                                android:background="@color/colorPrimaryText" />
 
                             <LinearLayout
                                 android:id="@+id/thursday_class_linear_layout"
@@ -553,17 +600,21 @@
                             </LinearLayout>
 
                             <Button
+
                                 android:id="@+id/thursday_add"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/transparent"
-                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:drawableLeft="@drawable/ic_add_circle_outline_black_24dp"
+                                android:drawablePadding="8dp"
+
+                                android:fontFamily="sans-serif"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 android:gravity="center_vertical"
-                                android:paddingLeft="8dp"
+                                android:paddingLeft="16dp"
                                 android:paddingRight="16dp"
                                 android:text="Add a class"
-                                android:textColor="@color/colorSecondaryText"
+                                android:textColor="@color/colorPrimaryText"
                                 android:textSize="16sp" />
 
                         </LinearLayout>
@@ -593,7 +644,7 @@
                                 android:layout_marginBottom="4dp"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:background="@color/md_grey_400" />
+                                android:background="@color/colorPrimaryText" />
 
                             <LinearLayout
                                 android:id="@+id/friday_class_linear_layout"
@@ -606,17 +657,21 @@
                             </LinearLayout>
 
                             <Button
+
                                 android:id="@+id/friday_add"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/transparent"
-                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:drawableLeft="@drawable/ic_add_circle_outline_black_24dp"
+                                android:drawablePadding="8dp"
+
+                                android:fontFamily="sans-serif"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 android:gravity="center_vertical"
-                                android:paddingLeft="8dp"
+                                android:paddingLeft="16dp"
                                 android:paddingRight="16dp"
                                 android:text="Add a class"
-                                android:textColor="@color/colorSecondaryText"
+                                android:textColor="@color/colorPrimaryText"
                                 android:textSize="16sp" />
 
                         </LinearLayout>
@@ -646,7 +701,7 @@
                                 android:layout_marginBottom="4dp"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:background="@color/md_grey_400" />
+                                android:background="@color/colorPrimaryText" />
 
                             <LinearLayout
                                 android:id="@+id/saturday_class_linear_layout"
@@ -659,17 +714,21 @@
                             </LinearLayout>
 
                             <Button
+
                                 android:id="@+id/saturday_add"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/transparent"
-                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:drawableLeft="@drawable/ic_add_circle_outline_black_24dp"
+                                android:drawablePadding="8dp"
+
+                                android:fontFamily="sans-serif"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 android:gravity="center_vertical"
-                                android:paddingLeft="8dp"
+                                android:paddingLeft="16dp"
                                 android:paddingRight="16dp"
                                 android:text="Add a class"
-                                android:textColor="@color/colorSecondaryText"
+                                android:textColor="@color/colorPrimaryText"
                                 android:textSize="16sp" />
 
                         </LinearLayout>
@@ -699,7 +758,7 @@
                                 android:layout_marginBottom="4dp"
                                 android:layout_marginLeft="16dp"
                                 android:layout_marginRight="16dp"
-                                android:background="@color/md_grey_400" />
+                                android:background="@color/colorPrimaryText" />
 
                             <LinearLayout
                                 android:id="@+id/sunday_class_linear_layout"
@@ -712,20 +771,24 @@
                             </LinearLayout>
 
                             <Button
+
                                 android:id="@+id/sunday_add"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/transparent"
-                                android:drawableLeft="@drawable/ic_add_grey"
+                                android:drawableLeft="@drawable/ic_add_circle_outline_black_24dp"
+                                android:drawablePadding="8dp"
+
+                                android:fontFamily="sans-serif"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 android:gravity="center_vertical"
-                                android:paddingLeft="8dp"
+                                android:paddingLeft="16dp"
                                 android:paddingRight="16dp"
                                 android:text="Add a class"
-                                android:textColor="@color/colorSecondaryText"
+                                android:textColor="@color/colorPrimaryText"
                                 android:textSize="16sp" />
-
                         </LinearLayout>
+
 
 
                     </LinearLayout>

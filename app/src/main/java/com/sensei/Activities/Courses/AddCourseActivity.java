@@ -62,6 +62,8 @@ import static com.sensei.Utils.RandomGenerator.getRandomID;
 public class AddCourseActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
     TextInputEditText CourseName;
     TextInputEditText CourseAbbreviation;
+    TextInputEditText CourseInstructor;
+    TextInputEditText CreditHours;
     LinearLayout ColorSelector;
     View ColorBox;
     Button MondayAdd;
@@ -126,19 +128,25 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
 
         CourseName = (TextInputEditText) findViewById(R.id.course_name);
         CourseAbbreviation = (TextInputEditText) findViewById(R.id.course_abbreviation);
+        CourseInstructor = (TextInputEditText) findViewById(R.id.course_instructor);
+        CreditHours = (TextInputEditText) findViewById(R.id.credit_hours);
         CourseName.setHorizontallyScrolling(false);
         CourseName.setMaxLines(Integer.MAX_VALUE);
         CourseAbbreviation.setHorizontallyScrolling(false);
         CourseAbbreviation.setMaxLines(1);
-        CourseAbbreviation.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        CourseInstructor.setHorizontallyScrolling(false);
+        CourseInstructor.setMaxLines(1);
+        CreditHours.setHorizontallyScrolling(false);
+        CreditHours.setMaxLines(1);
+        CreditHours.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
 
                 if (i == EditorInfo.IME_ACTION_DONE) {
                     {
-                        CourseAbbreviation.clearFocus();
+                        CreditHours.clearFocus();
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(CourseAbbreviation.getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(CreditHours.getWindowToken(), 0);
                     }
                 }
                 return false;
@@ -158,7 +166,11 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!CourseName.getText().toString().trim().equals("") && !CourseAbbreviation.getText().toString().trim().equals(""))
+
+
+                if (!CourseName.getText().toString().trim().equals("")
+                        && !CourseAbbreviation.getText().toString().trim().equals("")
+                        )
                     SaveMenu.setEnabled(true);
                 else
                     SaveMenu.setEnabled(false);
@@ -167,6 +179,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
 
         CourseName.addTextChangedListener(textWatcher);
         CourseAbbreviation.addTextChangedListener(textWatcher);
+
 
         MonToggle = (ToggleButton) findViewById(R.id.toggle_mon);
         TueToggle = (ToggleButton) findViewById(R.id.toggle_tue);
@@ -308,8 +321,8 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
 
                     ((TextView) classView.findViewById(R.id.start_time)).setText(classDataModel.getStartTimeOriginal().toString("h:mm a"));
                     ((TextView) classView.findViewById(R.id.end_time)).setText(classDataModel.getEndTimeOriginal().toString("h:mm a"));
-                    ((EditText) classView.findViewById(R.id.location)).setHorizontallyScrolling(false);
-                    ((EditText) classView.findViewById(R.id.location)).setMaxLines(Integer.MAX_VALUE);
+                    ((TextInputEditText) classView.findViewById(R.id.location)).setHorizontallyScrolling(false);
+                    ((TextInputEditText) classView.findViewById(R.id.location)).setMaxLines(Integer.MAX_VALUE);
 
 
                     ((EditText) classView.findViewById(R.id.location)).addTextChangedListener(new TextWatcher() {
@@ -442,7 +455,10 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
 
                 CourseDataModel courseDataModel = new CourseDataModel(CourseName.getText().toString().trim(),
                         CourseAbbreviation.getText().toString().trim(),
-                        ((ColorDrawable) ColorBox.getBackground()).getColor());
+                        ((ColorDrawable) ColorBox.getBackground()).getColor(),
+                        CourseInstructor.getText().toString().trim(),
+                        (CreditHours.getText().toString().isEmpty() ? 0 : Integer.valueOf(CreditHours.getText().toString()))
+                );
 
 
                 getCourseDataInstance().addCourse(courseDataModel, ClassesList);

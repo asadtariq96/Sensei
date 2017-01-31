@@ -1,4 +1,4 @@
-package com.sensei.Activities;
+package com.sensei.Activities.Quizzes;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -38,18 +38,19 @@ import com.sensei.Utils.NDSpinner;
 import static android.view.View.GONE;
 import static com.sensei.R.id.date;
 
-public class AssignmentDetailActivity extends AppCompatActivity {
+public class QuizDetailActivity extends AppCompatActivity {
+
     private MenuItem PinTaskMenuButton;
     private boolean isPinned = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assignment_detail);
+        setContentView(R.layout.activity_quiz_detail);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Linear Circuit Analysis");
-        toolbar.setSubtitle("Assignment");
+        toolbar.setSubtitle("Quiz");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -69,7 +70,16 @@ public class AssignmentDetailActivity extends AppCompatActivity {
             }
         });
 
+//        findViewById(R.id.reminder_container).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showReminderDialog();
+//
+//            }
+//        });
+
     }
+
 
     private void showAddMenu(View v) {
 
@@ -368,7 +378,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     private void updatePinStatus() {
         if (isPinned) {
             PinTaskMenuButton.setIcon(R.drawable.ic_bookmark_white_24dp);
-            Toast.makeText(AssignmentDetailActivity.this, "Task Pinned!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(QuizDetailActivity.this, "Task Pinned!", Toast.LENGTH_SHORT).show();
         } else {
             PinTaskMenuButton.setIcon(R.drawable.ic_bookmark_border_white_24dp);
         }
@@ -406,4 +416,5 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         updatePinStatus();
         return true;
     }
+
 }

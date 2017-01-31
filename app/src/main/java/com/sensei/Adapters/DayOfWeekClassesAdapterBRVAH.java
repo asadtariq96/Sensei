@@ -57,7 +57,14 @@ public class DayOfWeekClassesAdapterBRVAH extends BaseQuickAdapter<ClassDataMode
         mTime.setText(classDataModel.getStartTimeOriginal().toString("h:mm a")
                 + " to "
                 + classDataModel.getEndTimeOriginal().toString("h:mm a"));
-        mLocation.setText(classDataModel.getLocation());
+
+        if (!classDataModel.getLocation().equals("")) {
+            mLocation.setVisibility(View.VISIBLE);
+            mLocation.setText(classDataModel.getLocation());
+        } else
+            mLocation.setVisibility(View.INVISIBLE);
+
+//        mLocation.setText(classDataModel.getLocation());
         RemainingTime.setVisibility(View.GONE);
         classType.setText(classDataModel.getClassType().toLowerCase());
 

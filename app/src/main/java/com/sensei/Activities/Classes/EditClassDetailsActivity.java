@@ -85,7 +85,7 @@ public class EditClassDetailsActivity extends AppCompatActivity {
 
         daysOfWeek = (RadioGroup) findViewById(R.id.toggle_group);
         daysOfWeek.setOnCheckedChangeListener(ToggleListener);
-        switch (classDataModel.getDayOfWeek()) {
+            switch (classDataModel.getDayOfWeek()) {
             case 1:
                 ((ToggleButton) findViewById(R.id.toggle_mon)).setChecked(true);
                 break;

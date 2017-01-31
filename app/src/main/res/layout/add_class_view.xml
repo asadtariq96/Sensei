@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
@@ -53,8 +54,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:orientation="horizontal"
-                android:padding="4dp">
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp">
 
                 <LinearLayout
                     android:id="@+id/start_time_container"
@@ -69,7 +72,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
                         android:text="Start Time"
-                        android:textColor="@color/colorSecondaryText" />
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/start_time"
@@ -99,7 +103,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
                         android:text="End Time"
-                        android:textColor="@color/colorSecondaryText" />
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/end_time"
@@ -116,33 +121,65 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:text="Location"
-                        android:textColor="@color/colorSecondaryText" />
-
-                    <EditText
-                        android:id="@+id/location"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:fontFamily="sans-serif-light"
-                        android:imeOptions="actionDone"
-                        android:inputType="text"
-                        android:paddingTop="0dp"
-                        android:textColor="@color/colorPrimaryText"
-                        android:textSize="18sp" />
-                </LinearLayout>
-
 
             </LinearLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="4dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="4dp"
+
+                app:hintTextAppearance="@style/TextLabel">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:fontFamily="sans-serif-light"
+                    android:hint="Add a location"
+                    android:imeOptions="actionNext"
+                    android:inputType="textCapWords"
+
+                    android:textColor="@color/primary_text_material_light"
+                    android:textColorHint="@color/secondary_text_material_light"
+
+                    android:textSize="18sp" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:orientation="vertical"-->
+            <!--android:paddingBottom="8dp"-->
+            <!--android:paddingTop="4dp">-->
+
+            <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:fontFamily="sans-serif-light"-->
+            <!--android:text="Location"-->
+            <!--android:textColor="@color/colorSecondaryText" />-->
+
+            <!--<EditText-->
+            <!--android:paddingLeft="0dp"-->
+            <!--android:layout_marginLeft="0dp"-->
+            <!--android:id="@+id/location"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:fontFamily="sans-serif-light"-->
+            <!--android:imeOptions="actionDone"-->
+            <!--android:inputType="text"-->
+            <!--android:paddingTop="0dp"-->
+            <!--android:textColor="@color/colorPrimaryText"-->
+            <!--android:textSize="18sp" />-->
+            <!--</LinearLayout>-->
 
 
         </LinearLayout>

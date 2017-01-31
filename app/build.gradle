@@ -74,6 +74,8 @@ android {
         compile 'com.rengwuxian.materialedittext:library:2.1.4'
         compile 'com.github.andyxialm:SmoothCheckBox:4d4825562b'
         compile 'jp.wasabeef:recyclerview-animators:2.2.5'
+        compile 'com.github.arcadefire:nice-spinner:b17d3dd1f8'
+
 
 
 

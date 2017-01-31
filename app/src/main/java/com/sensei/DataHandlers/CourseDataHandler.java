@@ -31,6 +31,7 @@ import timber.log.Timber;
 import static com.sensei.Application.MyApplication.UID;
 import static com.sensei.Application.MyApplication.database;
 import static com.sensei.Application.MyApplication.databaseReference;
+import static com.sensei.R.id.courses;
 
 /**
  * Created by Asad on 08-Jan-17.
@@ -98,6 +99,10 @@ public class CourseDataHandler {
                 courseDataModel.setCourseAbbreviation(courseDataSnapshot.child("courseAbbreviation").getValue().toString());
                 courseDataModel.setCourseName(courseDataSnapshot.child("courseName").getValue().toString());
                 courseDataModel.setCourseColorCode(((Long) courseDataSnapshot.child("courseColorCode").getValue()).intValue());
+                if (courseDataSnapshot.child("instructor").getValue() != null)
+                    courseDataModel.setInstructor(courseDataSnapshot.child("instructor").getValue().toString());
+                if (courseDataSnapshot.child("creditHours").getValue() != null)
+                    courseDataModel.setCreditHours(((Long) courseDataSnapshot.child("creditHours").getValue()).intValue());
 
                 DataSnapshot classes = courseDataSnapshot.child("classes");
                 for (DataSnapshot classObj : classes.getChildren()) {
@@ -217,6 +222,8 @@ public class CourseDataHandler {
         coursesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dashboardClassesFragment != null)
+                    dashboardClassesFragment.adapter.setNewData(getListOfClassesForCurrentDay());
                 coursesRef.removeEventListener(childEventListener);
 
             }
@@ -468,6 +475,41 @@ public class CourseDataHandler {
             addClassToCourse(courseID, classDataModel);
 
         }
+
+    }
+
+    public void deleteCourse(String courseID) {
+        CourseDataModel courseDataModel = CoursesID.get(courseID);
+        DatabaseReference reference = databaseReference.child("courses").child(UID).child(courseID);
+        reference.removeValue();
+        List<ClassDataModel> classes = courseDataModel.getClasses();
+        CoursesList.remove(courseDataModel);
+        CoursesID.remove(courseID);
+        for (ClassDataModel classDataModel : classes) {
+            ClassesID.remove(getClassID(classDataModel));
+        }
+
+
+    }
+
+    public void updateCourse(CourseDataModel courseDataModel, String courseID) {
+        CourseDataModel originalCourse = CoursesID.get(courseID);
+        int loc = CoursesList.indexOf(originalCourse);
+        CoursesList.set(loc, courseDataModel);
+        CoursesID.put(courseID, courseDataModel);
+
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("courseAbbreviation", courseDataModel.getCourseAbbreviation());
+        map.put("courseColorCode", courseDataModel.getCourseColorCode());
+        map.put("courseName", courseDataModel.getCourseName());
+        map.put("creditHours", courseDataModel.getCreditHours());
+        map.put("instructor", courseDataModel.getInstructor());
+
+        databaseReference.child("courses")
+                .child(UID)
+                .child(courseID)
+                .updateChildren(map);
 
     }
 

@@ -13,8 +13,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.MainActivity" />
         <activity android:name=".Activities.TaskDetailActivity" />
-        <activity android:name=".Activities.QuizDetailActivity" />
-        <activity android:name=".Activities.AssignmentDetailActivity" />
+        <activity android:name=".Activities.Quizzes.QuizDetailActivity" />
+        <activity android:name=".Activities.Assignments.AssignmentDetailActivity" />
         <activity android:name=".Activities.Dashboard.DashboardActivity" />
         <activity android:name=".Activities.Courses.AddCourseActivity" />
         <activity android:name=".Activities.Quizzes.AddQuizActivity" />
@@ -43,7 +43,9 @@
         <activity android:name=".Activities.Courses.CourseDetailActivity" />
         <activity android:name=".Activities.Classes.AddClassActivity" />
         <activity android:name=".Activities.Quizzes.QuizzesListActivity" />
-        <activity android:name=".Activities.Assignments.AssignmentsListActivity"></activity>
+        <activity android:name=".Activities.Assignments.AssignmentsListActivity" />
+        <activity android:name=".Activities.Courses.EditCourseDetailsActivity" />
+        <activity android:name=".Activities.GPACalculatorActivity"></activity>
     </application>
 
 </manifest>

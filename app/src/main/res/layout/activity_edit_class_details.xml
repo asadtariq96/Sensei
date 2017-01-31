@@ -393,7 +393,7 @@
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
                 android:text="DELETE"
-                android:textColor="@color/delete_button_text"></Button>
+                android:textColor="@color/delete_button_text" />
 
 
         </LinearLayout>

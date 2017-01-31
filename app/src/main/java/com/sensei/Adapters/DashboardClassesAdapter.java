@@ -115,7 +115,14 @@ public class DashboardClassesAdapter extends RecyclerView.Adapter<RecyclerView.V
             viewHolder.mTime.setText(classDataModel.getStartTimeOriginal().toString("h:mm a")
                     + " to "
                     + classDataModel.getEndTimeOriginal().toString("h:mm a"));
-            viewHolder.mLocation.setText(classDataModel.getLocation());
+            if (!classDataModel.getLocation().equals("")) {
+                viewHolder.mLocation.setVisibility(View.VISIBLE);
+                viewHolder.mLocation.setText(classDataModel.getLocation());
+            } else
+                viewHolder.mLocation.setVisibility(View.INVISIBLE);
+
+
+//            viewHolder.mLocation.setText(classDataModel.getLocation());
             LocalTime localTime = new LocalTime();
             viewHolder.RemainingTime.setVisibility(View.VISIBLE);
 

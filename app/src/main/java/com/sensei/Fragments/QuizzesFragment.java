@@ -7,8 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sensei.Activities.QuizDetailActivity;
-import com.sensei.Activities.TaskDetailActivity;
+import com.sensei.Activities.Quizzes.QuizDetailActivity;
 import com.sensei.R;
 
 /**

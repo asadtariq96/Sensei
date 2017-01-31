@@ -24,6 +24,7 @@ import com.sensei.Activities.Assignments.AssignmentsListActivity;
 import com.sensei.Activities.Classes.ClassesActivity;
 import com.sensei.Activities.Courses.CoursesListActivity;
 import com.sensei.Activities.Dashboard.DashboardActivity;
+import com.sensei.Activities.GPACalculatorActivity;
 import com.sensei.Activities.Quizzes.QuizzesListActivity;
 import com.sensei.Activities.TimeTable.TimetableActivity;
 import com.sensei.Authentication.SignInActivity;
@@ -150,6 +151,20 @@ public class NavigationDrawerSetup extends AppCompatActivity {
                                             intent.putExtra("NavDrawer", true);
                                             HostActivity.startActivity(intent);
 //                                            HostActivity.finish();
+                                        }
+                                    }, 300);
+
+                                    break;
+
+                                case R.id.gpacalculator:
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            Intent intent = new Intent(HostActivity, GPACalculatorActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                            intent.putExtra("NavDrawer", true);
+                                            HostActivity.startActivity(intent);
                                         }
                                     }, 300);
 

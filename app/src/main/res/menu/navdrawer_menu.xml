@@ -41,6 +41,11 @@
             android:title="Settings" />
 
         <item
+            android:id="@+id/gpacalculator"
+            android:icon="@drawable/ic_assessment_black_24dp"
+            android:title="GPA Calculator" />
+
+        <item
             android:id="@+id/signout"
             android:icon="@drawable/ic_power_settings_new_black_24dp"
             android:title="Sign Out" />

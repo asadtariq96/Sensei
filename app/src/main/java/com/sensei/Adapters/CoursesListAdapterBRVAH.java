@@ -32,12 +32,19 @@ public class CoursesListAdapterBRVAH extends BaseQuickAdapter<CourseDataModel, B
 
         View colorView;
         TextView courseName;
+        TextView courseInstructor;
 
         colorView = baseViewHolder.getView(R.id.color);
         courseName = baseViewHolder.getView(R.id.course_name);
+        courseInstructor = baseViewHolder.getView(R.id.course_instructor);
 
 
         courseName.setText(courseDataModel.getCourseName());
+        if (!courseDataModel.getInstructor().isEmpty()) {
+            courseInstructor.setVisibility(View.VISIBLE);
+            courseInstructor.setText(courseDataModel.getInstructor());
+        } else
+            courseInstructor.setVisibility(View.GONE);
         colorView.setBackgroundColor(courseDataModel.getCourseColorCode());
 
     }
