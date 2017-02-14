@@ -1,13 +1,9 @@
 package com.sensei.DataModelClasses;
 
-import com.airbnb.epoxy.EpoxyModel;
 import com.google.firebase.database.Exclude;
-import com.sensei.R;
 
 import org.joda.time.LocalTime;
 import org.joda.time.Minutes;
-
-import java.io.Serializable;
 
 /**
  * Created by Asad on 01-Jan-17.

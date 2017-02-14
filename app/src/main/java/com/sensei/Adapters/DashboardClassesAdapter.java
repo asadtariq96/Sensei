@@ -11,7 +11,6 @@ import com.sensei.DataModelClasses.ClassDataModel;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.Minutes;
 

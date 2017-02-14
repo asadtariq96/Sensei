@@ -13,16 +13,13 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.sensei.Activities.Classes.ClassDetailsActivity;
-import com.sensei.Activities.Classes.EditClassDetailsActivity;
 import com.sensei.Adapters.DayOfWeekClassesAdapter;
 import com.sensei.Adapters.DayOfWeekClassesAdapterBRVAH;
 import com.sensei.DataModelClasses.ClassDataModel;
 import com.sensei.R;
-import com.squareup.otto.Subscribe;
 
 import timber.log.Timber;
 
-import static com.sensei.Application.MyApplication.bus;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 import static org.joda.time.DateTimeConstants.MONDAY;
 

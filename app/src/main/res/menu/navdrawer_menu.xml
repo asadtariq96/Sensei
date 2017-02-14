@@ -35,15 +35,17 @@
             android:id="@+id/homework"
             android:icon="@drawable/ic_navdrawer_homework"
             android:title="Homework" />
-        <item
-            android:id="@+id/settings"
-            android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Settings" />
 
         <item
             android:id="@+id/gpacalculator"
             android:icon="@drawable/ic_assessment_black_24dp"
             android:title="GPA Calculator" />
+
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
+
 
         <item
             android:id="@+id/signout"

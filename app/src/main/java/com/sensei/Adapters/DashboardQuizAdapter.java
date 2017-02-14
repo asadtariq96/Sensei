@@ -1,8 +1,5 @@
 package com.sensei.Adapters;
 
-import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,7 +15,6 @@ import java.util.List;
 
 import cn.refactor.library.SmoothCheckBox;
 
-import static com.sensei.Application.MyApplication.getContext;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 /**

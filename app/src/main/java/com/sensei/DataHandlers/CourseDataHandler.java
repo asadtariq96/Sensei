@@ -7,12 +7,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.sensei.Activities.Courses.CoursesListActivity;
 import com.sensei.Activities.Dashboard.DashboardClassesFragment;
+import com.sensei.Application.Constants;
 import com.sensei.DataModelClasses.AssignmentDataModel;
 import com.sensei.DataModelClasses.ClassDataModel;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.DataModelClasses.QuizDataModel;
+import com.sensei.DataModelClasses.SemesterDataModel;
+import com.sensei.DataModelClasses.UserSettings;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.json.JSONObject;
 
@@ -20,18 +24,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 import timber.log.Timber;
 
+import static com.sensei.Application.Constants.SELECTED_SEMESTER;
 import static com.sensei.Application.MyApplication.UID;
-import static com.sensei.Application.MyApplication.database;
+import static com.sensei.Application.MyApplication.coursesReference;
 import static com.sensei.Application.MyApplication.databaseReference;
-import static com.sensei.R.id.courses;
+import static com.sensei.Application.MyApplication.semestersReference;
+import static com.sensei.Application.MyApplication.settingsReference;
 
 /**
  * Created by Asad on 08-Jan-17.
@@ -52,15 +56,26 @@ public class CourseDataHandler {
     }
 
 
+    public void clearData() {
+        CoursesList.clear();
+//        SemesterMap.clear();
+        ClassesID.clear();
+        QuizzesID.clear();
+        AssignmentsID.clear();
+        CoursesID.clear();
+
+    }
+
     public List<CourseDataModel> CoursesList = new ArrayList<>();
+    //    public Map<String, SemesterDataModel> SemesterMap = new LinkedHashMap<>();
     public List<ClassDataModel> ClassesList = new ArrayList<>();
     public Map<String, ClassDataModel> ClassesID = new HashMap<>();
     public Map<String, QuizDataModel> QuizzesID = new HashMap<>();
     public Map<String, AssignmentDataModel> AssignmentsID = new HashMap<>();
 
     public Map<String, CourseDataModel> CoursesID = new HashMap<>();
-
     private CoursesListActivity coursesActivityInstance = null;
+
     private DashboardClassesFragment dashboardClassesFragment = null;
 
     public void registerCoursesActivity(CoursesListActivity coursesActivity) {
@@ -75,24 +90,111 @@ public class CourseDataHandler {
         coursesActivityInstance = null;
     }
 
+
     public void unregisterDashboardClassesFragment() {
         dashboardClassesFragment = null;
     }
 
 
-    List<String> tempList = new ArrayList<>();
 
-    public void addChildListener() {
-        final DatabaseReference coursesRef = databaseReference.child("courses").child(UID);
-        coursesRef.keepSynced(true);
+    public void getUserSettings() {
+
+        settingsReference = databaseReference.child("settings").child(UID);
+        settingsReference.keepSynced(true);
+        settingsReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+
+                    UserSettings userSettings = dataSnapshot.getValue(UserSettings.class);
+                    Constants.DEFAULT_START_TIME = new LocalTime().parse(userSettings.getStartTime());
+                    Constants.DEFAULT_END_TIME = new LocalTime().parse(userSettings.getEndTime());
+                    Constants.DEFAULT_BREAK_LENGTH = userSettings.getBreakBetweenClasses();
+                    Constants.DEFAULT_CLASS_LENGTH = userSettings.getClassLength();
+                    Constants.SELECTED_SEMESTER = userSettings.getSelectedSemester();
+                    getSemesters();
+                    getCourses();
+
+                } else addNewUserToDatabase();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
+
+    }
+
+    public void getSemesters() {
+//        SemesterMap.clear();
+        semestersReference = databaseReference.child("semesters").child(UID);
+        semestersReference.keepSynced(true);
+        semestersReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    SemesterDataModel semesterDataModel = snapshot.getValue(SemesterDataModel.class);
+                    if (snapshot.getKey().equals(Constants.SELECTED_SEMESTER)) {
+                        Constants.SELECTED_SEMESTER_NAME = semesterDataModel.getSemesterName();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+//        semestersReference.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                SemesterDataModel semesterDataModel = dataSnapshot.getValue(SemesterDataModel.class);
+//                if (dataSnapshot.getKey().equals(Constants.SELECTED_SEMESTER)) {
+//                    Constants.SELECTED_SEMESTER_NAME = semesterDataModel.getSemesterName();
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+
+    }
+
+    public void getCourses() {
+
+        coursesReference = databaseReference.child("courses").child(UID).child(SELECTED_SEMESTER);
+
         CoursesList.clear();
+
 
         final ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(final DataSnapshot courseDataSnapshot, String s) {
-                Object o = courseDataSnapshot.getValue();
-                Timber.d("courseDataSnapshot JSON" + new JSONObject((Map) o));
-                Timber.d("onChildAdded coursesRef" + courseDataSnapshot.toString());
+//                Object o = courseDataSnapshot.getValue();
+//                Timber.d("courseDataSnapshot JSON" + new JSONObject((Map) o));
+//                Timber.d("onChildAdded coursesRef" + courseDataSnapshot.toString());
 
 
                 CourseDataModel courseDataModel = new CourseDataModel();
@@ -132,65 +234,6 @@ public class CourseDataHandler {
 
                 CoursesList.add(courseDataModel);
                 CoursesID.put(courseDataSnapshot.getKey(), courseDataModel);
-//                updateClassesList();
-
-//                if (coursesActivityInstance != null)
-//                    coursesActivityInstance.adapter.notifyDataSetChanged();
-
-//                final DatabaseReference classesRef = databaseReference.child("courses").child(UID).child(courseDataSnapshot.getKey()).child("classes");
-//                classesRef.addChildEventListener(new ChildEventListener() {
-//                    @Override
-//                    public void onChildAdded(DataSnapshot classDataSnapshot, String s) {
-//                        if (dashboardClassesFragment != null) {
-//                            dashboardClassesFragment.dashboardClassesAdapter.notifyDataSetChanged();
-//                        }
-//
-//                        Timber.d("onChildAdded classesRef" + classDataSnapshot.toString());
-//
-//                        ClassDataModel classDataModel = classDataSnapshot.getValue(ClassDataModel.class);
-//                        int index = tempList.indexOf(classesRef.getParent().getKey());
-//                        CoursesList.get(index).getClasses().add(classDataModel); //add this class to list of classes for that course in courses list
-//                        CoursesID.get(courseDataSnapshot.getKey()).getClasses().add(classDataModel); //add this class to list of classes for that course in coursesID Hashmap
-//
-//                        ClassesID.put(classDataSnapshot.getKey(), classDataModel); //add this class to classesID Hashmap
-//
-//                        updateClassesList();
-//                    }
-//
-//                    @Override
-//                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//                        Timber.d("ChildChanged classesRef" + dataSnapshot.toString());
-//
-////                        ClassDataModel newClass = dataSnapshot.getValue(ClassDataModel.class);
-////                        String CourseKey = dataSnapshot.getRef().getParent().getParent().getKey();
-////                        CourseDataModel courseDataModel = CoursesID.get(CourseKey);
-////                        String ClassKey = dataSnapshot.getKey();
-////                        ClassDataModel oldClass = ClassesID.get(ClassKey);
-//
-////                        int indexOfOldClass = courseDataModel.getClasses().indexOf(oldClass);
-////                        courseDataModel.getClasses().set(indexOfOldClass, newClass);
-//
-//                    }
-//
-//                    @Override
-//                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                        Timber.d("ChildRemoved classesRef" + dataSnapshot.toString());
-//
-//                    }
-//
-//                    @Override
-//                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//                        Timber.d("onChildMoved classesRef" + dataSnapshot.toString());
-//
-//
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                        Timber.d("onCancelled classesRef" + databaseError.toString());
-//
-//                    }
-//                });
 
 
             }
@@ -218,13 +261,13 @@ public class CourseDataHandler {
             }
         };
 
-        coursesRef.addChildEventListener(childEventListener);
-        coursesRef.addValueEventListener(new ValueEventListener() {
+        coursesReference.addChildEventListener(childEventListener);
+        coursesReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dashboardClassesFragment != null)
                     dashboardClassesFragment.adapter.setNewData(getListOfClassesForCurrentDay());
-                coursesRef.removeEventListener(childEventListener);
+                coursesReference.removeEventListener(childEventListener);
 
             }
 
@@ -235,62 +278,22 @@ public class CourseDataHandler {
         });
     }
 
-//    public void addValueEventListener() {
-//
-//        coursesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot listOfCIDs) {
-//                Log.d("onDataChange coursesRef", listOfCIDs.toString());
-//
-//                for (DataSnapshot courseID : listOfCIDs.getChildren()) {
-//                    CoursesList.add(courseID.getValue(CourseDataModel.class));
-//                    if (coursesActivityInstance != null)
-//                        coursesActivityInstance.coursesListAdapter.notifyDataSetChanged();
-//
-//
-//                    DatabaseReference classesRef = databaseReference.child("courses").child(UID).child(courseID.getKey()).child("classes");
-//                    classesRef.addChildEventListener(new ChildEventListener() {
-//                        @Override
-//                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                            Log.d("onChildAdded classesRef", dataSnapshot.toString());
-//
-//                        }
-//
-//                        @Override
-//                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//                            Log.d("ChildChanged classesRef", dataSnapshot.toString());
-//
-//
-//                        }
-//
-//                        @Override
-//                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                            Log.d("ChildRemoved classesRef", dataSnapshot.toString());
-//
-//                        }
-//
-//                        @Override
-//                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//                            Log.d("onChildMoved classesRef", dataSnapshot.toString());
-//
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//                            Log.d("onCancelled classesRef", databaseError.toString());
-//
-//                        }
-//                    });
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.d("Error coursesRef", databaseError.toString());
-//
-//
-//            }
-//        });
+    public void moveFirebaseRecord(DatabaseReference fromPath, final DatabaseReference toPath) {
+        fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                toPath.setValue(dataSnapshot.getValue());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
+    }
+
 //    }
 
     public List<ClassDataModel> getAllClasses() {
@@ -304,14 +307,6 @@ public class CourseDataHandler {
         return classesList;
     }
 
-//    public void updateClassesList() {
-//        ClassesList.clear();
-//        for (CourseDataModel course : CoursesList) {
-//            for (ClassDataModel classDataModel : course.getClasses()) {
-////                if (!course.getClasses().contains(classDataModel))
-//                ClassesList.add(classDataModel);
-//            }
-//        }
 //    }
 
     public List<ClassDataModel> getListOfClassesForCurrentDay() {
@@ -358,6 +353,7 @@ public class CourseDataHandler {
         return tempList;
     }
 
+
     public List<AssignmentDataModel> getListOfAssignments() {
         List<AssignmentDataModel> tempList = new ArrayList<>();
         for (CourseDataModel courseDataModel : CoursesList)
@@ -365,17 +361,18 @@ public class CourseDataHandler {
         return tempList;
     }
 
-
     public static class classTimeComparator implements Comparator<ClassDataModel> {
         public int compare(ClassDataModel left, ClassDataModel right) {
             return left.getStartTimeOriginal().compareTo(right.getStartTimeOriginal());
         }
+
     }
 
     public static class classDayComparator implements Comparator<ClassDataModel> {
         public int compare(ClassDataModel left, ClassDataModel right) {
             return left.getDayOfWeek() - right.getDayOfWeek();
         }
+
     }
 
     public String getCourseID(CourseDataModel value) {
@@ -435,8 +432,8 @@ public class CourseDataHandler {
     }
 
     public synchronized void addClassToCourse(String courseID, ClassDataModel classDataModel) {
-        String ClassID = databaseReference.child("courses").child(UID).child(courseID).child("classes").push().getKey();
-        databaseReference.child("courses").child(UID).child(courseID).child("classes").child(ClassID).setValue(classDataModel);
+        String ClassID = coursesReference.child(courseID).child("classes").push().getKey();
+        coursesReference.child(courseID).child("classes").child(ClassID).setValue(classDataModel);
 
 
         CoursesID.get(courseID).getClasses().add(classDataModel);
@@ -444,13 +441,13 @@ public class CourseDataHandler {
     }
 
     public void updateClass(String courseID, String classID, ClassDataModel classDataModel) {
-        DatabaseReference reference = databaseReference.child("courses").child(UID).child(courseID).child("classes").child(classID);
+        DatabaseReference reference = coursesReference.child(courseID).child("classes").child(classID);
         reference.setValue(classDataModel);
 
     }
 
     public void deleteClass(String courseID, String classID) {
-        DatabaseReference reference = databaseReference.child("courses").child(UID).child(courseID).child("classes").child(classID);
+        DatabaseReference reference = coursesReference.child(courseID).child("classes").child(classID);
         reference.removeValue();
         CoursesID.get(courseID).getClasses().remove(ClassesID.get(classID));
         ClassesID.remove(classID);
@@ -458,11 +455,8 @@ public class CourseDataHandler {
     }
 
     public void addCourse(CourseDataModel courseDataModel, List<ClassDataModel> classesList) {
-        String courseID = databaseReference.child("courses").push().getKey();
-        databaseReference.child("courses")
-                .child(UID)
-                .child(courseID)
-                .setValue(courseDataModel);
+        String courseID = coursesReference.push().getKey();
+        coursesReference.child(courseID).setValue(courseDataModel);
 
 //        courseDataModel.getClasses().addAll(classesList);
         CoursesList.add(courseDataModel);
@@ -480,7 +474,7 @@ public class CourseDataHandler {
 
     public void deleteCourse(String courseID) {
         CourseDataModel courseDataModel = CoursesID.get(courseID);
-        DatabaseReference reference = databaseReference.child("courses").child(UID).child(courseID);
+        DatabaseReference reference = coursesReference.child(courseID);
         reference.removeValue();
         List<ClassDataModel> classes = courseDataModel.getClasses();
         CoursesList.remove(courseDataModel);
@@ -506,8 +500,7 @@ public class CourseDataHandler {
         map.put("creditHours", courseDataModel.getCreditHours());
         map.put("instructor", courseDataModel.getInstructor());
 
-        databaseReference.child("courses")
-                .child(UID)
+        coursesReference
                 .child(courseID)
                 .updateChildren(map);
 
@@ -522,8 +515,7 @@ public class CourseDataHandler {
                 .setCompleted(isCompleted);
 
         String quizID = getQuizID(quizDataModel);
-        databaseReference.child("courses")
-                .child(UID)
+        coursesReference
                 .child(getCourseID(getCourse(quizDataModel)))
                 .child("quizzes")
                 .child(quizID)
@@ -531,21 +523,25 @@ public class CourseDataHandler {
                 .setValue(isCompleted);
     }
 
-    public void moveFirebaseRecord(DatabaseReference fromPath, final DatabaseReference toPath) {
-        fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                toPath.setValue(dataSnapshot.getValue());
 
-            }
+    public void addNewUserToDatabase() {
+        DatabaseReference newUserRef = databaseReference.child("settings").child(UID);
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+        UserSettings userSettings = new UserSettings();
+        userSettings.setBreakBetweenClasses(10);
+        userSettings.setClassLength(50);
+        userSettings.setEndTime(new LocalTime(16, 30, 0).toString());
+        userSettings.setStartTime(new LocalTime(9, 0, 0).toString());
+        String defSemKey = databaseReference.child("courses").child(UID).push().getKey();
+        userSettings.setSelectedSemester(defSemKey);
+        Constants.SELECTED_SEMESTER = defSemKey;
 
-            }
+        databaseReference.child("semesters").child(UID).child(defSemKey)
+                .setValue(new SemesterDataModel("Default", new LocalDate().toString(), ""));
+
+        newUserRef.setValue(userSettings);
 
 
-        });
     }
 
 

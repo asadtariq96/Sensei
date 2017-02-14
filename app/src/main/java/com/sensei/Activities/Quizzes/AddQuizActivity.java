@@ -34,8 +34,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
 
-import static com.sensei.Application.MyApplication.UID;
-import static com.sensei.Application.MyApplication.databaseReference;
+import static com.sensei.Application.MyApplication.coursesReference;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 public class AddQuizActivity extends AppCompatActivity {
@@ -236,17 +235,13 @@ public class AddQuizActivity extends AppCompatActivity {
         quizDataModel.setQuizDescription(Description.getText().toString().trim());
         courseDataModel.getQuizzes().add(quizDataModel);
 
-        String QuizID = databaseReference
-                .child("courses")
-                .child(UID)
+        String QuizID = coursesReference
                 .child(getCourseDataInstance().getCourseID(courseDataModel))
                 .child("quizzes").push().getKey();
 
         getCourseDataInstance().QuizzesID.put(QuizID,quizDataModel);
 
-        databaseReference
-                .child("courses")
-                .child(UID)
+        coursesReference
                 .child(getCourseDataInstance().getCourseID(courseDataModel))
                 .child("quizzes")
                 .child(QuizID)

@@ -8,9 +8,6 @@ import com.google.firebase.database.Exclude;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.factor;
-import static android.R.attr.installLocation;
-
 /**
  * Created by Asad on 17-Dec-16.
  */

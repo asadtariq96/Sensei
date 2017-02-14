@@ -32,7 +32,6 @@ import com.sensei.Activities.Quizzes.AddQuizActivity;
 import com.sensei.Activities.AddHomeworkActivity;
 
 import static com.sensei.R.id.date;
-import static com.sensei.Utils.PhoneUtils.convertDpToPixel;
 
 /**
  * Created by Asad on 18-Dec-16.

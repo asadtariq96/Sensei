@@ -5,6 +5,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.ViewTreeObserver;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
@@ -91,6 +94,7 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
     public void onStart() {
         super.onStart();
         navigationDrawerSetup.ConfigureDrawer();
+        weekView.notifyDatasetChanged();
     }
 
     public void onResume() {
@@ -106,7 +110,7 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
         for (CourseDataModel courseDataModel : getCourseDataInstance().CoursesList) {
             for (ClassDataModel classDataModel : courseDataModel.getClasses()) {
                 {
-                    DateTime startOfThisMonth = new DateTime().dayOfMonth().withMinimumValue().withTimeAtStartOfDay();
+                    DateTime startOfThisMonth = new DateTime().dayOfMonth().withMinimumValue().withTimeAtStartOfDay().minusDays(7);
                     DateTime endOfNextMonth = startOfThisMonth.plusMonths(1).dayOfMonth().withMaximumValue().withTimeAtStartOfDay();
                     int dayOfWeek = classDataModel.getDayOfWeek();
 
@@ -162,6 +166,27 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
         //noinspection WrongConstant
         return (event.getStartTime().get(Calendar.YEAR) == year && event.getStartTime().get(Calendar.MONTH) == month - 1)
                 || (event.getEndTime().get(Calendar.YEAR) == year && event.getEndTime().get(Calendar.MONTH) == month - 1);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.timetable_refresh, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // handle arrow click here
+        if (item.getItemId() == R.id.refresh) {
+            weekView.notifyDatasetChanged();
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

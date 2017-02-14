@@ -12,7 +12,6 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.sensei.Adapters.DashboardAssignmentAdapter;
-import com.sensei.Adapters.DashboardQuizAdapter;
 import com.sensei.R;
 import com.sensei.Utils.NavigationDrawerSetup;
 

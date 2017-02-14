@@ -10,7 +10,6 @@ import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
 
 import org.joda.time.DateTime;
-import org.joda.time.MonthDay;
 
 import java.util.List;
 import java.util.Locale;

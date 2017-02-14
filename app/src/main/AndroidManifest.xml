@@ -45,7 +45,8 @@
         <activity android:name=".Activities.Quizzes.QuizzesListActivity" />
         <activity android:name=".Activities.Assignments.AssignmentsListActivity" />
         <activity android:name=".Activities.Courses.EditCourseDetailsActivity" />
-        <activity android:name=".Activities.GPACalculatorActivity"></activity>
+        <activity android:name=".Activities.GPACalculatorActivity" />
+        <activity android:name=".Activities.Settings.SettingsActivity"></activity>
     </application>
 
 </manifest>

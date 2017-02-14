@@ -34,8 +34,7 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
 
-import static com.sensei.Application.MyApplication.UID;
-import static com.sensei.Application.MyApplication.databaseReference;
+import static com.sensei.Application.MyApplication.coursesReference;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 
@@ -236,15 +235,11 @@ public class AddAssignmentActivity extends AppCompatActivity {
         assignmentDataModel.setAssignmentDescription(Description.getText().toString().trim());
         courseDataModel.getAssignments().add(assignmentDataModel);
 
-        String AssignmentID = databaseReference
-                .child("courses")
-                .child(UID)
+        String AssignmentID = coursesReference
                 .child(getCourseDataInstance().getCourseID(courseDataModel))
                 .child("assignments").push().getKey();
 
-        databaseReference
-                .child("courses")
-                .child(UID)
+        coursesReference
                 .child(getCourseDataInstance().getCourseID(courseDataModel))
                 .child("assignments")
                 .child(AssignmentID)

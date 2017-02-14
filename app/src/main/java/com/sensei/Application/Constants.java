@@ -46,16 +46,9 @@ public class Constants {
     }
 
     public static int DEFAULT_CLASS_LENGTH = 50;
-    public static int DEFAULT_BREAK_LENGTH = 5;
-    public static LocalTime DEFAULT_START_TIME = new LocalTime(8, 0, 0);
-    public static LocalTime DEFAULT_END_TIME = new LocalTime(16, 0, 0);
-
-//    public static int MONDAY = 1;
-//    public static int TUESDAY = 2;
-//    public static int WEDNESDAY = 3;
-//    public static int THURSDAY = 4;
-//    public static int FRIDAY = 5;
-//    public static int SATURDAY = 6;
+    public static int DEFAULT_BREAK_LENGTH = 10;
+    public static LocalTime DEFAULT_START_TIME = new LocalTime(9, 0, 0);
+    public static LocalTime DEFAULT_END_TIME = new LocalTime(16, 30, 0);
 
     public static int REQUEST_CODE_EDIT_CLASS = 100;
     public static int REQUEST_CODE_EDIT_COURSE = 200;
@@ -63,6 +56,13 @@ public class Constants {
     public static int RESULT_CODE_FINISH_ACTIVITY = 400;
 //    public static int REQUEST_CODE_CLASS_DETAILS = 101;
 //    public static int REQUEST_CODE_COURSE_DETAILS = 201;
+
+
+    public static String SELECTED_SEMESTER;
+    public static String SELECTED_SEMESTER_NAME;
+    public static String APPLICATION_TAG = "sensei";
+
+    public static String FIRST_LAUNCH = "first_launch";
 
     public static int getDayLength() {
         return DEFAULT_END_TIME.getHourOfDay() - DEFAULT_START_TIME.getHourOfDay();

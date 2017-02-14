@@ -61,22 +61,19 @@
             android:id="@+id/fab_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="6dp"
-
             android:layout_gravity="bottom|end"
+
+            android:elevation="6dp"
             android:paddingBottom="8dp"
             android:paddingRight="8dp"
             fab:layout_behavior="com.sensei.ScrollBehaviour.ScrollFAMBehaviour"
             fab:menu_animationDelayPerItem="10"
-            fab:menu_colorNormal="@color/colorPrimary"
             fab:menu_backgroundColor="#eeF5F5F5"
-            fab:menu_colorPressed="@color/colorPrimary"
+            fab:menu_fab_size="normal"
+            fab:menu_icon="@drawable/ic_add_white_24dp"
             fab:menu_labels_colorNormal="@color/white"
             fab:menu_labels_colorPressed="@color/md_grey_300"
-            fab:menu_colorRipple="@color/md_grey_500"
-            fab:menu_labels_textColor="@color/colorSecondaryText"
-            fab:menu_fab_size="normal"
-            fab:menu_icon="@drawable/ic_add_white_24dp">
+            fab:menu_labels_textColor="@color/colorSecondaryText">
 
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/fab_course"

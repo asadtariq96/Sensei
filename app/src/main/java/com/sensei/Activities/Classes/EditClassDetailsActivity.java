@@ -23,6 +23,7 @@ import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.sensei.Application.Constants;
 import com.sensei.DataModelClasses.ClassDataModel;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
@@ -85,7 +86,7 @@ public class EditClassDetailsActivity extends AppCompatActivity {
 
         daysOfWeek = (RadioGroup) findViewById(R.id.toggle_group);
         daysOfWeek.setOnCheckedChangeListener(ToggleListener);
-            switch (classDataModel.getDayOfWeek()) {
+        switch (classDataModel.getDayOfWeek()) {
             case 1:
                 ((ToggleButton) findViewById(R.id.toggle_mon)).setChecked(true);
                 break;
@@ -130,6 +131,8 @@ public class EditClassDetailsActivity extends AppCompatActivity {
                         LocalTime localTime = new LocalTime(hourOfDay, minute, second);
                         classDataModel.setStartTime(localTime.toString());
                         StartTime.setText(localTime.toString("h:mm a"));
+                        EndTime.setText(localTime.plusMinutes(Constants.DEFAULT_CLASS_LENGTH).toString("h:mm a"));
+                        classDataModel.setEndTime(localTime.plusMinutes(Constants.DEFAULT_CLASS_LENGTH).toString());
 
 
                     }

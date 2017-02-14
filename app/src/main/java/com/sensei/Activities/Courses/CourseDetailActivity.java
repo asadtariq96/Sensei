@@ -22,26 +22,18 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemLongClickListener;
 import com.sensei.Activities.Classes.AddClassActivity;
 import com.sensei.Activities.Classes.ClassDetailsActivity;
-import com.sensei.Activities.Classes.EditClassDetailsActivity;
 import com.sensei.Adapters.CourseClassesAdapter;
-import com.sensei.DataHandlers.CourseDataHandler;
 import com.sensei.DataModelClasses.ClassDataModel;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
-import com.squareup.otto.Subscribe;
-
-import java.util.Collections;
 
 import timber.log.Timber;
 
-import static android.media.CamcorderProfile.get;
 import static android.view.View.GONE;
 import static com.sensei.Application.Constants.REQUEST_CODE_EDIT_CLASS;
 import static com.sensei.Application.Constants.REQUEST_CODE_EDIT_COURSE;
 import static com.sensei.Application.Constants.RESULT_CODE_FINISH_ACTIVITY;
-import static com.sensei.Application.MyApplication.bus;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
-import static org.joda.time.DateTimeConstants.MONDAY;
 
 public class CourseDetailActivity extends AppCompatActivity {
     String courseID;

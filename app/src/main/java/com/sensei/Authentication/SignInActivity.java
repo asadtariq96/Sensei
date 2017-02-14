@@ -25,7 +25,6 @@ import static com.sensei.Application.MyApplication.mAuth;
 
 
 public class SignInActivity extends AppCompatActivity {
-    private static final String TAG = "EmailPassword";
 
     EditText Email;
     EditText Password;
@@ -111,7 +110,7 @@ public class SignInActivity extends AppCompatActivity {
     private void signIn() {
 
         final MaterialDialog materialDialog = new MaterialDialog.Builder(SignInActivity.this)
-                .title("Signing You In")
+                .title("Signing In")
                 .content("Please Wait")
                 .progress(true, 0)
                 .canceledOnTouchOutside(false)
@@ -133,7 +132,7 @@ public class SignInActivity extends AppCompatActivity {
                             materialDialog.dismiss();
                         } else {
 //                            Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Timber.d("signInWithEmail:failed"+ task.getException());
+                            Timber.d("signInWithEmail:failed" + task.getException());
 
                             Toast.makeText(SignInActivity.this, "Authentication Failed",
                                     Toast.LENGTH_SHORT).show();

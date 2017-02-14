@@ -9,19 +9,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.sensei.Activities.Classes.ClassDetailsActivity;
 import com.sensei.Adapters.DashboardClassesAdapter;
 import com.sensei.Adapters.DashboardClassesAdapterBRVAH;
 import com.sensei.DataModelClasses.ClassDataModel;
-import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
 
+import static com.sensei.Application.MyApplication.UID;
+import static com.sensei.Application.MyApplication.coursesReference;
+import static com.sensei.Application.MyApplication.databaseReference;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
-import static com.sensei.R.id.placeholder;
 
 
 /**
@@ -34,6 +38,7 @@ public class DashboardClassesFragment extends Fragment {
     public DashboardClassesAdapter dashboardClassesAdapter;
     View placeHolder;
     public DashboardClassesAdapterBRVAH adapter;
+    String semKey;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,6 +88,43 @@ public class DashboardClassesFragment extends Fragment {
 
                     }
                 }, 200);
+            }
+        });
+
+
+        Button button = (Button) view.findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                databaseReference.child("semesters").child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot semesterSnapshot : dataSnapshot.getChildren()) {
+                            semKey = semesterSnapshot.getKey();
+                            coursesReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    coursesReference.getParent().child(semKey).setValue(dataSnapshot.getValue());
+                                    databaseReference.child("settings").child(UID).child("selectedSemester").setValue(semKey);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+
             }
         });
 

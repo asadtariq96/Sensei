@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.google.firebase.database.DatabaseReference;
 import com.sensei.Application.Constants;
 import com.sensei.DataModelClasses.ClassDataModel;
 import com.sensei.DataModelClasses.CourseDataModel;
@@ -29,13 +28,8 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.LocalTime;
 
-import static android.R.attr.button;
 import static com.sensei.Application.Constants.DEFAULT_START_TIME;
-import static com.sensei.Application.MyApplication.UID;
-import static com.sensei.Application.MyApplication.bus;
-import static com.sensei.Application.MyApplication.databaseReference;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
-import static com.sensei.R.id.course;
 
 public class AddClassActivity extends AppCompatActivity {
     RadioGroup daysOfWeek;
@@ -195,7 +189,7 @@ public class AddClassActivity extends AppCompatActivity {
         }
 
 
-        getCourseDataInstance().addClassToCourse(courseID,classDataModel);
+        getCourseDataInstance().addClassToCourse(courseID, classDataModel);
 
 //        String ClassID = databaseReference.child("courses").child(UID).child(courseID).child("classes").push().getKey();
 //        databaseReference.child("courses").child(UID).child(courseID).child("classes").child(ClassID).setValue(classDataModel);

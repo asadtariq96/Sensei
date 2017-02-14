@@ -1,6 +1,5 @@
 package com.sensei.Activities.Classes;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;

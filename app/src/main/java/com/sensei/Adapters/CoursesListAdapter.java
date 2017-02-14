@@ -11,8 +11,6 @@ import android.widget.TextView;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
 
-import java.util.List;
-
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 /**

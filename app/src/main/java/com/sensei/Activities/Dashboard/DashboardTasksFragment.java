@@ -1,8 +1,6 @@
 package com.sensei.Activities.Dashboard;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,17 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.sensei.Adapters.DashboardAssignmentAdapter;
 import com.sensei.Adapters.DashboardQuizAdapter;
-import com.sensei.DataModelClasses.CourseDataModel;
-import com.sensei.DataModelClasses.QuizDataModel;
 import com.sensei.R;
-
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
@@ -129,4 +120,6 @@ public class DashboardTasksFragment extends Fragment {
 //            placeHolder.setVisibility(View.GONE);
 
     }
+
+
 }

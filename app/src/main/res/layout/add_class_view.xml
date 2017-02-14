@@ -141,7 +141,7 @@
                     android:background="@color/transparent"
                     android:fontFamily="sans-serif-light"
                     android:hint="Add a location"
-                    android:imeOptions="actionNext"
+                    android:imeOptions="actionDone"
                     android:inputType="textCapWords"
 
                     android:textColor="@color/primary_text_material_light"

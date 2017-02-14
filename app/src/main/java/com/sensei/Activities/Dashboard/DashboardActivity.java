@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sensei.Activities.Assignments.AddAssignmentActivity;
-import com.sensei.Activities.AddHomeworkActivity;
 import com.sensei.Activities.Quizzes.AddQuizActivity;
 import com.sensei.Activities.Courses.AddCourseActivity;
 import com.sensei.R;
@@ -37,6 +36,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
+    private ViewPager viewPager;
 
     //    List<ClassDataModel> ClassesList = new ArrayList<>();
 //    private ValueEventListener coursesValueEventListener;
@@ -52,14 +52,14 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Dashboard");
 
-//        getCourseDataInstance().addChildListener();
+//        getCourseDataInstance().getUserSettings();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
 
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
@@ -103,9 +103,13 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     public void onBackPressed() {
         if (floatingActionMenu.isOpened())
             floatingActionMenu.close(true);
-        else if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        else if (drawerLayout.isDrawerOpen(GravityCompat.START))
             drawerLayout.closeDrawer(GravityCompat.START);
-        } else
+        else if (viewPager.getCurrentItem() == 1)
+            viewPager.setCurrentItem(0);
+
+
+        else
             DashboardActivity.this.moveTaskToBack(true);
     }
 

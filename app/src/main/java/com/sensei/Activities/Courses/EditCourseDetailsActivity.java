@@ -23,15 +23,12 @@ import android.widget.LinearLayout;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
-import com.sensei.Activities.Classes.EditClassDetailsActivity;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
 
-import static android.view.View.GONE;
 import static com.sensei.Application.Constants.COLORS_LIST;
 import static com.sensei.Application.Constants.RESULT_CODE_FINISH_ACTIVITY;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
-import static com.sensei.R.id.course;
 
 public class EditCourseDetailsActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
     TextInputEditText CourseName;

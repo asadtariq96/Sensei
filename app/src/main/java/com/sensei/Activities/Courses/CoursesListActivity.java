@@ -23,9 +23,9 @@ import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 public class CoursesListActivity extends AppCompatActivity {
 
-        private DrawerLayout drawerLayout;
-        private NavigationView navigationView;
-        private NavigationDrawerSetup navigationDrawerSetup;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private NavigationDrawerSetup navigationDrawerSetup;
     private RecyclerView recyclerView;
     //    public CoursesListAdapter coursesListAdapter;
     public CoursesListAdapterBRVAH adapter;

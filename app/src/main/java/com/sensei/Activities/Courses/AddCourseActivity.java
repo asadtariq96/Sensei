@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,10 +27,6 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -48,8 +43,6 @@ import com.sensei.DataModelClasses.ClassDataModel;
 
 import static com.sensei.Application.Constants.COLORS_LIST;
 import static com.sensei.Application.Constants.DEFAULT_START_TIME;
-import static com.sensei.Application.MyApplication.UID;
-import static com.sensei.Application.MyApplication.databaseReference;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 import static com.sensei.R.id.friday_class_linear_layout;
 import static com.sensei.R.id.monday_class_linear_layout;
@@ -57,7 +50,6 @@ import static com.sensei.R.id.saturday_class_linear_layout;
 import static com.sensei.R.id.thursday_class_linear_layout;
 import static com.sensei.R.id.tuesday_class_linear_layout;
 import static com.sensei.R.id.wednesday_class_linear_layout;
-import static com.sensei.Utils.RandomGenerator.getRandomID;
 
 public class AddCourseActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
     TextInputEditText CourseName;
@@ -375,6 +367,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
                                     classDataModel.setStartTime(localTime.toString());
                                     ((TextView) classView.findViewById(R.id.start_time)).setText(localTime.toString("h:mm a"));
                                     ((TextView) classView.findViewById(R.id.end_time)).setText(localTime.plusMinutes(Constants.DEFAULT_CLASS_LENGTH).toString("h:mm a"));
+                                    classDataModel.setEndTime(localTime.plusMinutes(Constants.DEFAULT_CLASS_LENGTH).toString());
 
 
                                 }
@@ -400,10 +393,16 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
                             onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
                                 @Override
                                 public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
-                                    LocalTime localTime = new LocalTime(hourOfDay, minute, second);
-                                    classDataModel.setEndTime(localTime.toString());
-                                    ((TextView) classView.findViewById(R.id.end_time)).setText(localTime.toString("h:mm a"));
 
+
+                                    LocalTime localTime = new LocalTime(hourOfDay, minute, second);
+
+                                    if (localTime.isBefore(classDataModel.getStartTimeOriginal())) {
+                                        Toast.makeText(AddCourseActivity.this, "Oops! A class can not end before it starts!", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        classDataModel.setEndTime(localTime.toString());
+                                        ((TextView) classView.findViewById(R.id.end_time)).setText(localTime.toString("h:mm a"));
+                                    }
 
                                 }
                             };

@@ -19,21 +19,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.sensei.Activities.Assignments.AssignmentsListActivity;
 import com.sensei.Activities.Classes.ClassesActivity;
 import com.sensei.Activities.Courses.CoursesListActivity;
 import com.sensei.Activities.Dashboard.DashboardActivity;
 import com.sensei.Activities.GPACalculatorActivity;
 import com.sensei.Activities.Quizzes.QuizzesListActivity;
+import com.sensei.Activities.Settings.SettingsActivity;
 import com.sensei.Activities.TimeTable.TimetableActivity;
 import com.sensei.Authentication.SignInActivity;
 import com.sensei.R;
 
-import org.w3c.dom.Text;
-
 import static com.sensei.Application.MyApplication.firebaseUser;
 import static com.sensei.Application.MyApplication.mAuth;
+import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 /**
  * Created by asad on 7/13/16.
@@ -170,6 +169,20 @@ public class NavigationDrawerSetup extends AppCompatActivity {
 
                                     break;
 
+                                case R.id.settings:
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            Intent intent = new Intent(HostActivity, SettingsActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                            intent.putExtra("NavDrawer", true);
+                                            HostActivity.startActivity(intent);
+                                        }
+                                    }, 300);
+
+                                    break;
+
                                 case R.id.signout:
                                     handler.postDelayed(new Runnable() {
                                         @Override
@@ -181,6 +194,7 @@ public class NavigationDrawerSetup extends AppCompatActivity {
                                             HostActivity.startActivity(intent);
                                             HostActivity.finish();
                                             mAuth.signOut();
+                                            getCourseDataInstance().clearData();
                                         }
                                     }, 300);
 

@@ -2,7 +2,6 @@ package com.sensei.Application;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,15 +16,9 @@ import timber.log.Timber;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sensei.BuildConfig;
-import com.sensei.DataModelClasses.CourseDataModel;
-import com.sensei.Startup.SplashActivity;
 import com.squareup.otto.Bus;
 
-import static android.content.ContentValues.TAG;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 /**
@@ -42,6 +35,9 @@ public class MyApplication extends android.app.Application {
     public static FirebaseAuth.AuthStateListener mAuthListener;
     public static FirebaseDatabase database;
     public static DatabaseReference databaseReference;
+    public static DatabaseReference coursesReference;
+    public static DatabaseReference settingsReference;
+    public static DatabaseReference semestersReference;
     public static String UID;
     public static Bus bus;
 
@@ -77,6 +73,7 @@ public class MyApplication extends android.app.Application {
         database = FirebaseDatabase.getInstance();
         database.setPersistenceEnabled(true);
         databaseReference = database.getReference();
+        databaseReference.child("courses").child(UID).keepSynced(true);
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -87,7 +84,7 @@ public class MyApplication extends android.app.Application {
                 firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
                     UID = firebaseUser.getUid();
-                    getCourseDataInstance().addChildListener();
+                    getCourseDataInstance().getUserSettings();
 
 //                    Log.d("ApplicationClass", "onAuthStateChanged:signed_in:" + firebaseUser.getUid());
                     Timber.d("onAuthStateChanged:signed_in:" + firebaseUser.getUid());

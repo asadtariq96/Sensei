@@ -237,7 +237,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePickerDialog datePickerDialog, int year, int monthOfYear, int dayOfMonth) {
-                LocalDate localDate = new LocalDate(year, monthOfYear, dayOfMonth);
+                LocalDate localDate = new LocalDate(year, ++monthOfYear, dayOfMonth);
                 myDateList.get(3).setLocalDate(localDate);
                 dateAdapter.notifyDataSetChanged();
                 dateSpinner.setAdapter(dateAdapter);

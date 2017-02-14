@@ -11,31 +11,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.sensei.Activities.Courses.CoursesListActivity;
-import com.sensei.Adapters.CoursesListAdapterBRVAH;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
-import com.sensei.Utils.NDSpinner;
 import com.sensei.Utils.NavigationDrawerSetup;
 
-import org.angmarch.views.NiceSpinner;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import fr.ganfra.materialspinner.MaterialSpinner;
-
-import static android.R.attr.data;
 import static com.sensei.Application.Constants.GradesListStandard;
 import static com.sensei.Application.Constants.gradesMap;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
-import static com.sensei.R.id.spinner;
 
 public class GPACalculatorActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -114,8 +104,10 @@ public class GPACalculatorActivity extends AppCompatActivity {
     }
 
     private void fillList() {
+        GPAList.clear();
         for (CourseDataModel course : getCourseDataInstance().CoursesList) {
-            GPAList.add(new GPA(course, "A"));
+            if (course.getCreditHours() != 0)
+                GPAList.add(new GPA(course, "A"));
         }
     }
 
@@ -130,18 +122,23 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
             View colorView;
             TextView courseName;
-            NDSpinner gradeSpinner;
+            TextView creditHours;
+            Spinner gradeSpinner;
 
             colorView = baseViewHolder.getView(R.id.color);
             courseName = baseViewHolder.getView(R.id.course_name);
             gradeSpinner = baseViewHolder.getView(R.id.spinner);
+            creditHours = baseViewHolder.getView(R.id.credit_hours);
 
 
-            courseName.setText(gpa.course.getCourseName());
+            courseName.setText(gpa.course.getCourseAbbreviation());
+            creditHours.setText((String.valueOf(gpa.course.getCreditHours())));
             colorView.setBackgroundColor(gpa.course.getCourseColorCode());
 
 
             gradeSpinner.setAdapter(adapter);
+//            gradeSpinner.setPadding(0,0,0,0);
+
 
             gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -170,6 +167,6 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
-        navigationView.getMenu().getItem(8).setChecked(true); //select home by default in navigation drawer
+        navigationView.getMenu().getItem(7).setChecked(true); //select home by default in navigation drawer
     }
 }
