@@ -121,8 +121,8 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="8dp"
-                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginTop="16dp"
                                 android:paddingLeft="8dp"
                                 android:paddingRight="8dp"
                                 android:text="Add a new Semester" />
@@ -297,6 +297,103 @@
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="2dp"
+
+                    app:contentPaddingTop="8dp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:text="Account Settings"
+                            android:textColor="@color/colorAccent"
+                            android:textSize="14sp" />
+
+
+                        <LinearLayout
+                            android:id="@+id/link_facebook_account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:selectableItemBackground"
+                            android:orientation="vertical">
+
+
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginTop="16dp"
+                                android:drawableLeft="@drawable/ic_facebook_24dp"
+                                android:drawablePadding="8dp"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:text="Link Facebook account"
+                                android:textSize="14sp" />
+
+                            <View
+                                android:visibility="gone"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/md_grey_300" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/link_google_account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:selectableItemBackground">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginTop="16dp"
+                                android:drawableLeft="@drawable/ic_google_24dp"
+                                android:drawablePadding="8dp"
+                                android:gravity="center_vertical"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:text="Link Google account"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/login_button"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginTop="0dp"
+                    android:visibility="gone" />
 
 
             </LinearLayout>

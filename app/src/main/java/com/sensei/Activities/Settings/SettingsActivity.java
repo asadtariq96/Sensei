@@ -1,5 +1,6 @@
 package com.sensei.Activities.Settings;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
@@ -19,11 +20,32 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerBuilder;
 import com.codetroopers.betterpickers.numberpicker.NumberPickerDialogFragment;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInApi;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.sensei.Activities.Dashboard.DashboardActivity;
 import com.sensei.Application.Constants;
+import com.sensei.Authentication.SignInActivity;
 import com.sensei.DataModelClasses.SemesterDataModel;
 import com.sensei.DataModelClasses.UserSettings;
 import com.sensei.R;
@@ -42,6 +64,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+
+import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static com.sensei.Application.Constants.DEFAULT_BREAK_LENGTH;
@@ -51,12 +76,15 @@ import static com.sensei.Application.Constants.DEFAULT_START_TIME;
 import static com.sensei.Application.Constants.SELECTED_SEMESTER;
 import static com.sensei.Application.MyApplication.UID;
 import static com.sensei.Application.MyApplication.databaseReference;
+import static com.sensei.Application.MyApplication.firebaseUser;
+import static com.sensei.Application.MyApplication.mAuth;
 import static com.sensei.Application.MyApplication.semestersReference;
 import static com.sensei.Application.MyApplication.settingsReference;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, NumberPickerDialogFragment.NumberPickerDialogHandlerV2 {
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, NumberPickerDialogFragment.NumberPickerDialogHandlerV2, GoogleApiClient.OnConnectionFailedListener {
+    private static final int RC_SIGN_IN = 34343;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
@@ -67,11 +95,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     LinearLayout dayStartTime;
     LinearLayout dayEndTime;
     LinearLayout newSemester;
+    LinearLayout linkFacebook;
+    LinearLayout linkGoogle;
     TextView selectedSemesterText;
     TextView classLengthText;
     TextView breakLengthText;
     TextView dayStartTimeText;
     TextView dayEndTimeText;
+
+    LoginButton loginButton;
+    CallbackManager mCallbackManager;
+
 
     final int BREAK_REF = 100;
     final int CLASS_LENGTH_REF = 200;
@@ -87,6 +121,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        mCallbackManager = CallbackManager.Factory.create();
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Settings");
@@ -101,6 +138,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         dayStartTime = (LinearLayout) findViewById(R.id.day_start_time);
         dayEndTime = (LinearLayout) findViewById(R.id.day_end_time);
         newSemester = (LinearLayout) findViewById(R.id.add_new_semester);
+        linkFacebook = (LinearLayout) findViewById(R.id.link_facebook_account);
+        linkGoogle = (LinearLayout) findViewById(R.id.link_google_account);
 
         selectedSemesterText = (TextView) findViewById(R.id.selected_semester_text);
         breakLengthText = (TextView) findViewById(R.id.break_length_text);
@@ -114,6 +153,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         dayStartTime.setOnClickListener(this);
         dayEndTime.setOnClickListener(this);
         newSemester.setOnClickListener(this);
+        linkFacebook.setOnClickListener(this);
+        linkGoogle.setOnClickListener(this);
 
 
         selectedSemesterText.setText(Constants.SELECTED_SEMESTER_NAME);
@@ -121,6 +162,27 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         classLengthText.setText(Constants.DEFAULT_CLASS_LENGTH + " Minutes");
         dayStartTimeText.setText(DEFAULT_START_TIME.toString("h:mm a"));
         dayEndTimeText.setText(DEFAULT_END_TIME.toString("h:mm a"));
+        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Timber.d("facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Timber.d("facebook:onCancel");
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Timber.d("facebook:onError", error);
+                // ...
+            }
+        });
 
 
         settingsReference.addValueEventListener(new ValueEventListener() {
@@ -184,6 +246,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+
     public void onStart() {
         super.onStart();
         navigationDrawerSetup.ConfigureDrawer();
@@ -215,10 +278,65 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             case R.id.add_new_semester:
                 addNewSemester();
                 break;
+            case R.id.link_facebook_account:
+                if (AccessToken.getCurrentAccessToken() == null)
+                    loginButton.performClick();
+                else {
+                    Toast.makeText(SettingsActivity.this, "Account already linked!", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.link_google_account:
+                linkGoogleAccount();
 
 
         }
     }
+
+    private void linkGoogleAccount() {
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("490046406670-njv1rn90jcv7dpsolg6ab7upa4k4vhc0.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+
+
+    }
+
+    private void handleFacebookAccessToken(AccessToken accessToken) {
+
+        Timber.d("handleFacebookAccessToken:" + accessToken);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
+
+        firebaseUser.linkWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Timber.d("linkWithCredential:onComplete:" + task.isSuccessful());
+
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(SettingsActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
 
     private void addNewSemester() {
         final TextInputEditText semesterName;
@@ -534,5 +652,58 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         return null;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                firebaseLinkWithGoogle(account);
+            } else {
+                // Google Sign In failed, update UI appropriately
+                // ...
+            }
+        }
+
+        // Pass the activity result back to the Facebook SDK
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    private void firebaseLinkWithGoogle(GoogleSignInAccount account) {
+        Timber.d("firebaseLinkWithGoogle:" + account.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.getCurrentUser().linkWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
+
+                        if (task.isSuccessful()) {
+
+                            Toast.makeText(SettingsActivity.this, "Account linked!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Timber.d("signInWithCredential:" + task.getException().toString());
+                            Toast.makeText(SettingsActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        // ...
+                    }
+                });
+    }
 }

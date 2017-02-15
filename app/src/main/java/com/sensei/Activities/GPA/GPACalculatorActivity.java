@@ -1,4 +1,4 @@
-package com.sensei.Activities;
+package com.sensei.Activities.GPA;
 
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;

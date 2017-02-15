@@ -73,7 +73,6 @@ public class MyApplication extends android.app.Application {
         database = FirebaseDatabase.getInstance();
         database.setPersistenceEnabled(true);
         databaseReference = database.getReference();
-        databaseReference.child("courses").child(UID).keepSynced(true);
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -84,6 +83,8 @@ public class MyApplication extends android.app.Application {
                 firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
                     UID = firebaseUser.getUid();
+                    databaseReference.child("courses").child(UID).keepSynced(true);
+
                     getCourseDataInstance().getUserSettings();
 
 //                    Log.d("ApplicationClass", "onAuthStateChanged:signed_in:" + firebaseUser.getUid());

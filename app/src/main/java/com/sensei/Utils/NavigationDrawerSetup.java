@@ -13,23 +13,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.UserInfo;
 import com.sensei.Activities.Assignments.AssignmentsListActivity;
 import com.sensei.Activities.Classes.ClassesActivity;
 import com.sensei.Activities.Courses.CoursesListActivity;
 import com.sensei.Activities.Dashboard.DashboardActivity;
-import com.sensei.Activities.GPACalculatorActivity;
+import com.sensei.Activities.GPA.GPACalculatorActivity;
 import com.sensei.Activities.Quizzes.QuizzesListActivity;
 import com.sensei.Activities.Settings.SettingsActivity;
 import com.sensei.Activities.TimeTable.TimetableActivity;
 import com.sensei.Authentication.SignInActivity;
 import com.sensei.R;
+import com.squareup.picasso.Picasso;
 
+import static android.view.View.GONE;
 import static com.sensei.Application.MyApplication.firebaseUser;
 import static com.sensei.Application.MyApplication.mAuth;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
@@ -193,8 +199,12 @@ public class NavigationDrawerSetup extends AppCompatActivity {
                                             intent.putExtra("NavDrawer", true);
                                             HostActivity.startActivity(intent);
                                             HostActivity.finish();
-                                            mAuth.signOut();
+                                            firebaseUser = null;
                                             getCourseDataInstance().clearData();
+                                            if (AccessToken.getCurrentAccessToken() != null) {
+                                                LoginManager.getInstance().logOut();
+                                            }
+                                            mAuth.signOut();
                                         }
                                     }, 300);
 
@@ -253,17 +263,7 @@ public class NavigationDrawerSetup extends AppCompatActivity {
 
         View headerView = navigationView.getHeaderView(0);
 
-//        ImageView profile_pic = (ImageView) headerView.findViewById(R.id.nav_header_pic);
-//        if (appSettings.getProfilePic() != null)
-//            profile_pic.setImageBitmap(SignUpProfileActivity.decodeBase64(appSettings.getProfilePic()));
-//
-//        TextView nav_header_name = (TextView) headerView.findViewById(R.id.nav_header_name);
-//        if (appSettings.getfName() != null && appSettings.getlName() != null)
-//            nav_header_name.setText(appSettings.getfName() + " " + appSettings.getlName());
-//        else if (appSettings.getfName() != null)
-//            nav_header_name.setText(appSettings.getfName());
-//        else
-//            nav_header_name.setText("");
+        ImageView profile_pic = (ImageView) headerView.findViewById(R.id.nav_header_pic);
 //
 //
         TextView nav_header_email = (TextView) headerView.findViewById(R.id.nav_header_email);
@@ -271,13 +271,24 @@ public class NavigationDrawerSetup extends AppCompatActivity {
             nav_header_email.setText(firebaseUser.getEmail());
 
         TextView nav_header_name = (TextView) headerView.findViewById(R.id.nav_header_name);
-        if (firebaseUser != null)
-            if (firebaseUser.getDisplayName() != null) {
+        nav_header_name.setVisibility(GONE);
+        for (UserInfo profile : firebaseUser.getProviderData()) {
+            String providerId = profile.getProviderId();
+
+            if (providerId.equals("facebook.com")) {
+                String name = profile.getDisplayName();
                 nav_header_name.setVisibility(View.VISIBLE);
-                nav_header_name.setText(firebaseUser.getDisplayName());
-            } else {
-                nav_header_name.setVisibility(View.GONE);
+                nav_header_name.setText(name);
+                String facebookUserId = profile.getUid();
+
+
+//                Uri photoUrl = profile.getPhotoUrl();
+                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
+
+                Picasso.with(HostActivity).load(photoUrl).into(profile_pic);
+
             }
+        }
 
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(HostActivity, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {

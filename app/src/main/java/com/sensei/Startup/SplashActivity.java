@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
 import com.sensei.Activities.Dashboard.DashboardActivity;
 import com.sensei.Authentication.SignInActivity;
 import com.sensei.R;
@@ -24,6 +26,9 @@ public class SplashActivity extends AppCompatActivity {
 
         final Intent signInIntent = new Intent(SplashActivity.this, SignInActivity.class);
         final Intent dashboardIntent = new Intent(SplashActivity.this, DashboardActivity.class);
+        Shimmer shimmer = new Shimmer();
+        ShimmerTextView shimmerTextView = (ShimmerTextView) findViewById(R.id.shimmer_text_view);
+        shimmer.start(shimmerTextView);
 
         new Handler().postDelayed(new Runnable() {
             @Override

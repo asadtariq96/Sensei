@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.cocosw.bottomsheet.BottomSheet;
 import com.sensei.R;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -83,24 +82,24 @@ public class QuizDetailActivity extends AppCompatActivity {
 
     private void showAddMenu(View v) {
 
-        new BottomSheet.Builder(this).sheet(R.menu.add_contents_task_detail).listener(new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                }
-            }
-        }).show();
+//        new BottomSheet.Builder(this).sheet(R.menu.add_contents_task_detail).listener(new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                switch (which) {
+//                }
+//            }
+//        }).show();
     }
 
     private void showOptionsMenu(View v) {
 
-        new BottomSheet.Builder(this).sheet(R.menu.options_task_detail).listener(new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                }
-            }
-        }).show();
+//        new BottomSheet.Builder(this).sheet(R.menu.options_task_detail).listener(new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                switch (which) {
+//                }
+//            }
+//        }).show();
     }
 
     private void showReminderDialog() {
