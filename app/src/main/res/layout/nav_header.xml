@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:text="Asad Tariq"
+        android:text=""
         android:textColor="@color/white"
         android:textSize="14sp"
         android:textStyle="bold" />
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:text="asadtariq96@gmail.com"
+        android:text=""
         android:textColor="@color/white"
         android:textSize="14sp" />
 

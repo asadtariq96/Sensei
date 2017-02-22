@@ -20,6 +20,7 @@ public class CourseDataModel {
     private List<ClassDataModel> classes = new ArrayList<>();
     private List<QuizDataModel> quizzes = new ArrayList<>();
     private List<AssignmentDataModel> assignments = new ArrayList<>();
+    private List<HomeworkDataModel> homework = new ArrayList<>();
 
 
     public CourseDataModel() {
@@ -102,6 +103,24 @@ public class CourseDataModel {
         return temp;
     }
 
+    public List<AssignmentDataModel> getIncompleteAssignments() {
+        List<AssignmentDataModel> temp = new ArrayList<>();
+        for (AssignmentDataModel assignment : assignments)
+            if (!assignment.getCompleted())
+                temp.add(assignment);
+
+        return temp;
+    }
+
+    public List<HomeworkDataModel> getIncompleteHomework() {
+        List<HomeworkDataModel> temp = new ArrayList<>();
+        for (HomeworkDataModel hw : homework)
+            if (!hw.getCompleted())
+                temp.add(hw);
+
+        return temp;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -129,4 +148,10 @@ public class CourseDataModel {
     public List<AssignmentDataModel> getAssignments() {
         return assignments;
     }
+
+    public List<HomeworkDataModel> getHomework() {
+        return homework;
+    }
+
+
 }

@@ -80,7 +80,31 @@ public class EditClassDetailsActivity extends AppCompatActivity {
                 for (int j = 1; j < radioGroup.getChildCount(); j = j + 2) {
                     final ToggleButton view = (ToggleButton) radioGroup.getChildAt(j);
                     view.setChecked(view.getId() == i);
+
                 }
+
+                switch (i) {
+                    case R.id.toggle_mon:
+                        classDataModel.setDayOfWeek(1);
+                        break;
+                    case R.id.toggle_tue:
+                        classDataModel.setDayOfWeek(2);
+                        break;
+                    case R.id.toggle_wed:
+                        classDataModel.setDayOfWeek(3);
+                        break;
+                    case R.id.toggle_thu:
+                        classDataModel.setDayOfWeek(4);
+                        break;
+                    case R.id.toggle_fri:
+                        classDataModel.setDayOfWeek(5);
+                        break;
+                    case R.id.toggle_sat:
+                        classDataModel.setDayOfWeek(6);
+                        break;
+                }
+
+
             }
         };
 
@@ -91,7 +115,7 @@ public class EditClassDetailsActivity extends AppCompatActivity {
                 ((ToggleButton) findViewById(R.id.toggle_mon)).setChecked(true);
                 break;
             case 2:
-                ((ToggleButton) findViewById(R.id.toggle_thu)).setChecked(true);
+                ((ToggleButton) findViewById(R.id.toggle_tue)).setChecked(true);
                 break;
             case 3:
                 ((ToggleButton) findViewById(R.id.toggle_wed)).setChecked(true);

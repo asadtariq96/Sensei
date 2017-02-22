@@ -3,6 +3,7 @@ package com.sensei.Utils;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.UserInfo;
@@ -190,21 +193,23 @@ public class NavigationDrawerSetup extends AppCompatActivity {
                                     break;
 
                                 case R.id.signout:
+
+
                                     handler.postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
 
-                                            Intent intent = new Intent(HostActivity, SignInActivity.class);
-                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                            intent.putExtra("NavDrawer", true);
-                                            HostActivity.startActivity(intent);
-                                            HostActivity.finish();
-                                            firebaseUser = null;
-                                            getCourseDataInstance().clearData();
-                                            if (AccessToken.getCurrentAccessToken() != null) {
-                                                LoginManager.getInstance().logOut();
-                                            }
-                                            mAuth.signOut();
+                                            new MaterialDialog.Builder(HostActivity)
+                                                    .content("Are you sure you want to sign out?")
+                                                    .positiveText("SIGN OUT")
+                                                    .negativeText("CANCEL")
+                                                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                                        @Override
+                                                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                            signOut();
+                                                        }
+                                                    }).build().show();
+
                                         }
                                     }, 300);
 
@@ -259,12 +264,14 @@ public class NavigationDrawerSetup extends AppCompatActivity {
                         drawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     }
-                });
+                }
+
+        );
 
         View headerView = navigationView.getHeaderView(0);
 
         ImageView profile_pic = (ImageView) headerView.findViewById(R.id.nav_header_pic);
-//
+        //
 //
         TextView nav_header_email = (TextView) headerView.findViewById(R.id.nav_header_email);
         if (firebaseUser != null)
@@ -272,39 +279,65 @@ public class NavigationDrawerSetup extends AppCompatActivity {
 
         TextView nav_header_name = (TextView) headerView.findViewById(R.id.nav_header_name);
         nav_header_name.setVisibility(GONE);
-        for (UserInfo profile : firebaseUser.getProviderData()) {
-            String providerId = profile.getProviderId();
+        if (firebaseUser != null) {
 
-            if (providerId.equals("facebook.com")) {
-                String name = profile.getDisplayName();
-                nav_header_name.setVisibility(View.VISIBLE);
-                nav_header_name.setText(name);
-                String facebookUserId = profile.getUid();
+
+            for (UserInfo profile : firebaseUser.getProviderData()) {
+                String providerId = profile.getProviderId();
+
+                if (providerId.equals("facebook.com")) {
+                    String name = profile.getDisplayName();
+                    nav_header_name.setVisibility(View.VISIBLE);
+                    nav_header_name.setText(name);
+                    String facebookUserId = profile.getUid();
 
 
 //                Uri photoUrl = profile.getPhotoUrl();
-                String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
+                    String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
 
-                Picasso.with(HostActivity).load(photoUrl).into(profile_pic);
+                    Picasso.with(HostActivity).load(photoUrl).placeholder(R.drawable.ic_profile).into(profile_pic);
 
+                }
             }
         }
 
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(HostActivity, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
+        actionBarDrawerToggle = new
+
+                ActionBarDrawerToggle(HostActivity, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                        super.onDrawerClosed(drawerView);
+                    }
 
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        super.onDrawerOpened(drawerView);
+                    }
+                }
+
+        ;
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+
+    }
+
+    private void signOut() {
+        Intent intent = new Intent(HostActivity, SignInActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//        intent.putExtra("NavDrawer", true);
+
+//        HostActivity.finish();
+        firebaseUser = null;
+        getCourseDataInstance().clearData();
+        if (AccessToken.getCurrentAccessToken() != null) {
+            LoginManager.getInstance().logOut();
+        }
+        mAuth.signOut();
+
+        HostActivity.finishAffinity();
+        HostActivity.startActivity(intent);
 
     }
 

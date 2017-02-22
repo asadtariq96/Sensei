@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sensei.Activities.Classes.ClassDetailsActivity;
 import com.sensei.Adapters.DashboardClassesAdapter;
@@ -22,8 +23,12 @@ import com.sensei.Adapters.DashboardClassesAdapterBRVAH;
 import com.sensei.DataModelClasses.ClassDataModel;
 import com.sensei.R;
 
-import static com.sensei.Application.MyApplication.UID;
-import static com.sensei.Application.MyApplication.coursesReference;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import timber.log.Timber;
+
+import static com.sensei.Application.MyApplication.database;
 import static com.sensei.Application.MyApplication.databaseReference;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
@@ -92,41 +97,57 @@ public class DashboardClassesFragment extends Fragment {
         });
 
 
-        Button button = (Button) view.findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                databaseReference.child("semesters").child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot semesterSnapshot : dataSnapshot.getChildren()) {
-                            semKey = semesterSnapshot.getKey();
-                            coursesReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    coursesReference.getParent().child(semKey).setValue(dataSnapshot.getValue());
-                                    databaseReference.child("settings").child(UID).child("selectedSemester").setValue(semKey);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-
-
-            }
-        });
+//        Button button = (Button) view.findViewById(R.id.button);
+//        button.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//                final Map<String, Map<String, Object>> courseMap = new LinkedHashMap<String, Map<String, Object>>();
+//
+//                Query query = databaseReference
+//                        .child("courses").orderByKey();
+//
+//                query.addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//
+//                        for (DataSnapshot semID : dataSnapshot.getChildren()) {
+//
+//
+//                            for (DataSnapshot courseID : semID.getChildren()) {
+//
+//
+//                                databaseReference.child("courses").child(semID.getKey()).child(courseID.getKey()).child("classes").removeValue();
+//                                databaseReference.child("courses").child(semID.getKey()).child(courseID.getKey()).child("quizzes").removeValue();
+//                                databaseReference.child("courses").child(semID.getKey()).child(courseID.getKey()).child("assignments").removeValue();
+//
+//
+//
+//
+//
+//                            }
+//
+//
+//                        }
+//
+//
+//
+//
+//                    }
+//
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
+//
+//
+//            }
+//        });
 
 
     }
@@ -155,4 +176,6 @@ public class DashboardClassesFragment extends Fragment {
         getCourseDataInstance().unregisterDashboardClassesFragment();
 
     }
+
+
 }

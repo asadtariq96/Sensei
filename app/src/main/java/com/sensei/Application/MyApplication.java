@@ -38,6 +38,10 @@ public class MyApplication extends android.app.Application {
     public static DatabaseReference coursesReference;
     public static DatabaseReference settingsReference;
     public static DatabaseReference semestersReference;
+    public static DatabaseReference classesReference;
+    public static DatabaseReference quizzesReference;
+    public static DatabaseReference assignmentsReference;
+    public static DatabaseReference homeworkReference;
     public static String UID;
     public static Bus bus;
 
@@ -73,6 +77,15 @@ public class MyApplication extends android.app.Application {
         database = FirebaseDatabase.getInstance();
         database.setPersistenceEnabled(true);
         databaseReference = database.getReference();
+        classesReference = databaseReference.child("classes");
+        classesReference.keepSynced(true);
+        quizzesReference = databaseReference.child("quizzes");
+        quizzesReference.keepSynced(true);
+        assignmentsReference = databaseReference.child("assignments");
+        assignmentsReference.keepSynced(true);
+        homeworkReference = databaseReference.child("homework");
+        homeworkReference.keepSynced(true);
+        databaseReference.child("courses").keepSynced(true);
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -83,7 +96,13 @@ public class MyApplication extends android.app.Application {
                 firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
                     UID = firebaseUser.getUid();
-                    databaseReference.child("courses").child(UID).keepSynced(true);
+
+                    settingsReference = databaseReference.child("settings").child(UID);
+                    settingsReference.keepSynced(true);
+
+                    semestersReference = databaseReference.child("semesters").child(UID);
+                    semestersReference.keepSynced(true);
+
 
                     getCourseDataInstance().getUserSettings();
 

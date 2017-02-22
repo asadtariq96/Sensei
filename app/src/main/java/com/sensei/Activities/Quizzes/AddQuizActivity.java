@@ -217,11 +217,13 @@ public class AddQuizActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!CourseName.getText().toString().equals("") &&
-                        !Title.getText().toString().trim().equals(""))
-                    SaveMenu.setEnabled(true);
-                else
-                    SaveMenu.setEnabled(false);
+                if (!CourseName.getText().toString().equals("") && !Title.getText().toString().trim().equals("")) {
+                    if (SaveMenu != null)
+                        SaveMenu.setEnabled(true);
+                } else {
+                    if (SaveMenu != null)
+                        SaveMenu.setEnabled(false);
+                }
 
             }
         };
@@ -233,19 +235,21 @@ public class AddQuizActivity extends AppCompatActivity {
     public void addQuiz() {
         quizDataModel.setQuizTitle(Title.getText().toString().trim());
         quizDataModel.setQuizDescription(Description.getText().toString().trim());
-        courseDataModel.getQuizzes().add(quizDataModel);
 
-        String QuizID = coursesReference
-                .child(getCourseDataInstance().getCourseID(courseDataModel))
-                .child("quizzes").push().getKey();
-
-        getCourseDataInstance().QuizzesID.put(QuizID,quizDataModel);
-
-        coursesReference
-                .child(getCourseDataInstance().getCourseID(courseDataModel))
-                .child("quizzes")
-                .child(QuizID)
-                .setValue(quizDataModel);
+        getCourseDataInstance().addQuiz(courseDataModel,quizDataModel);
+//        courseDataModel.getQuizzes().add(quizDataModel);
+//
+//        String QuizID = coursesReference
+//                .child(getCourseDataInstance().getCourseID(courseDataModel))
+//                .child("quizzes").push().getKey();
+//
+//        getCourseDataInstance().QuizzesID.put(QuizID, quizDataModel);
+//
+//        coursesReference
+//                .child(getCourseDataInstance().getCourseID(courseDataModel))
+//                .child("quizzes")
+//                .child(QuizID)
+//                .setValue(quizDataModel);
 
 
         AddQuizActivity.this.finish();
@@ -284,5 +288,12 @@ public class AddQuizActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
 
 
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        SaveMenu = menu.getItem(0);
+
+        return super.onPrepareOptionsMenu(menu);
     }
 }

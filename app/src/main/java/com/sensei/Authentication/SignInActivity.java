@@ -50,7 +50,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     Button facebookLogin;
     Button googleLogin;
     LoginButton loginButton;
-//    SignInButton googleSignInButton;
+    //    SignInButton googleSignInButton;
     CallbackManager mCallbackManager;
     public GoogleApiClient mGoogleApiClient;
 
@@ -92,7 +92,9 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
             @Override
             public void onError(FacebookException error) {
-                Timber.d("facebook:onError", error);
+                Timber.d("facebook:onError:" + error.toString());
+                if (error.toString().contains("CONNECTION_FAILURE"))
+                    Toast.makeText(SignInActivity.this, "Login failed. Please check your internet connection.", Toast.LENGTH_SHORT).show();
                 // ...
             }
         });

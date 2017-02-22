@@ -65,7 +65,9 @@ public class Constants {
     public static String FIRST_LAUNCH = "first_launch";
 
     public static int getDayLength() {
-        return DEFAULT_END_TIME.getHourOfDay() - DEFAULT_START_TIME.getHourOfDay();
+//        return (int) Math.ceil(DEFAULT_END_TIME.getHourOfDay() - DEFAULT_START_TIME.getHourOfDay());
+        return (DEFAULT_END_TIME.getHourOfDay() - DEFAULT_START_TIME.getHourOfDay());
+
 
     }
 

@@ -160,12 +160,13 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
             public void afterTextChanged(Editable editable) {
 
 
-                if (!CourseName.getText().toString().trim().equals("")
-                        && !CourseAbbreviation.getText().toString().trim().equals("")
-                        )
-                    SaveMenu.setEnabled(true);
-                else
-                    SaveMenu.setEnabled(false);
+                if (!CourseName.getText().toString().trim().equals("") && !CourseAbbreviation.getText().toString().trim().equals("")) {
+                    if (SaveMenu != null)
+                        SaveMenu.setEnabled(true);
+                } else {
+                    if (SaveMenu != null)
+                        SaveMenu.setEnabled(false);
+                }
             }
         };
 

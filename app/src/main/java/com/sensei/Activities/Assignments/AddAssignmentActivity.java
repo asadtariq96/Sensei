@@ -219,9 +219,15 @@ public class AddAssignmentActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (!CourseName.getText().toString().equals("") &&
                         !Title.getText().toString().trim().equals(""))
-                    SaveMenu.setEnabled(true);
+                {
+                    if (SaveMenu != null)
+                        SaveMenu.setEnabled(true);
+                }
                 else
-                    SaveMenu.setEnabled(false);
+                {
+                    if (SaveMenu != null)
+                        SaveMenu.setEnabled(false);
+                }
 
             }
         };

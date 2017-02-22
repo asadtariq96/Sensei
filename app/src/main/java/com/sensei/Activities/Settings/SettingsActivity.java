@@ -179,7 +179,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onError(FacebookException error) {
-                Timber.d("facebook:onError", error);
+                Timber.d("facebook:onError" + error.toString());
                 // ...
             }
         });
@@ -279,11 +279,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 addNewSemester();
                 break;
             case R.id.link_facebook_account:
-                if (AccessToken.getCurrentAccessToken() == null)
-                    loginButton.performClick();
-                else {
+                if (firebaseUser.getProviders().contains(("facebook.com")))
                     Toast.makeText(SettingsActivity.this, "Account already linked!", Toast.LENGTH_SHORT).show();
-                }
+                else
+//                if (AccessToken.getCurrentAccessToken() == null)
+                    loginButton.performClick();
+//                else {
+//                }
                 break;
             case R.id.link_google_account:
                 linkGoogleAccount();
@@ -328,6 +330,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
+                            Timber.d("Authentication Failed:" + task.getException().toString());
                             Toast.makeText(SettingsActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }

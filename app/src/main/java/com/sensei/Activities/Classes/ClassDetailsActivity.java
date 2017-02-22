@@ -18,6 +18,8 @@ import com.sensei.DataModelClasses.ClassDataModel;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
 
+import timber.log.Timber;
+
 import static com.sensei.Application.Constants.REQUEST_CODE_EDIT_CLASS;
 import static com.sensei.Application.Constants.RESULT_CODE_FINISH_ACTIVITY;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
@@ -69,7 +71,8 @@ public class ClassDetailsActivity extends AppCompatActivity {
         classType = (TextView) findViewById(R.id.class_type);
         daysOfWeek = (RadioGroup) findViewById(R.id.toggle_group);
 
-        updateFields();
+//        Timber.d("onCreate, calling updateFields");
+//        updateFields();
 
 //        RadioGroup.OnCheckedChangeListener ToggleListener = new RadioGroup.OnCheckedChangeListener() {
 //            @Override
@@ -88,12 +91,15 @@ public class ClassDetailsActivity extends AppCompatActivity {
     }
 
     public void updateFields() {
+        Timber.d("updateFields,dayOfWeek:" + classDataModel.getDayOfWeek());
+        clearChecked();
         switch (classDataModel.getDayOfWeek()) {
             case 1:
+
                 ((ToggleButton) findViewById(R.id.toggle_mon)).setChecked(true);
                 break;
             case 2:
-                ((ToggleButton) findViewById(R.id.toggle_thu)).setChecked(true);
+                ((ToggleButton) findViewById(R.id.toggle_tue)).setChecked(true);
                 break;
             case 3:
                 ((ToggleButton) findViewById(R.id.toggle_wed)).setChecked(true);
@@ -107,6 +113,8 @@ public class ClassDetailsActivity extends AppCompatActivity {
             case 6:
                 ((ToggleButton) findViewById(R.id.toggle_sat)).setChecked(true);
                 break;
+
+
         }
 
 
@@ -152,6 +160,10 @@ public class ClassDetailsActivity extends AppCompatActivity {
 
     public void onStart() {
         super.onStart();
+        classDataModel = getCourseDataInstance().ClassesID.get(classID);
+
+        Timber.d("onStart,Calling updateFields");
+
         updateFields();
 
     }
@@ -159,9 +171,20 @@ public class ClassDetailsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_CODE_EDIT_CLASS) {
+//            Timber.d("onActivityResult,calling updateFields");
+//            updateFields();
+
             if (resultCode == RESULT_CODE_FINISH_ACTIVITY) {
                 finish();
             }
+        }
+    }
+
+    public void clearChecked(){
+        for (int j = 1; j < daysOfWeek.getChildCount(); j = j + 2) {
+            final ToggleButton view = (ToggleButton) daysOfWeek.getChildAt(j);
+            view.setChecked(false);
+
         }
     }
 

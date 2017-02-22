@@ -143,10 +143,13 @@ public class EditCourseDetailsActivity extends AppCompatActivity implements Colo
                 if (!CourseName.getText().toString().trim().equals("")
                         && !CourseAbbreviation.getText().toString().trim().equals("")
                         && !CreditHours.getText().toString().isEmpty()
-                        && Integer.parseInt(CreditHours.getText().toString()) != 0)
-                    SaveMenu.setEnabled(true);
-                else
-                    SaveMenu.setEnabled(false);
+                        && Integer.parseInt(CreditHours.getText().toString()) != 0) {
+                    if (SaveMenu != null)
+                        SaveMenu.setEnabled(true);
+                } else {
+                    if (SaveMenu != null)
+                        SaveMenu.setEnabled(false);
+                }
             }
         };
 
@@ -192,7 +195,7 @@ public class EditCourseDetailsActivity extends AppCompatActivity implements Colo
                 courseDataModel.setCourseAbbreviation(CourseAbbreviation.getText().toString().trim());
                 courseDataModel.setInstructor(CourseInstructor.getText().toString().trim());
 
-                courseDataModel.setCreditHours(Integer.parseInt(CreditHours.getText().toString()));
+                courseDataModel.setCreditHours(CreditHours.getText().toString().isEmpty() ? 0 : Integer.valueOf(CreditHours.getText().toString()));
 //                CourseDataModel courseDataModel = new CourseDataModel(CourseName.getText().toString().trim(),
 //                        CourseAbbreviation.getText().toString().trim(),
 //                        ((ColorDrawable) ColorBox.getBackground()).getColor(),
