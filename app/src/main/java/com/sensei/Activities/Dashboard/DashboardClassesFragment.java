@@ -4,12 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.WindowDecorActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -20,17 +25,21 @@ import com.google.firebase.database.ValueEventListener;
 import com.sensei.Activities.Classes.ClassDetailsActivity;
 import com.sensei.Adapters.DashboardClassesAdapter;
 import com.sensei.Adapters.DashboardClassesAdapterBRVAH;
+import com.sensei.DataHandlers.CourseDataHandler;
 import com.sensei.DataModelClasses.ClassDataModel;
 import com.sensei.R;
+import com.squareup.otto.Subscribe;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import timber.log.Timber;
 
+import static com.sensei.Application.MyApplication.bus;
 import static com.sensei.Application.MyApplication.database;
 import static com.sensei.Application.MyApplication.databaseReference;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
+import static com.sensei.R.id.weekView;
 
 
 /**
@@ -47,7 +56,7 @@ public class DashboardClassesFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        setHasOptionsMenu(true);
         placeHolder = inflater.inflate(R.layout.no_class_placeholder, container, false);
 
         return inflater.inflate(R.layout.fragment_dashboard_classes_layout, null);
@@ -97,59 +106,6 @@ public class DashboardClassesFragment extends Fragment {
         });
 
 
-//        Button button = (Button) view.findViewById(R.id.button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//                final Map<String, Map<String, Object>> courseMap = new LinkedHashMap<String, Map<String, Object>>();
-//
-//                Query query = databaseReference
-//                        .child("courses").orderByKey();
-//
-//                query.addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//
-//                        for (DataSnapshot semID : dataSnapshot.getChildren()) {
-//
-//
-//                            for (DataSnapshot courseID : semID.getChildren()) {
-//
-//
-//                                databaseReference.child("courses").child(semID.getKey()).child(courseID.getKey()).child("classes").removeValue();
-//                                databaseReference.child("courses").child(semID.getKey()).child(courseID.getKey()).child("quizzes").removeValue();
-//                                databaseReference.child("courses").child(semID.getKey()).child(courseID.getKey()).child("assignments").removeValue();
-//
-//
-//
-//
-//
-//                            }
-//
-//
-//                        }
-//
-//
-//
-//
-//                    }
-//
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//
-//                    }
-//                });
-//
-//
-//            }
-//        });
-
-
     }
 
     @Override
@@ -163,7 +119,8 @@ public class DashboardClassesFragment extends Fragment {
         super.onStart();
         getCourseDataInstance().registerDashboardClassesFragment(DashboardClassesFragment.this);
         adapter.setNewData(getCourseDataInstance().getListOfClassesForCurrentDay());
-        adapter.notifyDataSetChanged();
+        bus.register(DashboardClassesFragment.this);
+//        adapter.notifyDataSetChanged();
 //        if (getCourseDataInstance().getListOfClassesForCurrentDay().isEmpty())
 //            placeHolder.setVisibility(View.VISIBLE);
 //        else
@@ -174,8 +131,35 @@ public class DashboardClassesFragment extends Fragment {
     public void onStop() {
         super.onStop();
         getCourseDataInstance().unregisterDashboardClassesFragment();
+        bus.unregister(DashboardClassesFragment.this);
 
     }
+
+    @Subscribe
+    public void answerAvailable(CourseDataHandler.DataChangedEvent event) {
+        adapter.setNewData(getCourseDataInstance().getListOfClassesForCurrentDay());
+        Timber.d("event received");
+    }
+
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.timetable_refresh, menu);
+//    }
+//
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        // handle arrow click here
+//        if (item.getItemId() == R.id.refresh) {
+//            Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
+//            adapter.setNewData(getCourseDataInstance().getListOfClassesForCurrentDay());
+//        }
+//
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
 }

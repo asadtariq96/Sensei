@@ -15,9 +15,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.github.clans.fab.FloatingActionButton;
 import com.sensei.Adapters.CoursesListAdapterBRVAH;
+import com.sensei.DataHandlers.CourseDataHandler;
 import com.sensei.DataModelClasses.CourseDataModel;
 import com.sensei.R;
 import com.sensei.Utils.NavigationDrawerSetup;
+import com.squareup.otto.Subscribe;
+
+import timber.log.Timber;
 
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
@@ -89,7 +93,13 @@ public class CoursesListActivity extends AppCompatActivity {
         getCourseDataInstance().registerCoursesActivity(CoursesListActivity.this);
         navigationDrawerSetup.ConfigureDrawer();
         adapter.setNewData(getCourseDataInstance().CoursesList);
-        adapter.notifyDataSetChanged();
+//        adapter.notifyDataSetChanged();
+    }
+
+    @Subscribe
+    public void answerAvailable(CourseDataHandler.DataChangedEvent event) {
+        adapter.setNewData(getCourseDataInstance().CoursesList);
+        Timber.d("event received");
     }
 
     public void onResume() {

@@ -23,7 +23,7 @@
         <activity android:name=".Activities.Courses.AddCourseActivity" />
         <activity android:name=".Activities.Quizzes.AddQuizActivity" />
         <activity android:name=".Activities.Assignments.AddAssignmentActivity" />
-        <activity android:name=".Activities.AddHomeworkActivity" />
+        <activity android:name=".Activities.Homework.AddHomeworkActivity" />
         <activity android:name=".Activities.Classes.ClassesActivity" />
         <activity android:name=".Authentication.SignInActivity" />
         <activity
@@ -50,7 +50,8 @@
         <activity android:name=".Activities.Assignments.AssignmentsListActivity" />
         <activity android:name=".Activities.Courses.EditCourseDetailsActivity" />
         <activity android:name=".Activities.GPA.GPACalculatorActivity" />
-        <activity android:name=".Activities.Settings.SettingsActivity"></activity>
+        <activity android:name=".Activities.Settings.SettingsActivity" />
+        <activity android:name=".Activities.Homework.HomeworkListActivity"/>
     </application>
 
 </manifest>

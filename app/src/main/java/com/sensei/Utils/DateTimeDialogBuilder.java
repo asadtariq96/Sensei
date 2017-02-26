@@ -29,7 +29,7 @@ import java.util.List;
 
 import com.sensei.Activities.Assignments.AddAssignmentActivity;
 import com.sensei.Activities.Quizzes.AddQuizActivity;
-import com.sensei.Activities.AddHomeworkActivity;
+import com.sensei.Activities.Homework.AddHomeworkActivity;
 
 import static com.sensei.R.id.date;
 

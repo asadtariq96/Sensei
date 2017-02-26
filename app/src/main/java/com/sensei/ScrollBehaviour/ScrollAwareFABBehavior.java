@@ -2,15 +2,16 @@ package com.sensei.ScrollBehaviour;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.github.clans.fab.FloatingActionButton;
 
 /**
  * Created by Asad on 04-Jan-17.
  */
 
-public class ScrollAwareFABBehavior extends CoordinatorLayout.Behavior<FloatingActionButton> {
+public class ScrollAwareFABBehavior extends CoordinatorLayout.Behavior<com.github.clans.fab.FloatingActionButton> {
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
 
@@ -31,9 +32,9 @@ public class ScrollAwareFABBehavior extends CoordinatorLayout.Behavior<FloatingA
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
 
         if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
-            child.hide();
+            child.hide(true);
         } else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
-            child.show();
+            child.show(true);
         }
     }
 }

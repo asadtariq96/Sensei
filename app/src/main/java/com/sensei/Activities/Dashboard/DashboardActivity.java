@@ -13,6 +13,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.github.clans.fab.FloatingActionMenu;
@@ -21,10 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sensei.Activities.Assignments.AddAssignmentActivity;
+import com.sensei.Activities.Homework.AddHomeworkActivity;
 import com.sensei.Activities.Quizzes.AddQuizActivity;
 import com.sensei.Activities.Courses.AddCourseActivity;
 import com.sensei.R;
 import com.sensei.Utils.NavigationDrawerSetup;
+
+import static com.sensei.R.id.weekView;
 
 public class DashboardActivity extends AppCompatActivity implements View.OnClickListener {
     FloatingActionMenu floatingActionMenu;
@@ -148,7 +154,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(DashboardActivity.this, AddQuizActivity.class));
+                        startActivity(new Intent(DashboardActivity.this, AddHomeworkActivity.class));
                     }
                 }, 300);
                 break;
@@ -184,4 +190,14 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             return mFragmentTitleList.get(position);
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.timetable_refresh, menu);
+        return true;
+    }
+
+
 }

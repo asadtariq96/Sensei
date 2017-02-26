@@ -28,11 +28,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import timber.log.Timber;
+
 import static com.sensei.Application.Constants.SELECTED_SEMESTER;
 import static com.sensei.Application.MyApplication.UID;
+import static com.sensei.Application.MyApplication.assignmentsReference;
+import static com.sensei.Application.MyApplication.bus;
 import static com.sensei.Application.MyApplication.classesReference;
 import static com.sensei.Application.MyApplication.coursesReference;
 import static com.sensei.Application.MyApplication.databaseReference;
+import static com.sensei.Application.MyApplication.homeworkReference;
 import static com.sensei.Application.MyApplication.quizzesReference;
 import static com.sensei.Application.MyApplication.semestersReference;
 import static com.sensei.Application.MyApplication.settingsReference;
@@ -176,6 +181,8 @@ public class CourseDataHandler {
                 ClassDataModel classDataModel = classSnapShot.getValue(ClassDataModel.class);
                 CoursesID.get(classSnapShot.getRef().getParent().getKey()).getClasses().add(classDataModel);
                 ClassesID.put(classSnapShot.getKey(), classDataModel);
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post classChildAdded");
             }
 
             @Override
@@ -190,10 +197,14 @@ public class CourseDataHandler {
 
                 ClassesID.put(classSnapShot.getKey(), classDataModel);
 
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post classChildChanged");
+
             }
 
             @Override
             public void onChildRemoved(DataSnapshot classSnapShot) {
+
 
                 String courseKey = classSnapShot.getRef().getParent().getKey();
 
@@ -201,6 +212,9 @@ public class CourseDataHandler {
                     CoursesID.get(classSnapShot.getRef().getParent().getKey()).getClasses().remove(ClassesID.get(classSnapShot.getKey()));
                 }
                 ClassesID.remove(classSnapShot.getKey());
+
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post classChildRemoved");
 
             }
 
@@ -222,6 +236,8 @@ public class CourseDataHandler {
                 QuizDataModel quizDataModel = quizSnapshot.getValue(QuizDataModel.class);
                 CoursesID.get(quizSnapshot.getRef().getParent().getKey()).getQuizzes().add(quizDataModel);
                 QuizzesID.put(quizSnapshot.getKey(), quizDataModel);
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post quizAdded");
             }
 
             @Override
@@ -236,10 +252,14 @@ public class CourseDataHandler {
 
                 QuizzesID.put(quizSnapshot.getKey(), quizDataModel);
 
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post quizChanged");
+
             }
 
             @Override
             public void onChildRemoved(DataSnapshot quizSnapshot) {
+
 
                 String courseKey = quizSnapshot.getRef().getParent().getKey();
 
@@ -247,6 +267,9 @@ public class CourseDataHandler {
                     CoursesID.get(quizSnapshot.getRef().getParent().getKey()).getQuizzes().remove(QuizzesID.get(quizSnapshot.getKey()));
                 }
                 QuizzesID.remove(quizSnapshot.getKey());
+
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post quizRemoved");
 
             }
 
@@ -268,6 +291,8 @@ public class CourseDataHandler {
                 AssignmentDataModel assignmentDataModel = assignmentSnapshot.getValue(AssignmentDataModel.class);
                 CoursesID.get(assignmentSnapshot.getRef().getParent().getKey()).getAssignments().add(assignmentDataModel);
                 AssignmentsID.put(assignmentSnapshot.getKey(), assignmentDataModel);
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post assgAdded");
             }
 
             @Override
@@ -282,6 +307,9 @@ public class CourseDataHandler {
 
                 AssignmentsID.put(assignmentSnapshot.getKey(), assignmentDataModel);
 
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post assgChanged");
+
             }
 
             @Override
@@ -293,6 +321,9 @@ public class CourseDataHandler {
                     CoursesID.get(assignmentSnapshot.getRef().getParent().getKey()).getAssignments().remove(AssignmentsID.get(assignmentSnapshot.getKey()));
                 }
                 AssignmentsID.remove(assignmentSnapshot.getKey());
+
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post assgRemoved");
 
             }
 
@@ -314,6 +345,9 @@ public class CourseDataHandler {
                 HomeworkDataModel homeworkDataModel = homeworkSnapshot.getValue(HomeworkDataModel.class);
                 CoursesID.get(homeworkSnapshot.getRef().getParent().getKey()).getHomework().add(homeworkDataModel);
                 HomeworkID.put(homeworkSnapshot.getKey(), homeworkDataModel);
+
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post homeworkAdded");
             }
 
             @Override
@@ -328,6 +362,9 @@ public class CourseDataHandler {
 
                 HomeworkID.put(homeworkSnapshot.getKey(), homeworkDataModel);
 
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post homeworkChanged");
+
             }
 
             @Override
@@ -339,6 +376,9 @@ public class CourseDataHandler {
                     CoursesID.get(homeworkSnapshot.getRef().getParent().getKey()).getHomework().remove(HomeworkID.get(homeworkSnapshot.getKey()));
                 }
                 HomeworkID.remove(homeworkSnapshot.getKey());
+
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post homeworkRemoved");
 
             }
 
@@ -356,6 +396,8 @@ public class CourseDataHandler {
         coursesChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(final DataSnapshot courseDataSnapshot, String s) {
+
+
                 CourseDataModel courseDataModel = courseDataSnapshot.getValue(CourseDataModel.class);
                 CoursesList.add(courseDataModel);
                 CoursesID.put(courseDataSnapshot.getKey(), courseDataModel);
@@ -367,6 +409,9 @@ public class CourseDataHandler {
                 childEventListenerHashMap.put(databaseReference.child("assignments").child(courseDataSnapshot.getKey()), assignmentsChildEventListener);
                 databaseReference.child("homework").child(courseDataSnapshot.getKey()).addChildEventListener(homeworkChildEventListener);
                 childEventListenerHashMap.put(databaseReference.child("homework").child(courseDataSnapshot.getKey()), homeworkChildEventListener);
+
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post coursesChildAdded");
 
             }
 
@@ -381,6 +426,9 @@ public class CourseDataHandler {
                 original.setInstructor(courseDataModel.getInstructor());
                 original.setCourseAbbreviation(courseDataModel.getCourseAbbreviation());
                 original.setCourseColorCode(courseDataModel.getCourseColorCode());
+
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post coursesChildChanged");
 
 
             }
@@ -398,7 +446,8 @@ public class CourseDataHandler {
 //                for (ClassDataModel classDataModel : classes) {
 //                    ClassesID.remove(getClassID(classDataModel));
 //                }
-
+                bus.post(new DataChangedEvent(true));
+                Timber.d("bus.post coursesChildRemoved");
 
             }
 
@@ -706,6 +755,20 @@ public class CourseDataHandler {
 
     }
 
+    public void addAssignment(CourseDataModel courseDataModel, AssignmentDataModel assignmentDataModel) {
+        String courseID = getCourseID(courseDataModel);
+        assignmentsReference.child(courseID).push().setValue(assignmentDataModel);
+
+
+    }
+
+    public void addHomework(CourseDataModel courseDataModel, HomeworkDataModel homeworkDataModel) {
+        String courseID = getCourseID(courseDataModel);
+        homeworkReference.child(courseID).push().setValue(homeworkDataModel);
+
+
+    }
+
 
     public void addNewUserToDatabase() {
         DatabaseReference newUserRef = databaseReference.child("settings").child(UID);
@@ -732,6 +795,23 @@ public class CourseDataHandler {
             DatabaseReference ref = entry.getKey();
             ChildEventListener listener = entry.getValue();
             ref.removeEventListener(listener);
+        }
+    }
+
+
+    public static class DataChangedEvent {
+        boolean var;
+
+        public DataChangedEvent(boolean var) {
+            this.var = var;
+        }
+
+        public boolean isVar() {
+            return var;
+        }
+
+        public void setVar(boolean var) {
+            this.var = var;
         }
     }
 

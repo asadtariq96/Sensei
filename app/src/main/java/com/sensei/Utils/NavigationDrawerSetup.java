@@ -31,6 +31,7 @@ import com.sensei.Activities.Classes.ClassesActivity;
 import com.sensei.Activities.Courses.CoursesListActivity;
 import com.sensei.Activities.Dashboard.DashboardActivity;
 import com.sensei.Activities.GPA.GPACalculatorActivity;
+import com.sensei.Activities.Homework.HomeworkListActivity;
 import com.sensei.Activities.Quizzes.QuizzesListActivity;
 import com.sensei.Activities.Settings.SettingsActivity;
 import com.sensei.Activities.TimeTable.TimetableActivity;
@@ -140,6 +141,21 @@ public class NavigationDrawerSetup extends AppCompatActivity {
                                         public void run() {
 
                                             Intent intent = new Intent(HostActivity, QuizzesListActivity.class);
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                            intent.putExtra("NavDrawer", true);
+                                            HostActivity.startActivity(intent);
+//                                            HostActivity.finish();
+                                        }
+                                    }, 300);
+
+                                    break;
+
+                                case R.id.homework:
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            Intent intent = new Intent(HostActivity, HomeworkListActivity.class);
                                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                                             intent.putExtra("NavDrawer", true);
                                             HostActivity.startActivity(intent);

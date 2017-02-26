@@ -1,4 +1,4 @@
-package com.sensei.Activities.Quizzes;
+package com.sensei.Activities.Homework;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
+import com.sensei.Activities.Quizzes.AddQuizActivity;
+import com.sensei.DataModelClasses.HomeworkDataModel;
 import com.sensei.DataModelClasses.QuizDataModel;
 import com.sensei.R;
 import com.thebluealliance.spectrum.internal.ColorCircleDrawable;
@@ -34,10 +36,10 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
 
-import static com.sensei.Application.MyApplication.coursesReference;
 import static com.sensei.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
-public class AddQuizActivity extends AppCompatActivity {
+
+public class AddHomeworkActivity extends AppCompatActivity {
 
     TextInputEditText CourseName;
     TextInputEditText Reminder;
@@ -51,22 +53,22 @@ public class AddQuizActivity extends AppCompatActivity {
     DateTimeDialogBuilder dateTimeDialogBuilder = new DateTimeDialogBuilder();
     private MenuItem SaveMenu;
 
-    QuizDataModel quizDataModel;
+    HomeworkDataModel homeworkDataModel;
     CourseDataModel courseDataModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_quiz);
+        setContentView(R.layout.activity_add_homework);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Add Quiz");
+        toolbar.setTitle("Add Homework");
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        quizDataModel = new QuizDataModel();
-        quizDataModel.setCompleted(false);
+        homeworkDataModel = new HomeworkDataModel();
+        homeworkDataModel.setCompleted(false);
 
 
         CourseName = (TextInputEditText) findViewById(R.id.course);
@@ -78,7 +80,6 @@ public class AddQuizActivity extends AppCompatActivity {
 
         Title.setHorizontallyScrolling(false);
         Title.setMaxLines(Integer.MAX_VALUE);
-
 
         CourseName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +96,7 @@ public class AddQuizActivity extends AppCompatActivity {
                 });
 
                 for (CourseDataModel item : getCourseDataInstance().CoursesList) {
-                    adapter.add(new MaterialSimpleListItem.Builder(AddQuizActivity.this)
+                    adapter.add(new MaterialSimpleListItem.Builder(AddHomeworkActivity.this)
                             .content(item.getCourseName())
                             .icon(new ColorCircleDrawable(item.getCourseColorCode()))
                             .backgroundColor(Color.WHITE)
@@ -103,7 +104,7 @@ public class AddQuizActivity extends AppCompatActivity {
                 }
 
 
-                new MaterialDialog.Builder(AddQuizActivity.this)
+                new MaterialDialog.Builder(AddHomeworkActivity.this)
                         .title("Select Course")
                         .adapter(adapter, null)
                         .show();
@@ -115,7 +116,7 @@ public class AddQuizActivity extends AppCompatActivity {
         Reminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dateTimeDialogBuilder.BuildReminderDialog(AddQuizActivity.this, Reminder, AddQuizActivity.this);
+                dateTimeDialogBuilder.BuildReminderDialog(AddHomeworkActivity.this, Reminder, AddHomeworkActivity.this);
             }
         });
 
@@ -129,7 +130,7 @@ public class AddQuizActivity extends AppCompatActivity {
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
                         LocalDate localDate = new LocalDate(year, monthOfYear + 1, dayOfMonth);
                         DueDate.setText(localDate.toString("d MMMM, yyyy"));
-                        quizDataModel.setDueDate(localDate.toString());
+                        homeworkDataModel.setDueDate(localDate.toString());
 
                     }
                 };
@@ -146,7 +147,7 @@ public class AddQuizActivity extends AppCompatActivity {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
                         DueDate.setText("");
-                        quizDataModel.setDueDate(null);
+                        homeworkDataModel.setDueDate(null);
 
 
                     }
@@ -168,7 +169,7 @@ public class AddQuizActivity extends AppCompatActivity {
                     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
                         LocalTime localTime = new LocalTime(hourOfDay, minute, second);
                         DueTime.setText(localTime.toString("h:mm a"));
-                        quizDataModel.setDueTime(localTime.toString());
+                        homeworkDataModel.setDueTime(localTime.toString());
 
 //                final Handler handler = new Handler();
 //                handler.postDelayed(new Runnable() {
@@ -194,7 +195,7 @@ public class AddQuizActivity extends AppCompatActivity {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
                         DueTime.setText("");
-                        quizDataModel.setDueTime(null);
+                        homeworkDataModel.setDueTime(null);
 
 
                     }
@@ -230,13 +231,15 @@ public class AddQuizActivity extends AppCompatActivity {
 
         CourseName.addTextChangedListener(textWatcher);
         Title.addTextChangedListener(textWatcher);
+
     }
 
-    public void addQuiz() {
-        quizDataModel.setQuizTitle(Title.getText().toString().trim());
-        quizDataModel.setQuizDescription(Description.getText().toString().trim());
+    public void addHomework() {
 
-        getCourseDataInstance().addQuiz(courseDataModel, quizDataModel);
+        homeworkDataModel.setHomeworkTitle(Title.getText().toString().trim());
+        homeworkDataModel.setHomeworkDescription(Description.getText().toString().trim());
+
+        getCourseDataInstance().addHomework(courseDataModel, homeworkDataModel);
 //        courseDataModel.getQuizzes().add(quizDataModel);
 //
 //        String QuizID = coursesReference
@@ -252,8 +255,7 @@ public class AddQuizActivity extends AppCompatActivity {
 //                .setValue(quizDataModel);
 
 
-        AddQuizActivity.this.finish();
-
+        AddHomeworkActivity.this.finish();
     }
 
     @Override
@@ -270,14 +272,13 @@ public class AddQuizActivity extends AppCompatActivity {
                     Toast.makeText(this, "Please set a due date.", Toast.LENGTH_SHORT).show();
                 else
 
-                    addQuiz();
+                    addHomework();
 
 
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

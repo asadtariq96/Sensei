@@ -122,6 +122,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             public void onClick(View view) {
 //                Toast.makeText(SignInActivity.this, "googleLoginClicked", Toast.LENGTH_SHORT).show();
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                Timber.d("startActivityForResult(signInIntent)");
                 startActivityForResult(signInIntent, RC_SIGN_IN);
 //                googleSignInButton.performClick();
             }
@@ -280,8 +281,12 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
+                Timber.d("GoogleSignInResult Success");
+
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
+                Timber.d("GoogleSignInAccount:" + result.getSignInAccount().toString());
+
                 firebaseAuthWithGoogle(account);
             } else {
                 // Google Sign In failed, update UI appropriately
@@ -296,11 +301,22 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         Timber.d("firebaseAuthWithGoogle:" + account.getId());
 
+        final MaterialDialog progressDialog = new MaterialDialog.Builder(SignInActivity.this)
+                .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
+                .content("Signing in...")
+                .build();
+
+        progressDialog.show();
+
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
+
 
                         Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
 
