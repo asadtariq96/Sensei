@@ -93,5 +93,5 @@
         android:layout_gravity="right|bottom"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
-        app:layout_behavior="com.sensei.ScrollAwareFABBehavior" />
+        app:layout_behavior="com.sensei.assistant.ScrollAwareFABBehavior" />
 </android.support.design.widget.CoordinatorLayout>

@@ -15,6 +15,50 @@
       },
       "oauth_client": [
         {
+          "client_id": "490046406670-6hn9gb7tb1usq4heetsnb9fudauj5drm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sensei",
+            "certificate_hash": "eb46fa678530f6c9a5276b901e1f88fe89d195cd"
+          }
+        },
+        {
+          "client_id": "490046406670-njv1rn90jcv7dpsolg6ab7upa4k4vhc0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKnmZ5uXCnEhuCV4pvqskwtzDdXGG61uo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "490046406670-njv1rn90jcv7dpsolg6ab7upa4k4vhc0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490046406670:android:f582dd20e9382c4b",
+        "android_client_info": {
+          "package_name": "com.sensei.assistant"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "490046406670-njv1rn90jcv7dpsolg6ab7upa4k4vhc0.apps.googleusercontent.com",
           "client_type": 3
         }

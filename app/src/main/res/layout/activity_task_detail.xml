@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.sensei.Activities.TaskDetailActivity">
+    tools:context="com.sensei.assistant.Activities.TaskDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -124,10 +124,10 @@
                         android:orientation="vertical">
 
                         <CheckBox
-                            android:backgroundTint="@color/colorPrimary"
                             android:layout_width="56dp"
                             android:layout_height="56dp"
                             android:background="?android:attr/listChoiceIndicatorMultiple"
+                            android:backgroundTint="@color/colorPrimary"
                             android:button="@null"
                             android:checked="true" />
 

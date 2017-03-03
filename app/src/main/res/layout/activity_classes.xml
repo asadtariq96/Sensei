@@ -63,7 +63,7 @@
             android:paddingBottom="8dp"
             android:paddingRight="8dp"
             android:visibility="gone"
-            fab:layout_behavior="com.sensei.ScrollBehaviour.ScrollFAMBehaviour"
+            fab:layout_behavior="com.sensei.assistant.ScrollBehaviour.ScrollFAMBehaviour"
             fab:menu_animationDelayPerItem="10"
             fab:menu_fab_size="normal"
             fab:menu_icon="@drawable/ic_add_white_24dp">
