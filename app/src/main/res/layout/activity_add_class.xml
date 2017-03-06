@@ -167,12 +167,13 @@
                     <android.support.v4.widget.Space
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:visibility="gone" />
 
                     <ToggleButton
                         android:id="@+id/toggle_sat"
-
                         android:layout_width="40dp"
+
                         android:layout_height="40dp"
                         android:background="@drawable/toggle_selector"
                         android:onClick="onToggle"
@@ -180,7 +181,8 @@
                         android:textOff="SAT"
                         android:textOn="SAT"
                         android:textSize="10sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                     <android.support.v4.widget.Space
                         android:layout_width="0dp"
@@ -343,7 +345,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:buttonTint="@color/colorPrimary"
+                        android:buttonTint="@color/colorAccent"
                         android:fontFamily="sans-serif-light"
                         android:padding="4dp"
                         android:text="Lecture"
@@ -356,7 +358,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:buttonTint="@color/colorPrimary"
+                        android:buttonTint="@color/colorAccent"
                         android:fontFamily="sans-serif-light"
                         android:padding="4dp"
                         android:text="Lab"

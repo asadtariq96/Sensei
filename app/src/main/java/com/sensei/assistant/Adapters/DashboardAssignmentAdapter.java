@@ -1,10 +1,12 @@
 package com.sensei.assistant.Adapters;
 
 import android.view.View;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.github.zagum.switchicon.SwitchIconView;
 import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.R;
@@ -37,7 +39,7 @@ public class DashboardAssignmentAdapter extends BaseQuickAdapter<AssignmentDataM
         TextView dueDate;
         TextView dueTime;
         TextView dueWhen;
-        SmoothCheckBox markAsDone;
+        SwitchIconView markAsDone;
 
 
         colorView = baseViewHolder.getView(R.id.color);
@@ -92,9 +94,7 @@ public class DashboardAssignmentAdapter extends BaseQuickAdapter<AssignmentDataM
 
         }
 
-        markAsDone.setChecked(assignmentDataModel.getCompleted(), false);
-
-
+        markAsDone.setIconEnabled(assignmentDataModel.getCompleted(), false);
 
 
     }

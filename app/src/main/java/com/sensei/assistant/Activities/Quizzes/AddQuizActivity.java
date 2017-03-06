@@ -233,7 +233,8 @@ public class AddQuizActivity extends AppCompatActivity {
 
     public void addQuiz() {
         quizDataModel.setQuizTitle(Title.getText().toString().trim());
-        quizDataModel.setQuizDescription(Description.getText().toString().trim());
+        if (!Description.getText().toString().isEmpty())
+            quizDataModel.setQuizDescription(Description.getText().toString().trim());
 
         getCourseDataInstance().addQuiz(courseDataModel, quizDataModel);
 //        courseDataModel.getQuizzes().add(quizDataModel);

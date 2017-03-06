@@ -32,6 +32,7 @@
             android:padding="4dp">
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -47,10 +48,9 @@
                         android:id="@+id/due_when"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
                         android:fontFamily="sans-serif-light"
                         android:text="Due Tomorrow!"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorAccent"
                         android:textSize="16sp"
                         android:textStyle="italic|bold" />
 
@@ -58,7 +58,6 @@
                         android:id="@+id/course_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="-4dp"
                         android:fontFamily="sans-serif-light"
                         android:text="Linear Circuit Analysis"
                         android:textColor="@color/secondary_text_material_light"
@@ -68,7 +67,6 @@
                         android:id="@+id/quiz_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="-4dp"
                         android:fontFamily="sans-serif-light"
                         android:text="Eigen Values and Eigen Vectors"
                         android:textColor="@color/primary_text_material_light"
@@ -76,15 +74,21 @@
                 </LinearLayout>
 
 
-                <cn.refactor.library.SmoothCheckBox
+                <com.github.zagum.switchicon.SwitchIconView
                     android:id="@+id/done_checkbox"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical|top"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="8dp"
-                    app:color_checked="@color/colorPrimary"
-                    app:stroke_width="2dp" />
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:padding="4dp"
+                    app:si_animation_duration="500"
+                    app:si_disabled_alpha=".4"
+                    app:si_disabled_color="#b7b7b7"
+                    app:si_enabled="false"
+                    app:si_no_dash="true"
+                    app:si_tint_color="@color/colorAccent"
+                    app:srcCompat="@drawable/ic_assignment_turned_in_black_36dp" />
 
 
             </LinearLayout>
@@ -93,13 +97,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/due_date"
+
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:layout_weight="1"
                     android:drawableLeft="@drawable/ic_date_range_black_18dp"
                     android:drawablePadding="8dp"
@@ -114,7 +119,9 @@
                     android:id="@+id/due_time"
 
                     android:layout_width="0dp"
+
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:layout_weight="1"
                     android:drawableLeft="@drawable/ic_access_time_black_18dp"
                     android:drawablePadding="8dp"

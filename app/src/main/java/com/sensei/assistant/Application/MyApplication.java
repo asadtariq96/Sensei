@@ -80,11 +80,11 @@ public class MyApplication extends android.app.Application {
         classesReference = databaseReference.child("classes");
         classesReference.keepSynced(true);
         quizzesReference = databaseReference.child("quizzes");
-//        quizzesReference.keepSynced(true);
+        quizzesReference.keepSynced(true);
         assignmentsReference = databaseReference.child("assignments");
-//        assignmentsReference.keepSynced(true);
+        assignmentsReference.keepSynced(true);
         homeworkReference = databaseReference.child("homework");
-//        homeworkReference.keepSynced(true);
+        homeworkReference.keepSynced(true);
 //        databaseReference.child("courses").keepSynced(true);
 
 

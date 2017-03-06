@@ -1,10 +1,13 @@
 package com.sensei.assistant.Adapters;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.github.zagum.switchicon.SwitchIconView;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.DataModelClasses.QuizDataModel;
 import com.sensei.assistant.R;
@@ -15,6 +18,7 @@ import java.util.List;
 
 import cn.refactor.library.SmoothCheckBox;
 
+import static android.view.View.GONE;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 /**
@@ -36,8 +40,8 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
         TextView quizTitle;
         TextView dueDate;
         TextView dueTime;
-        TextView dueWhen;
-        SmoothCheckBox markAsDone;
+        final TextView dueWhen;
+        final SwitchIconView markAsDone;
 
 
         colorView = baseViewHolder.getView(R.id.color);
@@ -60,18 +64,22 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
 
         quizTitle.setText(quizDataModel.getQuizTitle());
 
-        if (quizDataModel.getDueDate() != null) {
-            dueDate.setVisibility(View.VISIBLE);
-            dueDate.setText(quizDataModel.getDueDateOriginal().toString("E, d MMM"));
-        } else
-            dueDate.setVisibility(View.INVISIBLE);
+//        if (quizDataModel.getDueDate() != null) {
+//            dueWhen.setVisibility(View.VISIBLE);
+//            dueDate.setVisibility(View.VISIBLE);
+//            dueDate.setText(quizDataModel.getDueDateOriginal().toString("E, d MMM"));
+//        } else {
+//            dueDate.setVisibility(View.GONE);
+//            dueWhen.setVisibility(GONE);
+//        }
 
 
         if (quizDataModel.getDueTime() != null) {
             dueTime.setVisibility(View.VISIBLE);
             dueTime.setText(quizDataModel.getDueTimeOriginal().toString("h:mm a"));
-        } else
-            dueTime.setVisibility(View.INVISIBLE);
+        } else {
+            dueTime.setVisibility(View.GONE);
+        }
 
         LocalDate today = new LocalDate();
         LocalDate thisWeekEnd = today.dayOfWeek().withMaximumValue();
@@ -91,24 +99,70 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
                 dueWhen.setText("Due This Week!");
             else if (quizDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.plusWeeks(1).getWeekOfWeekyear())
                 dueWhen.setText("Due Next Week!");
-            else dueWhen.setVisibility(View.GONE);
+            else dueWhen.setText("Upcoming!");
 
+        } else {
+            dueDate.setVisibility(GONE);
+            dueWhen.setVisibility(GONE);
         }
 
-        markAsDone.setChecked(quizDataModel.getCompleted(), false);
+        markAsDone.setIconEnabled(quizDataModel.getCompleted(), false);
 
         if (quizDataModel.getCompleted()) {
-            dueWhen.setVisibility(View.GONE);
+
+            dueWhen.setVisibility(GONE);
         } else {
-            dueWhen.setVisibility(View.VISIBLE);
+            if (quizDataModel.getDueDate() != null) {
+                dueWhen.setVisibility(View.VISIBLE);
+            } else
+                dueWhen.setVisibility(GONE);
         }
 
-        markAsDone.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
+        markAsDone.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(SmoothCheckBox smoothCheckBox, boolean b) {
-                getCourseDataInstance().updateTaskCompleted(quizDataModel, b);
+            public void onClick(View view) {
+                markAsDone.switchState(true);
+                getCourseDataInstance().updateTaskCompleted(quizDataModel, markAsDone.isIconEnabled());
+                if (markAsDone.isIconEnabled()) {
+                    dueWhen.animate()
+//                            .translationY(view.getHeight())
+                            .alpha(0.0f)
+                            .setDuration(500)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    dueWhen.setVisibility(GONE);
+                                }
+                            });
+
+//                    dueWhen.setVisibility(View.GONE);
+                } else {
+
+//                    dueWhen.setVisibility(View.VISIBLE);
+                    dueWhen.animate()
+//                            .translationY(-view.getHeight())
+                            .alpha(1f)
+                            .setDuration(500)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationStart(Animator animation) {
+                                    super.onAnimationStart(animation);
+                                    dueWhen.setVisibility(View.VISIBLE);
+                                }
+                            });
+
+
+                }
             }
         });
+
+//        markAsDone.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(SmoothCheckBox smoothCheckBox, boolean b) {
+//                getCourseDataInstance().updateTaskCompleted(quizDataModel, b);
+//            }
+//        });
     }
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_done_checked" android:state_checked="true" />
-    <item android:drawable="@drawable/ic_done_unchcked" android:state_checked="false" />
-    <item android:drawable="@drawable/ic_done_unchcked" />
+    <item android:drawable="@drawable/ic_tick" android:state_checked="true" />
+    <item android:drawable="@drawable/ic_done_unchecked" android:state_checked="false" />
+    <item android:drawable="@drawable/ic_done_unchecked" />
 </selector>
