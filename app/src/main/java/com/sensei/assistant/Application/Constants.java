@@ -3,12 +3,15 @@ package com.sensei.assistant.Application;
 import android.graphics.Color;
 
 import org.joda.time.LocalTime;
+import org.joda.time.Minutes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import timber.log.Timber;
 
 /**
  * Created by Asad on 17-Dec-16.
@@ -52,6 +55,9 @@ public class Constants {
 
     public static int REQUEST_CODE_EDIT_CLASS = 100;
     public static int REQUEST_CODE_EDIT_COURSE = 200;
+    public static int REQUEST_CODE_EDIT_QUIZ = 457;
+    public static int REQUEST_CODE_EDIT_ASSIGNMENT = 454;
+    public static int REQUEST_CODE_EDIT_HOMEWORK = 444;
     public static int REQUEST_CODE_ADD_CLASS = 300;
     public static int RESULT_CODE_FINISH_ACTIVITY = 400;
 //    public static int REQUEST_CODE_CLASS_DETAILS = 101;
@@ -66,12 +72,17 @@ public class Constants {
 
     public static int getDayLength() {
 //        return (int) Math.ceil(DEFAULT_END_TIME.getHourOfDay() - DEFAULT_START_TIME.getHourOfDay());
-        return (DEFAULT_END_TIME.getHourOfDay() - DEFAULT_START_TIME.getHourOfDay());
+
+//        Timber.d("Minutes %f",Math.ceil(Minutes.minutesBetween(DEFAULT_START_TIME, DEFAULT_END_TIME).getMinutes() / 60.0));
+
+        return (int) Math.ceil(Minutes.minutesBetween(DEFAULT_START_TIME, DEFAULT_END_TIME).getMinutes() / 60.0);
+//        DEFAULT_END_TIME.minusHours(DEFAULT_START_TIME);
+//        return (DEFAULT_END_TIME.getHourOfDay() - DEFAULT_START_TIME.getHourOfDay());
 
 
     }
 
-    public static List<String> GradesListStandard = new ArrayList<String>() {
+    public static List<String> GradesListSchemeA = new ArrayList<String>() {
         {
             add("A");
             add("B+");
@@ -83,8 +94,25 @@ public class Constants {
         }
     };
 
+    public static List<String> GradesListSchemeB = new ArrayList<String>() {
+        {
+            add("A");
+            add("A-");
+            add("B+");
+            add("B");
+            add("B-");
+            add("C+");
+            add("C");
+            add("C-");
+            add("D+");
+            add("D");
+            add("D-");
 
-    public static Map<String, Float> gradesMap = new HashMap<String, Float>() {
+        }
+    };
+
+
+    public static Map<String, Float> gradesMapSchemeA = new HashMap<String, Float>() {
         {
             put("A", 4f);
             put("B+", 3.5f);
@@ -93,6 +121,23 @@ public class Constants {
             put("C", 2f);
             put("D+", 1.5f);
             put("D", 1f);
+
+        }
+    };
+
+    public static Map<String, Float> gradesMapSchemeB = new HashMap<String, Float>() {
+        {
+            put("A", 4f);
+            put("A-", 3.7f);
+            put("B+", 3.33f);
+            put("B", 3f);
+            put("B-", 2.7f);
+            put("C+", 2.33f);
+            put("C", 2f);
+            put("C-", 1.7f);
+            put("D+", 1.33f);
+            put("D", 1f);
+            put("D-", 0.7f);
 
         }
     };

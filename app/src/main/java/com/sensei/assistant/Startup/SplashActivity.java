@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.romainpiel.shimmer.Shimmer;
@@ -11,6 +12,11 @@ import com.romainpiel.shimmer.ShimmerTextView;
 import com.sensei.assistant.Activities.Dashboard.DashboardActivity;
 import com.sensei.assistant.Authentication.SignInActivity;
 import com.sensei.assistant.R;
+
+import org.json.JSONObject;
+
+import io.branch.referral.Branch;
+import io.branch.referral.BranchError;
 
 import static com.sensei.assistant.Application.MyApplication.firebaseUser;
 
@@ -26,10 +32,10 @@ public class SplashActivity extends AppCompatActivity {
 
         final Intent signInIntent = new Intent(SplashActivity.this, SignInActivity.class);
         final Intent dashboardIntent = new Intent(SplashActivity.this, DashboardActivity.class);
-        Shimmer shimmer = new Shimmer();
-        ShimmerTextView shimmerTextView = (ShimmerTextView) findViewById(R.id.shimmer_text_view);
-        shimmer.start(shimmerTextView);
-
+//        Shimmer shimmer = new Shimmer();
+//        ShimmerTextView shimmerTextView = (ShimmerTextView) findViewById(R.id.shimmer_text_view);
+//        shimmer.start(shimmerTextView);
+//
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -42,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
                     SplashActivity.this.finish();
                 }
             }
-        }, 2000);
+        }, 1500);
     }
 
     @Override
@@ -50,7 +56,9 @@ public class SplashActivity extends AppCompatActivity {
         super.onStart();
 //        Log.d("Splash", "mAuth.addAuthStateListener");
 //        mAuth.addAuthStateListener(mAuthListener);
+
     }
+
 
     @Override
     public void onStop() {

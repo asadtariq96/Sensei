@@ -1,4 +1,4 @@
-package com.sensei.assistant.Activities.Assignments;
+package com.sensei.assistant.Activities.Homework;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -18,8 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.zagum.switchicon.SwitchIconView;
-import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
+import com.sensei.assistant.Activities.Assignments.AssignmentDetailActivity;
+import com.sensei.assistant.Activities.Assignments.EditAssignmentActivity;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
+import com.sensei.assistant.DataModelClasses.HomeworkDataModel;
 import com.sensei.assistant.R;
 
 import org.joda.time.LocalDate;
@@ -28,16 +30,17 @@ import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static com.sensei.assistant.Application.Constants.REQUEST_CODE_EDIT_ASSIGNMENT;
-import static com.sensei.assistant.Application.Constants.REQUEST_CODE_EDIT_QUIZ;
+import static com.sensei.assistant.Application.Constants.REQUEST_CODE_EDIT_HOMEWORK;
 import static com.sensei.assistant.Application.Constants.RESULT_CODE_FINISH_ACTIVITY;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
-public class AssignmentDetailActivity extends AppCompatActivity {
+public class HomeworkDetailActivity extends AppCompatActivity {
 
-    AssignmentDataModel assignmentDataModel;
+
+    HomeworkDataModel homeworkDataModel;
     CourseDataModel courseDataModel;
     String courseID;
-    String assignmentID;
+    String homeworkID;
     TextView dueDate;
     TextView dueTime;
     TextView dueWhen;
@@ -46,13 +49,14 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     View markAsDone;
     SwitchIconView doneIconView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_detail);
 
         Intent intent = getIntent();
-        assignmentID = intent.getStringExtra("assignmentID");
+        homeworkID = intent.getStringExtra("homeworkID");
         courseID = intent.getStringExtra("courseID");
 
         courseDataModel = getCourseDataInstance().CoursesID.get(courseID);
@@ -67,7 +71,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Assignment Details");
+        getSupportActionBar().setTitle("Homework Details");
         getSupportActionBar().setSubtitle(courseDataModel.getCourseAbbreviation());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,7 +88,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 doneIconView.switchState(true);
-                getCourseDataInstance().updateTaskCompleted(assignmentDataModel, doneIconView.isIconEnabled());
+                getCourseDataInstance().updateTaskCompleted(homeworkDataModel, doneIconView.isIconEnabled());
                 if (doneIconView.isIconEnabled()) { //MARK AS INCOMPLETE
                     dueWhen.animate()
 //                            .translationY(view.getHeight())
@@ -112,7 +116,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
-                                    if (assignmentDataModel.getDueDate() != null) {
+                                    if (homeworkDataModel.getDueDate() != null) {
                                         dueWhen.setVisibility(View.VISIBLE);
                                     }
 //                                    dueWhen.setVisibility(View.VISIBLE);
@@ -127,7 +131,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
     public void onStart() {
         super.onStart();
-        assignmentDataModel = getCourseDataInstance().AssignmentsID.get(assignmentID);
+        homeworkDataModel = getCourseDataInstance().HomeworkID.get(homeworkID);
 
         Timber.d("onStart,Calling updateFields");
 
@@ -138,15 +142,15 @@ public class AssignmentDetailActivity extends AppCompatActivity {
     public void updateFields() {
 
 
-        if (assignmentDataModel.getDueDate() != null) {
+        if (homeworkDataModel.getDueDate() != null) {
             ((LinearLayout) (dueDate.getParent())).setVisibility(View.VISIBLE);
-            dueDate.setText(assignmentDataModel.getDueDateOriginal().toString("E, d MMM"));
+            dueDate.setText(homeworkDataModel.getDueDateOriginal().toString("E, d MMM"));
 
-            if (!assignmentDataModel.getCompleted()) {
+            if (!homeworkDataModel.getCompleted()) {
 
                 dueWhen.setVisibility(View.VISIBLE);
 
-                int quizDay = assignmentDataModel.getDueDateOriginal().getDayOfYear();
+                int quizDay = homeworkDataModel.getDueDateOriginal().getDayOfYear();
 
                 LocalDate today = new LocalDate();
 
@@ -156,9 +160,9 @@ public class AssignmentDetailActivity extends AppCompatActivity {
                     dueWhen.setText("Due Today!");
                 else if (quizDay == today.plusDays(1).getDayOfYear())
                     dueWhen.setText("Due Tomorrow!");
-                else if (assignmentDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.getWeekOfWeekyear())
+                else if (homeworkDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.getWeekOfWeekyear())
                     dueWhen.setText("Due This Week!");
-                else if (assignmentDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.plusWeeks(1).getWeekOfWeekyear())
+                else if (homeworkDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.plusWeeks(1).getWeekOfWeekyear())
                     dueWhen.setText("Due Next Week!");
                 else dueWhen.setText("Upcoming!");
 
@@ -172,34 +176,34 @@ public class AssignmentDetailActivity extends AppCompatActivity {
         }
 
 
-        if (assignmentDataModel.getDueTime() != null) {
+        if (homeworkDataModel.getDueTime() != null) {
             dueTime.setVisibility(View.VISIBLE);
-            dueTime.setText(assignmentDataModel.getDueTimeOriginal().toString("h:mm a"));
+            dueTime.setText(homeworkDataModel.getDueTimeOriginal().toString("h:mm a"));
         } else
             ((LinearLayout) (dueTime.getParent().getParent())).setVisibility(View.GONE);
 
 
-        taskTitle.setText(assignmentDataModel.getAssignmentTitle());
+        taskTitle.setText(homeworkDataModel.getHomeworkTitle());
 
-        if (assignmentDataModel.getAssignmentDescription() != null) {
+        if (homeworkDataModel.getHomeworkDescription() != null) {
             ((View) (taskDetails.getParent())).setVisibility(View.VISIBLE);
 
-            taskDetails.setText(assignmentDataModel.getAssignmentDescription());
+            taskDetails.setText(homeworkDataModel.getHomeworkDescription());
         } else {
 
             ((CardView) (taskDetails.getParent())).setVisibility(View.GONE);
         }
 
 
-//        if (assignmentDataModel.getAssignmentDescription() != null) {
+//        if (homeworkDataModel.getAssignmentDescription() != null) {
 //            taskDetails.setVisibility(View.VISIBLE);
-//            taskDetails.setText(assignmentDataModel.getAssignmentDescription());
+//            taskDetails.setText(homeworkDataModel.getAssignmentDescription());
 //        } else {
 //            taskDetails.setVisibility(GONE);
 //        }
 
 
-        doneIconView.setIconEnabled(assignmentDataModel.getCompleted());
+        doneIconView.setIconEnabled(homeworkDataModel.getCompleted());
 
 
     }
@@ -212,11 +216,11 @@ public class AssignmentDetailActivity extends AppCompatActivity {
                 break;
 
             case R.id.edit_class:
-                Intent intent = new Intent(AssignmentDetailActivity.this, EditAssignmentActivity.class);
+                Intent intent = new Intent(HomeworkDetailActivity.this, EditHomeworkActivity.class);
 //                intent.putExtras(bundle);
                 intent.putExtra("courseID", courseID);
-                intent.putExtra("assignmentID", assignmentID);
-                startActivityForResult(intent, REQUEST_CODE_EDIT_ASSIGNMENT);
+                intent.putExtra("homeworkID", homeworkID);
+                startActivityForResult(intent, REQUEST_CODE_EDIT_HOMEWORK);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -230,7 +234,7 @@ public class AssignmentDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == REQUEST_CODE_EDIT_ASSIGNMENT) {
+        if (requestCode == REQUEST_CODE_EDIT_HOMEWORK) {
 //            Timber.d("onActivityResult,calling updateFields");
 //            updateFields();
 

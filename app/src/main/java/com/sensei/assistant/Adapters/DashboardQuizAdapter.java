@@ -2,9 +2,11 @@ package com.sensei.assistant.Adapters;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.zagum.switchicon.SwitchIconView;
@@ -25,11 +27,15 @@ import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataI
  * Created by asad on 7/19/16.
  */
 
-public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseViewHolder> {
+public class DashboardQuizAdapter extends BaseItemDraggableAdapter<QuizDataModel, BaseViewHolder> {
+
+
 
     public DashboardQuizAdapter(int layoutResId, List<QuizDataModel> data) {
         super(layoutResId, data);
     }
+
+
 
 
     @Override
@@ -86,8 +92,12 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
         LocalDate nextWeekEnd = thisWeekEnd.plusDays(7);
 
         if (quizDataModel.getDueDate() != null) {
+
             int quizDay = quizDataModel.getDueDateOriginal().getDayOfYear();
             dueWhen.setVisibility(View.VISIBLE);
+            dueDate.setVisibility(View.VISIBLE);
+            dueDate.setText(quizDataModel.getDueDateOriginal().toString("E, d MMM"));
+
 
             if (today.getDayOfYear() > quizDay)
                 dueWhen.setText("Overdue!");
@@ -106,6 +116,7 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
             dueWhen.setVisibility(GONE);
         }
 
+
         markAsDone.setIconEnabled(quizDataModel.getCompleted(), false);
 
         if (quizDataModel.getCompleted()) {
@@ -122,39 +133,50 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
             @Override
             public void onClick(View view) {
                 markAsDone.switchState(true);
+//                notifyDataSetChanged();
                 getCourseDataInstance().updateTaskCompleted(quizDataModel, markAsDone.isIconEnabled());
-                if (markAsDone.isIconEnabled()) {
+                if (markAsDone.isIconEnabled()) { //MARK AS INCOMPLETE
                     dueWhen.animate()
 //                            .translationY(view.getHeight())
                             .alpha(0.0f)
-                            .setDuration(500)
+                            .setDuration(250)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
                                     dueWhen.setVisibility(GONE);
+
                                 }
                             });
 
+
 //                    dueWhen.setVisibility(View.GONE);
-                } else {
+                } else {   //MARK AS DONE
 
 //                    dueWhen.setVisibility(View.VISIBLE);
                     dueWhen.animate()
 //                            .translationY(-view.getHeight())
                             .alpha(1f)
-                            .setDuration(500)
+                            .setDuration(250)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
-                                public void onAnimationStart(Animator animation) {
-                                    super.onAnimationStart(animation);
-                                    dueWhen.setVisibility(View.VISIBLE);
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    if (quizDataModel.getDueDate() != null) {
+                                        dueWhen.setVisibility(View.VISIBLE);
+                                    }
+//                                    dueWhen.setVisibility(View.VISIBLE);
                                 }
                             });
 
 
                 }
+//                setNewData(getCourseDataInstance().getListOfQuizzes());
+
+
             }
+
+
         });
 
 //        markAsDone.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
@@ -164,6 +186,16 @@ public class DashboardQuizAdapter extends BaseQuickAdapter<QuizDataModel, BaseVi
 //            }
 //        });
     }
+
+//    public void add(QuizDataModel quizDataModel, int position) {
+//        getData().add(position, quizDataModel);
+//        notifyItemInserted(position);
+//    }
+//
+//    public void remove(int position) {
+//        getData().remove(position);
+//        notifyItemRemoved(position);
+//    }
 
 
 }

@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sensei.assistant.Activities.Assignments.AssignmentDetailActivity">
+    tools:context="com.sensei.assistant.Activities.Homework.HomeworkDetailActivity">
 
 </android.support.constraint.ConstraintLayout>

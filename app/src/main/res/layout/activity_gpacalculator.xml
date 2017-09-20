@@ -48,6 +48,47 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="16dp"-->
+                    <!--android:layout_marginTop="16dp"-->
+                    <!--android:fontFamily="sans-serif-light"-->
+                    <!--android:text="Please select grading scheme"-->
+                    <!--android:textColor="@color/colorPrimaryText"-->
+                    <!--android:textSize="18sp" />-->
+
+                <!--<RadioGroup-->
+                    <!--android:id="@+id/radio_group"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginEnd="16dp"-->
+                    <!--android:layout_marginStart="16dp"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<RadioButton-->
+                        <!--android:id="@+id/scheme1"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:checked="true"-->
+                        <!--android:fontFamily="sans-serif-light"-->
+                        <!--android:text="A, B+, B, C+, C" />-->
+
+                    <!--<android.support.v4.widget.Space-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1" />-->
+
+                    <!--<RadioButton-->
+                        <!--android:id="@+id/scheme2"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:fontFamily="sans-serif-light"-->
+                        <!--android:text="A, A-, B+, B,  B-, C+, C,  C-" />-->
+
+
+                <!--</RadioGroup>-->
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerview"
                     android:layout_width="match_parent"
@@ -86,6 +127,16 @@
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:fontFamily="sans-serif-light"
+                    android:text="NOTE: Only those courses will appear here for which you have set credit hours."
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
 
 
             </LinearLayout>

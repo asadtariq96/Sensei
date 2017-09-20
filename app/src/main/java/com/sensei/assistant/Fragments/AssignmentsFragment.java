@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sensei.assistant.Activities.Assignments.AssignmentDetailActivity;
+import com.sensei.assistant.Activities.Assignments.AssignmentDetailActivityOld;
 import com.sensei.assistant.R;
 
 /**
@@ -23,7 +23,7 @@ public class AssignmentsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(getActivity(), AssignmentDetailActivity.class));
+                startActivity(new Intent(getActivity(), AssignmentDetailActivityOld.class));
 
             }
         });

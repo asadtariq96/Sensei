@@ -59,6 +59,8 @@ public class QuizDataModel {
     }
 
     public String getQuizDescription() {
+        if (quizDescription == null || quizDescription.isEmpty())
+            return null;
         return quizDescription;
     }
 

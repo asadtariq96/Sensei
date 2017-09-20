@@ -11,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
+import io.branch.referral.Branch;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -53,6 +54,8 @@ public class MyApplication extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        Branch.getAutoInstance(this);
+
 
         Fabric.with(this, new Crashlytics());
         Iconify.with(new FontAwesomeModule());

@@ -14,6 +14,7 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.github.clans.fab.FloatingActionButton;
+import com.google.android.gms.appinvite.AppInvite;
 import com.sensei.assistant.Adapters.CoursesListAdapterBRVAH;
 import com.sensei.assistant.DataHandlers.CourseDataHandler;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
@@ -83,6 +84,8 @@ public class CoursesListActivity extends AppCompatActivity {
 //                startActivity(new Intent(CoursesListActivity.this, CourseDetailActivity.class   ));
             }
         });
+
+
 
 
     }

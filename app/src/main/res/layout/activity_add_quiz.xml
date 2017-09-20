@@ -155,7 +155,8 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
-                    android:background="@color/md_grey_300" />
+                    android:background="@color/md_grey_300"
+                    android:visibility="gone" />
 
 
                 <android.support.design.widget.TextInputLayout
@@ -166,6 +167,7 @@
                     android:paddingEnd="8dp"
                     android:paddingStart="16dp"
                     android:paddingTop="8dp"
+                    android:visibility="gone"
 
                     app:hintTextAppearance="@style/TextLabel">
 

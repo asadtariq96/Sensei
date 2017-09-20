@@ -292,7 +292,7 @@ public class DateTimeDialogBuilder {
 
     }
 
-    public void BuildReminderDialog(final Context context, final TextInputEditText Reminder, final AddQuizActivity activity) {
+    public void BuildReminderDialog(final Context context, final TextInputEditText Reminder) {
         this.context = context;
 //        if (RootView.findViewById(R.id.reminder_container).getVisibility() == View.VISIBLE) {
 //            dialog = new MaterialDialog.Builder(context)
@@ -347,13 +347,13 @@ public class DateTimeDialogBuilder {
                         LocalTime tempLocalTime = ((myTime) timeSpinner.getSelectedItem()).obj;
 
 
-                        (activity).ReminderDateTime = new DateTime(
-                                tempLocalDate.getYear(),
-                                tempLocalDate.getMonthOfYear(),
-                                tempLocalDate.getDayOfMonth(),
-                                tempLocalTime.getHourOfDay(),
-                                tempLocalTime.getMinuteOfHour());
-                        Toast.makeText(context, activity.ReminderDateTime.toString(), Toast.LENGTH_SHORT).show();
+//                        (activity).ReminderDateTime = new DateTime(
+//                                tempLocalDate.getYear(),
+//                                tempLocalDate.getMonthOfYear(),
+//                                tempLocalDate.getDayOfMonth(),
+//                                tempLocalTime.getHourOfDay(),
+//                                tempLocalTime.getMinuteOfHour());
+//                        Toast.makeText(context, activity.ReminderDateTime.toString(), Toast.LENGTH_SHORT).show();
                     }
                 })
 //                .neutralText("DELETE")

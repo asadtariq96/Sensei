@@ -76,6 +76,7 @@
                             android:id="@+id/task_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
                             android:fontFamily="sans-serif-light"
                             android:text="Chapter 5 Exercise 5.9"
                             android:textColor="@color/colorPrimaryText"
@@ -83,8 +84,10 @@
 
                         <TextView
                             android:id="@+id/due_when"
+
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
                             android:layout_marginTop="2dp"
                             android:fontFamily="sans-serif-light"
                             android:text="Due Tomorrow!"
@@ -100,6 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="6dp"
                         android:background="?selectableItemBackgroundBorderless"
                         android:gravity="center"
                         android:orientation="vertical">

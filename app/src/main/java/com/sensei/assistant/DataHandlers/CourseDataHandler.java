@@ -37,6 +37,7 @@ import static com.sensei.assistant.Application.MyApplication.bus;
 import static com.sensei.assistant.Application.MyApplication.classesReference;
 import static com.sensei.assistant.Application.MyApplication.coursesReference;
 import static com.sensei.assistant.Application.MyApplication.databaseReference;
+import static com.sensei.assistant.Application.MyApplication.firebaseUser;
 import static com.sensei.assistant.Application.MyApplication.homeworkReference;
 import static com.sensei.assistant.Application.MyApplication.quizzesReference;
 import static com.sensei.assistant.Application.MyApplication.semestersReference;
@@ -527,6 +528,9 @@ public class CourseDataHandler {
         List<QuizDataModel> tempList = new ArrayList<>();
         for (CourseDataModel courseDataModel : CoursesList)
             tempList.addAll(courseDataModel.getQuizzes());
+
+        Collections.sort(tempList, new quizCompleteComparator());
+
         return tempList;
     }
 
@@ -536,6 +540,26 @@ public class CourseDataHandler {
             tempList.addAll(courseDataModel.getIncompleteQuizzes());
         return tempList;
     }
+
+    public List<QuizDataModel> getCurrentWeekQuizzes() {
+        List<QuizDataModel> tempList = new ArrayList<>();
+        DateTime endOfCurrentWeek = new DateTime().dayOfWeek().withMaximumValue();
+        for (CourseDataModel courseDataModel : CoursesList) {
+
+            for (QuizDataModel quizDataModel : courseDataModel.getIncompleteQuizzes()) {
+
+                if (quizDataModel.getDueDateOriginal() != null) {
+                    if (quizDataModel.getDueDateOriginal().isBefore(endOfCurrentWeek.toLocalDate()))
+                        tempList.add(quizDataModel);
+
+                }
+            }
+
+
+        }
+        return tempList;
+    }
+
 
     public List<AssignmentDataModel> getListOfAssignments() {
         List<AssignmentDataModel> tempList = new ArrayList<>();
@@ -548,6 +572,25 @@ public class CourseDataHandler {
         List<AssignmentDataModel> tempList = new ArrayList<>();
         for (CourseDataModel courseDataModel : CoursesList)
             tempList.addAll(courseDataModel.getIncompleteAssignments());
+        return tempList;
+    }
+
+    public List<AssignmentDataModel> getCurrentWeekAssignments() {
+        List<AssignmentDataModel> tempList = new ArrayList<>();
+        DateTime endOfCurrentWeek = new DateTime().dayOfWeek().withMaximumValue();
+        for (CourseDataModel courseDataModel : CoursesList) {
+
+            for (AssignmentDataModel assignmentDataModel : courseDataModel.getIncompleteAssignments()) {
+
+                if (assignmentDataModel.getDueDateOriginal() != null) {
+                    if (assignmentDataModel.getDueDateOriginal().isBefore(endOfCurrentWeek.toLocalDate()))
+                        tempList.add(assignmentDataModel);
+
+                }
+            }
+
+
+        }
         return tempList;
     }
 
@@ -566,6 +609,25 @@ public class CourseDataHandler {
         return tempList;
     }
 
+    public List<HomeworkDataModel> getCurrentWeekHomework() {
+        List<HomeworkDataModel> tempList = new ArrayList<>();
+        DateTime endOfCurrentWeek = new DateTime().dayOfWeek().withMaximumValue();
+        for (CourseDataModel courseDataModel : CoursesList) {
+
+            for (HomeworkDataModel homeworkDataModel : courseDataModel.getIncompleteHomework()) {
+
+                if (homeworkDataModel.getDueDateOriginal() != null) {
+                    if (homeworkDataModel.getDueDateOriginal().isBefore(endOfCurrentWeek.toLocalDate()))
+                        tempList.add(homeworkDataModel);
+
+                }
+            }
+
+
+        }
+        return tempList;
+    }
+
 
     public static class classTimeComparator implements Comparator<ClassDataModel> {
         public int compare(ClassDataModel left, ClassDataModel right) {
@@ -579,6 +641,15 @@ public class CourseDataHandler {
             return left.getDayOfWeek() - right.getDayOfWeek();
         }
 
+    }
+
+    public static class quizCompleteComparator implements Comparator<QuizDataModel> {
+
+
+        @Override
+        public int compare(QuizDataModel left, QuizDataModel right) {
+            return left.getCompleted().compareTo(right.getCompleted());
+        }
     }
 
     public String getCourseID(CourseDataModel value) {
@@ -603,6 +674,25 @@ public class CourseDataHandler {
 
     public String getQuizID(QuizDataModel value) {
         for (Map.Entry<String, QuizDataModel> entry : QuizzesID.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+
+    public String getAssignmentID(AssignmentDataModel value) {
+        for (Map.Entry<String, AssignmentDataModel> entry : AssignmentsID.entrySet()) {
+            if (Objects.equals(value, entry.getValue())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    public String getHomeworkID(HomeworkDataModel value) {
+        for (Map.Entry<String, HomeworkDataModel> entry : HomeworkID.entrySet()) {
             if (Objects.equals(value, entry.getValue())) {
                 return entry.getKey();
             }
@@ -675,6 +765,40 @@ public class CourseDataHandler {
 
     }
 
+    public void updateQuiz(String courseID, String quizID, QuizDataModel quizDataModel) {
+        quizzesReference.child(courseID).child(quizID).setValue(quizDataModel);
+
+    }
+
+    public void deleteQuiz(String courseID, String quizID) {
+
+        quizzesReference.child(courseID).child(quizID).removeValue();
+
+    }
+
+    public void updateHomework(String courseID, String homeworkID, HomeworkDataModel homeworkDataModel) {
+        homeworkReference.child(courseID).child(homeworkID).setValue(homeworkDataModel);
+
+    }
+
+    public void deleteHomework(String courseID, String homeworkID) {
+
+        homeworkReference.child(courseID).child(homeworkID).removeValue();
+
+    }
+
+    public void updateAssignment(String courseID, String assignmentID, AssignmentDataModel assignmentDataModel) {
+        assignmentsReference.child(courseID).child(assignmentID).setValue(assignmentDataModel);
+
+    }
+
+    public void deleteAssignment(String courseID, String assignmentID) {
+
+        assignmentsReference.child(courseID).child(assignmentID).removeValue();
+
+    }
+
+
     public void addCourse(CourseDataModel courseDataModel, List<ClassDataModel> classesList) {
 
         String courseID = coursesReference.push().getKey();
@@ -732,20 +856,20 @@ public class CourseDataHandler {
         String quizID = getQuizID(quizDataModel);
         String courseID = getCourseID(getCourse(quizDataModel));
         quizzesReference.child(courseID).child(quizID).child("completed").setValue(isCompleted);
-//        getCourse(quizDataModel)
-//                .getQuizzes()
-//                .get(getCourse(quizDataModel)
-//                        .getQuizzes()
-//                        .indexOf(quizDataModel))
-//                .setCompleted(isCompleted);
-//
-//        String quizID = getQuizID(quizDataModel);
-//        coursesReference
-//                .child(getCourseID(getCourse(quizDataModel)))
-//                .child("quizzes")
-//                .child(quizID)
-//                .child("completed")
-//                .setValue(isCompleted);
+    }
+
+    public void updateTaskCompleted(AssignmentDataModel assignmentDataModel, boolean isCompleted) {
+
+        String assignmentID = getAssignmentID(assignmentDataModel);
+        String courseID = getCourseID(getCourse(assignmentDataModel));
+        assignmentsReference.child(courseID).child(assignmentID).child("completed").setValue(isCompleted);
+    }
+
+    public void updateTaskCompleted(HomeworkDataModel homeworkDataModel, boolean isCompleted) {
+
+        String homeworkID = getHomeworkID(homeworkDataModel);
+        String courseID = getCourseID(getCourse(homeworkDataModel));
+        homeworkReference.child(courseID).child(homeworkID).child("completed").setValue(isCompleted);
     }
 
     public void addQuiz(CourseDataModel courseDataModel, QuizDataModel quizDataModel) {
@@ -781,6 +905,7 @@ public class CourseDataHandler {
         String defSemKey = databaseReference.child("courses").child(UID).push().getKey();
         userSettings.setSelectedSemester(defSemKey);
         Constants.SELECTED_SEMESTER = defSemKey;
+        userSettings.setEmail(firebaseUser.getEmail());
 
         databaseReference.child("semesters").child(UID).child(defSemKey)
                 .setValue(new SemesterDataModel("Default", new LocalDate().toString(), ""));
@@ -796,6 +921,43 @@ public class CourseDataHandler {
             ChildEventListener listener = entry.getValue();
             ref.removeEventListener(listener);
         }
+    }
+
+    public String getDailyNotificationString() {
+        int quiz = getCurrentWeekQuizzes().size();
+        int assignment = getCurrentWeekAssignments().size();
+        int homework = getCurrentWeekHomework().size();
+
+        if (quiz == 0 && assignment == 0 && homework == 0)
+            return null;
+
+
+        StringBuilder stringBuilder = new StringBuilder();
+        if (quiz != 0) {
+            if (quiz == 1) {
+                stringBuilder.append(quiz + " quiz");
+            } else
+                stringBuilder.append(quiz + " quizzes");
+
+        }
+        if (assignment != 0) {
+            stringBuilder.append(", ");
+            if (assignment == 1) {
+                stringBuilder.append(assignment + " assignment");
+            } else
+                stringBuilder.append(assignment + " assignments");
+        }
+        if (homework != 0) {
+            stringBuilder.append(", ");
+            if (homework == 1) {
+                stringBuilder.append(homework + " homework");
+            } else
+                stringBuilder.append(homework + " homework");
+        }
+
+        return stringBuilder.toString();
+
+
     }
 
 

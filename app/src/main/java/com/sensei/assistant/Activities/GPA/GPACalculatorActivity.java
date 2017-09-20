@@ -11,11 +11,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.sensei.assistant.DataModelClasses.ClassDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.R;
 import com.sensei.assistant.Utils.NavigationDrawerSetup;
@@ -23,8 +27,12 @@ import com.sensei.assistant.Utils.NavigationDrawerSetup;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sensei.assistant.Application.Constants.GradesListStandard;
-import static com.sensei.assistant.Application.Constants.gradesMap;
+import timber.log.Timber;
+
+import static com.sensei.assistant.Application.Constants.GradesListSchemeA;
+import static com.sensei.assistant.Application.Constants.GradesListSchemeB;
+import static com.sensei.assistant.Application.Constants.gradesMapSchemeA;
+import static com.sensei.assistant.Application.Constants.gradesMapSchemeB;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 public class GPACalculatorActivity extends AppCompatActivity {
@@ -37,15 +45,53 @@ public class GPACalculatorActivity extends AppCompatActivity {
     private TextView gpaText;
     List<GPA> GPAList = new ArrayList<>();
     private ArrayAdapter<String> adapter;
+    private int gradeScheme;
+//    RadioGroup radioGroup;
+//    RadioButton scheme1;
+//    RadioButton scheme2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gpacalculator);
+        gradeScheme = 0;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("GPA Calculator");
+
+//        radioGroup = findViewById(R.id.radio_group);
+//        scheme1 = findViewById(R.id.scheme1);
+//        scheme2 = findViewById(R.id.scheme2);
+
+        List<String> GradingSchemes = new ArrayList<String>() {{
+            add("A, B+, B, C+, C");
+            add("A, A-, B+, B,  B-, C+, C,  C-");
+        }};
+
+        new MaterialDialog.Builder(this)
+                .title("Grading Scheme")
+                .items(GradingSchemes)
+                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        /**
+                         * If you use alwaysCallSingleChoiceCallback(), which is discussed below,
+                         * returning false here won't allow the newly selected radio button to actually be selected.
+                         **/
+                        gradeScheme = which;
+                        fillList();
+                        gpaAdapter.setNewData(GPAList);
+                        Timber.d("Grade Scheme %d",gradeScheme);
+                        adapter = new ArrayAdapter<>(GPACalculatorActivity.this, android.R.layout.simple_spinner_item, (gradeScheme == 0 ? GradesListSchemeA : GradesListSchemeB));
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        return true;
+                    }
+                })
+                .positiveText("Choose")
+                .show();
+
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
@@ -79,8 +125,26 @@ public class GPACalculatorActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new ArrayAdapter<>(GPACalculatorActivity.this, android.R.layout.simple_spinner_item, GradesListStandard);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+
+
+//        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//
+//
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//                Timber.d("Checked changed");
+//
+//                if (i == scheme1.getId()) {
+//                    gradeScheme = 1;
+//                } else if (i == scheme2.getId()) {
+//                    gradeScheme = 2;
+//                }
+//
+//                adapter = new ArrayAdapter<>(GPACalculatorActivity.this, android.R.layout.simple_spinner_item, (gradeScheme == 1 ? GradesListSchemeA : GradesListSchemeB));
+//                fillList();
+//            }
+//        });
 
 
     }
@@ -99,11 +163,17 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
         GPA(CourseDataModel courseDataModel, String gradeString) {
             this.course = courseDataModel;
-            this.grade = gradesMap.get(gradeString);
+            if (gradeScheme == 0)
+                this.grade = gradesMapSchemeA.get(gradeString);
+
+            else if (gradeScheme == 1)
+                this.grade = gradesMapSchemeB.get(gradeString);
+
         }
     }
 
     private void fillList() {
+        Timber.d("fill List");
         GPAList.clear();
         for (CourseDataModel course : getCourseDataInstance().CoursesList) {
             if (course.getCreditHours() != 0)
@@ -143,7 +213,10 @@ public class GPACalculatorActivity extends AppCompatActivity {
             gradeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    gpa.setGrade(gradesMap.get(GradesListStandard.get(i)));
+                    if (gradeScheme == 0)
+                        gpa.setGrade(gradesMapSchemeA.get(GradesListSchemeA.get(i)));
+                    else if (gradeScheme == 1)
+                        gpa.setGrade(gradesMapSchemeB.get(GradesListSchemeB.get(i)));
                 }
 
                 @Override
@@ -160,8 +233,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 //        coursesRef.addValueEventListener(valueEventListener);
-        fillList();
-        gpaAdapter.setNewData(GPAList);
+
         navigationDrawerSetup.ConfigureDrawer();
     }
 

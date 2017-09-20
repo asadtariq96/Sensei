@@ -1,5 +1,9 @@
 package com.sensei.assistant.Activities.TimeTable;
 
+import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Toast;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
@@ -26,6 +32,7 @@ import org.joda.time.LocalTime;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -41,6 +48,7 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
     private NavigationDrawerSetup navigationDrawerSetup;
     private WeekView weekView;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,9 +92,13 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
             public void onGlobalLayout() {
                 int width = weekView.getMeasuredWidth();
                 int height = weekView.getHeight();
+                Timber.d("weekview height %d", height);
+                Timber.d("weekview measured height %d", weekView.getMeasuredHeight());
+                Timber.d("daylength %d", getDayLength());
                 //TODO calculate hours dynamically
-                weekView.setHourHeight(height / getDayLength());
-
+                weekView.setHourHeight(height / getDayLength() - 50);
+//                weekView.setHourHeight(200);
+                Timber.d("hour height %d", weekView.getHourHeight());
 
             }
         });
@@ -108,8 +120,21 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
     @Override
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         Timber.d("onMonthChange year:%d,month:%d", newYear, newMonth);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }
+
+
+        ).start();
+
+
         int counter = 0;
         List<WeekViewEvent> eventsList = new ArrayList<>();
+
 
         for (CourseDataModel courseDataModel : getCourseDataInstance().CoursesList) {
             for (ClassDataModel classDataModel : courseDataModel.getClasses()) {
