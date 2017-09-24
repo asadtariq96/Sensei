@@ -36,8 +36,8 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="sans-serif-light"
                 android:text="starts in 3 hours 15 mins!"
-                android:textColor="@color/colorPrimary"
-                android:textSize="12sp"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp"
                 android:textStyle="italic|bold" />
 
             <LinearLayout

@@ -148,8 +148,8 @@ public class CourseDetailActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE_EDIT_COURSE);
                 break;
 
-            case R.id.share:
-                shareCourse();
+//            case R.id.share:
+//                shareCourse();
         }
         return super.onOptionsItemSelected(item);
     }

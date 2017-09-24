@@ -2,9 +2,12 @@ package com.sensei.assistant.Activities.Dashboard;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,10 @@ import com.sensei.assistant.Adapters.DashboardHomeworkAdapter;
 import com.sensei.assistant.Adapters.DashboardQuizAdapter;
 import com.sensei.assistant.Adapters.MainAdapter;
 import com.sensei.assistant.DataHandlers.CourseDataHandler;
+import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
+import com.sensei.assistant.DataModelClasses.CourseDataModel;
+import com.sensei.assistant.DataModelClasses.HomeworkDataModel;
+import com.sensei.assistant.DataModelClasses.QuizDataModel;
 import com.sensei.assistant.R;
 import com.squareup.otto.Subscribe;
 
@@ -26,6 +33,9 @@ import timber.log.Timber;
 
 import static com.sensei.assistant.Application.MyApplication.bus;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
+import static com.sensei.assistant.DataModelClasses.TaskItem.TYPE_ASSIGNMENT;
+import static com.sensei.assistant.DataModelClasses.TaskItem.TYPE_HOMEWORK;
+import static com.sensei.assistant.DataModelClasses.TaskItem.TYPE_QUIZ;
 
 
 /**
@@ -45,6 +55,7 @@ public class DashboardTasksFragment extends Fragment {
 //    private View assignmentHeaderView;
 //    private View homeworkHeaderView;
     RelativeLayout placeholder;
+    SwipeRefreshLayout swipeRefreshLayout;
     final String PREFS_NAME = "MyPrefsFile";
 
 
@@ -75,6 +86,17 @@ public class DashboardTasksFragment extends Fragment {
 
         bus.register(this);
 
+//        swipeRefreshLayout = view.findViewById(R.id.swipe);
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                swipeRefreshLayout.setRefreshing(true);
+//
+//                updateData();
+//                swipeRefreshLayout.setRefreshing(false);
+//
+//            }
+//        });
 //        placeholder = view.findViewById(R.id.placeholder);
         recyclerView = view.findViewById(R.id.recyclerview);
         adapter = new MainAdapter(getActivity(), getCourseDataInstance().getListOfIncompleteQuizzes(),
@@ -86,6 +108,121 @@ public class DashboardTasksFragment extends Fragment {
         adapter.expandAllSections();
         adapter.shouldShowHeadersForEmptySections(false);
 
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                //Remove swiped item from list and notify the RecyclerView
+                final int absPos = viewHolder.getAdapterPosition();
+                final int relPos = adapter.getRelativePosition(absPos).relativePos();
+
+
+                final View rootview = getActivity().findViewById(R.id.coordinator_layout);
+                switch (viewHolder.getItemViewType()) {
+                    case TYPE_QUIZ:
+                        final QuizDataModel quizDataModel = adapter.quizList.get(relPos);
+                        adapter.quizList.remove(relPos);
+                        String quizID = getCourseDataInstance().getQuizID(quizDataModel);
+                        final CourseDataModel parentCourse = getCourseDataInstance().getCourse(quizDataModel);
+                        String courseID = getCourseDataInstance().getCourseID(parentCourse);
+                        getCourseDataInstance().deleteQuiz(courseID, quizID);
+
+                        if (!adapter.quizList.isEmpty())
+                            adapter.notifyItemRemoved(absPos);
+                        else
+                            adapter.notifyDataSetChanged();
+
+
+                        Snackbar.make(rootview, "Quiz deleted!", Snackbar.LENGTH_LONG)
+                                .setAction("Undo", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        getCourseDataInstance().addQuiz(parentCourse, quizDataModel);
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                updateData();
+                                            }
+                                        }, 500);
+//                                        adapter.quizList.add(relPos, quizDataModel);
+//                                        adapter.notifyItemInserted(absPos);
+                                    }
+                                })
+                                .show(); // Don’t forget to show!
+                        break;
+
+                    case TYPE_ASSIGNMENT:
+                        final AssignmentDataModel assignmentDataModel = adapter.assignmentList.get(relPos);
+                        adapter.assignmentList.remove(relPos);
+                        String assignmentID = getCourseDataInstance().getAssignmentID(assignmentDataModel);
+                        final CourseDataModel parentCourse2 = getCourseDataInstance().getCourse(assignmentDataModel);
+                        courseID = getCourseDataInstance().getCourseID(parentCourse2);
+                        getCourseDataInstance().deleteAssignment(courseID, assignmentID);
+
+                        if (!adapter.assignmentList.isEmpty())
+                            adapter.notifyItemRemoved(absPos);
+                        else
+                            adapter.notifyDataSetChanged();
+
+
+                        Snackbar.make(rootview, "Assignment deleted!", Snackbar.LENGTH_LONG)
+                                .setAction("Undo", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        getCourseDataInstance().addAssignment(parentCourse2, assignmentDataModel);
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                updateData();
+                                            }
+                                        }, 500);
+                                    }
+                                })
+                                .show(); // Don’t forget to show!
+                        break;
+
+                    case TYPE_HOMEWORK:
+                        final HomeworkDataModel homeworkDataModel = adapter.homeworkList.get(relPos);
+                        adapter.homeworkList.remove(relPos);
+                        String homeworkID = getCourseDataInstance().getHomeworkID(homeworkDataModel);
+                        final CourseDataModel parentCourse3 = getCourseDataInstance().getCourse(homeworkDataModel);
+                        courseID = getCourseDataInstance().getCourseID(parentCourse3);
+                        getCourseDataInstance().deleteHomework(courseID, homeworkID);
+                        if (!adapter.homeworkList.isEmpty())
+                            adapter.notifyItemRemoved(absPos);
+                        else
+                            adapter.notifyDataSetChanged();
+                        Snackbar.make(rootview, "Homework deleted!", Snackbar.LENGTH_LONG)
+                                .setAction("Undo", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        getCourseDataInstance().addHomework(parentCourse3, homeworkDataModel);
+                                        Handler handler = new Handler();
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                updateData();
+                                            }
+                                        }, 500);
+                                    }
+                                })
+                                .show(); // Don’t forget to show!
+                        break;
+                }
+
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
 //        quizRecyclerview = (RecyclerView) view.findViewById(R.id.quiz_recyclerview);
 //        quizAdapter = new DashboardQuizAdapter(R.layout.quiz_layout, getCourseDataInstance().getListOfIncompleteQuizzes(), true);
@@ -351,6 +488,9 @@ public class DashboardTasksFragment extends Fragment {
     }
 
     public void updateData() {
+        adapter.updateData(getCourseDataInstance().getListOfIncompleteQuizzes(),
+                getCourseDataInstance().getListOfIncompleteAssignments(),
+                getCourseDataInstance().getListOfIncompleteHomework());
 //        quizAdapter.setNewData(getCourseDataInstance().getListOfIncompleteQuizzes());
 //        assignmentAdapter.setNewData(getCourseDataInstance().getListOfIncompleteAssignments());
 //        homeworkAdapter.setNewData(getCourseDataInstance().getListOfIncompleteHomework());
@@ -373,7 +513,7 @@ public class DashboardTasksFragment extends Fragment {
 
     public void showTutorial() {
 
-        RecyclerView.ViewHolder holder = quizRecyclerview.findViewHolderForAdapterPosition(1);
+        RecyclerView.ViewHolder holder = recyclerView.findViewHolderForAdapterPosition(1);
         View view = holder.itemView;
         final SwitchIconView switchIconView = view.findViewById(R.id.done_checkbox);
 
@@ -388,7 +528,15 @@ public class DashboardTasksFragment extends Fragment {
                     @Override
                     public void onTargetClick(TapTargetView view) {
                         super.onTargetClick(view);
-                        switchIconView.performClick();
+
+                        Handler handler0 = new Handler();
+                        handler0.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                switchIconView.performClick();
+
+                            }
+                        }, 1500);
 
 
                         Handler handler = new Handler();
@@ -435,9 +583,7 @@ public class DashboardTasksFragment extends Fragment {
             }, 1000);
         }
 
-        adapter.updateData(getCourseDataInstance().getListOfIncompleteQuizzes(),
-                getCourseDataInstance().getListOfIncompleteAssignments(),
-                getCourseDataInstance().getListOfIncompleteHomework());
+        updateData();
 
 
     }

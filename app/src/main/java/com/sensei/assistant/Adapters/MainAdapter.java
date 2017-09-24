@@ -1,6 +1,10 @@
 package com.sensei.assistant.Adapters;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.afollestad.sectionedrecyclerview.SectionedViewHolder;
 import com.github.zagum.switchicon.SwitchIconView;
 import com.sensei.assistant.Activities.Homework.HomeworkDetailActivity;
+import com.sensei.assistant.Activities.Quizzes.QuizDetailActivity;
 import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.DataModelClasses.HomeworkDataModel;
@@ -48,9 +53,9 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
         this.context = context;
     }
 
-    List<QuizDataModel> quizList;
-    List<AssignmentDataModel> assignmentList;
-    List<HomeworkDataModel> homeworkList;
+    public List<QuizDataModel> quizList;
+    public List<AssignmentDataModel> assignmentList;
+    public List<HomeworkDataModel> homeworkList;
     private Context context;
 
     @Override
@@ -94,22 +99,96 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
 
     }
 
+//    public void removeQuiz(int pos, QuizDataModel quizDataModel){
+//
+//
+//    }
+
     @Override
     public void onBindViewHolder(
-            MainVH holder, int section, int relativePosition, int absolutePosition) {
+            final MainVH holder, final int section, final int relativePosition, int absolutePosition) {
 
 
         switch (section) {
             case TYPE_QUIZ:
+                final QuizDataModel quizDataModel = quizList.get(relativePosition);
 
+                ((View) holder.colorView.getParent()).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final Intent intent = new Intent(context, QuizDetailActivity.class);
+                        String courseID = getCourseDataInstance().getCourseID(getCourseDataInstance().getCourse(quizDataModel));
+                        String quizID = getCourseDataInstance().getQuizID(quizDataModel);
+                        intent.putExtra("courseID", courseID);
+                        intent.putExtra("quizID", quizID);
+                        context.startActivity(intent);
+
+                    }
+                });
 
                 holder.markAsDone.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
+                        holder.markAsDone.switchState(true);
+
+                        Timber.d("markAsDoneState " + holder.markAsDone.isIconEnabled());
+                        getCourseDataInstance().updateTaskCompleted(quizDataModel, holder.markAsDone.isIconEnabled());
+                        quizDataModel.setCompleted(holder.markAsDone.isIconEnabled());
+
+                        if (holder.markAsDone.isIconEnabled()) { //MARK AS COMPLETE
+
+                            quizList.remove(quizDataModel);
+//                            holder.adapter.notifyDataSetChanged();
+                            if (quizList.isEmpty()) {
+                                holder.adapter.notifyDataSetChanged();
+                            } else {
+                                holder.adapter.notifyItemRemoved(relativePosition);
+                                holder.adapter.notifyItemRangeChanged(relativePosition, quizList.size());
+                            }
+
+                        } else {   //MARK AS INCOMPLETE
+
+                            if (quizDataModel.getDueDate() != null) {
+                                LocalDate today = new LocalDate();
+
+                                if (quizDataModel.getDueDate() != null) {
+                                    int quizDay = quizDataModel.getDueDateOriginal().getDayOfYear();
+                                    holder.dueDate.setVisibility(View.VISIBLE);
+                                    holder.dueDate.setText(quizDataModel.getDueDateOriginal().toString("E, d MMM"));
+
+                                    if (!quizDataModel.getCompleted()) {
+
+                                        if (today.getDayOfYear() > quizDay)
+                                            holder.dueWhen.setText("Overdue!");
+                                        else if (quizDay == today.getDayOfYear())
+                                            holder.dueWhen.setText("Due Today!");
+                                        else if (quizDay == today.plusDays(1).getDayOfYear())
+                                            holder.dueWhen.setText("Due Tomorrow!");
+                                        else if (quizDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.getWeekOfWeekyear())
+                                            holder.dueWhen.setText("Due This Week!");
+                                        else if (quizDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.plusWeeks(1).getWeekOfWeekyear())
+                                            holder.dueWhen.setText("Due Next Week!");
+                                        else holder.dueWhen.setText("Upcoming!");
+
+                                        holder.dueWhen.setVisibility(View.VISIBLE);
+
+
+                                    } else {
+                                        holder.dueWhen.setVisibility(GONE);
+
+                                    }
+
+
+                                } else {
+                                    holder.dueWhen.setVisibility(GONE);
+                                    holder.dueDate.setVisibility(GONE);
+                                }
+                            }
+
+
+                        }
                     }
                 });
-                QuizDataModel quizDataModel = quizList.get(relativePosition);
 
 
                 CourseDataModel parentCourse = getCourseDataInstance().getCourse(quizDataModel);
@@ -127,15 +206,11 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
                 LocalDate today = new LocalDate();
 
                 if (quizDataModel.getDueDate() != null) {
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate!=null");
                     int quizDay = quizDataModel.getDueDateOriginal().getDayOfYear();
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate.setVisibility(View.VISIBLE)");
                     holder.dueDate.setVisibility(View.VISIBLE);
                     holder.dueDate.setText(quizDataModel.getDueDateOriginal().toString("E, d MMM"));
 
                     if (!quizDataModel.getCompleted()) {
-//                Timber.d(getViewHolderPosition(baseViewHolder) + " quiz not completed");
-//                Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(View.VISIBLE)");
 
                         if (today.getDayOfYear() > quizDay)
                             holder.dueWhen.setText("Overdue!");
@@ -148,19 +223,16 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
                         else if (quizDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.plusWeeks(1).getWeekOfWeekyear())
                             holder.dueWhen.setText("Due Next Week!");
                         else holder.dueWhen.setText("Upcoming!");
+
                         holder.dueWhen.setVisibility(View.VISIBLE);
-//                Timber.d(getViewHolderPosition(baseViewHolder) + ":" + dueWhen.getText().toString());
 
                     } else {
                         holder.dueWhen.setVisibility(GONE);
-//                Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(GONE)");
 
                     }
 
 
                 } else {
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(GONE)");
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate.setVisibility(GONE)");
 
                     holder.dueWhen.setVisibility(GONE);
                     holder.dueDate.setVisibility(GONE);
@@ -172,7 +244,84 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
 
 
             case TYPE_ASSIGNMENT:
-                AssignmentDataModel assignmentDataModel = assignmentList.get(relativePosition);
+                final AssignmentDataModel assignmentDataModel = assignmentList.get(relativePosition);
+
+                ((View) holder.colorView.getParent()).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final Intent intent = new Intent(context, QuizDetailActivity.class);
+                        String courseID = getCourseDataInstance().getCourseID(getCourseDataInstance().getCourse(assignmentDataModel));
+                        String assignmentID = getCourseDataInstance().getAssignmentID(assignmentDataModel);
+                        intent.putExtra("courseID", courseID);
+                        intent.putExtra("assignmentID", assignmentID);
+                        context.startActivity(intent);
+
+                    }
+                });
+
+                holder.markAsDone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        holder.markAsDone.switchState(true);
+
+                        Timber.d("markAsDoneState " + holder.markAsDone.isIconEnabled());
+                        getCourseDataInstance().updateTaskCompleted(assignmentDataModel, holder.markAsDone.isIconEnabled());
+                        assignmentDataModel.setCompleted(holder.markAsDone.isIconEnabled());
+
+                        if (holder.markAsDone.isIconEnabled()) { //MARK AS COMPLETE
+
+                            assignmentList.remove(assignmentDataModel);
+//                            holder.adapter.notifyDataSetChanged();
+                            if (assignmentList.isEmpty()) {
+                                holder.adapter.notifyDataSetChanged();
+                            } else {
+                                holder.adapter.notifyItemRemoved(relativePosition);
+                                holder.adapter.notifyItemRangeChanged(relativePosition, assignmentList.size());
+                            }
+
+                        } else {   //MARK AS INCOMPLETE
+
+                            if (assignmentDataModel.getDueDate() != null) {
+                                LocalDate today = new LocalDate();
+
+                                if (assignmentDataModel.getDueDate() != null) {
+                                    int quizDay = assignmentDataModel.getDueDateOriginal().getDayOfYear();
+                                    holder.dueDate.setVisibility(View.VISIBLE);
+                                    holder.dueDate.setText(assignmentDataModel.getDueDateOriginal().toString("E, d MMM"));
+
+                                    if (!assignmentDataModel.getCompleted()) {
+
+                                        if (today.getDayOfYear() > quizDay)
+                                            holder.dueWhen.setText("Overdue!");
+                                        else if (quizDay == today.getDayOfYear())
+                                            holder.dueWhen.setText("Due Today!");
+                                        else if (quizDay == today.plusDays(1).getDayOfYear())
+                                            holder.dueWhen.setText("Due Tomorrow!");
+                                        else if (assignmentDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.getWeekOfWeekyear())
+                                            holder.dueWhen.setText("Due This Week!");
+                                        else if (assignmentDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.plusWeeks(1).getWeekOfWeekyear())
+                                            holder.dueWhen.setText("Due Next Week!");
+                                        else holder.dueWhen.setText("Upcoming!");
+
+                                        holder.dueWhen.setVisibility(View.VISIBLE);
+
+
+                                    } else {
+                                        holder.dueWhen.setVisibility(GONE);
+
+                                    }
+
+
+                                } else {
+                                    holder.dueWhen.setVisibility(GONE);
+                                    holder.dueDate.setVisibility(GONE);
+                                }
+                            }
+
+
+                        }
+                    }
+                });
 
 
                 parentCourse = getCourseDataInstance().getCourse(assignmentDataModel);
@@ -190,15 +339,11 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
                 today = new LocalDate();
 
                 if (assignmentDataModel.getDueDate() != null) {
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate!=null");
                     int quizDay = assignmentDataModel.getDueDateOriginal().getDayOfYear();
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate.setVisibility(View.VISIBLE)");
                     holder.dueDate.setVisibility(View.VISIBLE);
                     holder.dueDate.setText(assignmentDataModel.getDueDateOriginal().toString("E, d MMM"));
 
                     if (!assignmentDataModel.getCompleted()) {
-//                Timber.d(getViewHolderPosition(baseViewHolder) + " quiz not completed");
-//                Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(View.VISIBLE)");
 
                         if (today.getDayOfYear() > quizDay)
                             holder.dueWhen.setText("Overdue!");
@@ -212,18 +357,14 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
                             holder.dueWhen.setText("Due Next Week!");
                         else holder.dueWhen.setText("Upcoming!");
                         holder.dueWhen.setVisibility(View.VISIBLE);
-//                Timber.d(getViewHolderPosition(baseViewHolder) + ":" + dueWhen.getText().toString());
 
                     } else {
                         holder.dueWhen.setVisibility(GONE);
-//                Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(GONE)");
 
                     }
 
 
                 } else {
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(GONE)");
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate.setVisibility(GONE)");
 
                     holder.dueWhen.setVisibility(GONE);
                     holder.dueDate.setVisibility(GONE);
@@ -235,7 +376,86 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
 
 
             case TYPE_HOMEWORK:
-                HomeworkDataModel homeworkDataModel = homeworkList.get(relativePosition);
+                final HomeworkDataModel homeworkDataModel = homeworkList.get(relativePosition);
+
+
+                ((View) holder.colorView.getParent()).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final Intent intent = new Intent(context, QuizDetailActivity.class);
+                        String courseID = getCourseDataInstance().getCourseID(getCourseDataInstance().getCourse(homeworkDataModel));
+                        String homeworkID = getCourseDataInstance().getHomeworkID(homeworkDataModel);
+                        intent.putExtra("courseID", courseID);
+                        intent.putExtra("homeworkID", homeworkID);
+                        context.startActivity(intent);
+
+                    }
+                });
+
+
+                holder.markAsDone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        holder.markAsDone.switchState(true);
+
+                        Timber.d("markAsDoneState " + holder.markAsDone.isIconEnabled());
+                        getCourseDataInstance().updateTaskCompleted(homeworkDataModel, holder.markAsDone.isIconEnabled());
+                        homeworkDataModel.setCompleted(holder.markAsDone.isIconEnabled());
+
+                        if (holder.markAsDone.isIconEnabled()) { //MARK AS COMPLETE
+
+                            homeworkList.remove(homeworkDataModel);
+//                            holder.adapter.notifyDataSetChanged();
+                            if (homeworkList.isEmpty()) {
+                                holder.adapter.notifyDataSetChanged();
+                            } else {
+                                holder.adapter.notifyItemRemoved(relativePosition);
+                                holder.adapter.notifyItemRangeChanged(relativePosition, homeworkList.size());
+                            }
+
+                        } else {   //MARK AS INCOMPLETE
+
+                            if (homeworkDataModel.getDueDate() != null) {
+                                LocalDate today = new LocalDate();
+
+                                if (homeworkDataModel.getDueDate() != null) {
+                                    int quizDay = homeworkDataModel.getDueDateOriginal().getDayOfYear();
+                                    holder.dueDate.setVisibility(View.VISIBLE);
+                                    holder.dueDate.setText(homeworkDataModel.getDueDateOriginal().toString("E, d MMM"));
+
+                                    if (!homeworkDataModel.getCompleted()) {
+
+                                        if (today.getDayOfYear() > quizDay)
+                                            holder.dueWhen.setText("Overdue!");
+                                        else if (quizDay == today.getDayOfYear())
+                                            holder.dueWhen.setText("Due Today!");
+                                        else if (quizDay == today.plusDays(1).getDayOfYear())
+                                            holder.dueWhen.setText("Due Tomorrow!");
+                                        else if (homeworkDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.getWeekOfWeekyear())
+                                            holder.dueWhen.setText("Due This Week!");
+                                        else if (homeworkDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.plusWeeks(1).getWeekOfWeekyear())
+                                            holder.dueWhen.setText("Due Next Week!");
+                                        else holder.dueWhen.setText("Upcoming!");
+
+                                        holder.dueWhen.setVisibility(View.VISIBLE);
+
+
+                                    } else {
+                                        holder.dueWhen.setVisibility(GONE);
+
+                                    }
+
+
+                                } else {
+                                    holder.dueWhen.setVisibility(GONE);
+                                    holder.dueDate.setVisibility(GONE);
+                                }
+                            }
+
+
+                        }
+                    }
+                });
 
 
                 parentCourse = getCourseDataInstance().getCourse(homeworkDataModel);
@@ -253,15 +473,11 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
                 today = new LocalDate();
 
                 if (homeworkDataModel.getDueDate() != null) {
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate!=null");
                     int quizDay = homeworkDataModel.getDueDateOriginal().getDayOfYear();
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate.setVisibility(View.VISIBLE)");
                     holder.dueDate.setVisibility(View.VISIBLE);
                     holder.dueDate.setText(homeworkDataModel.getDueDateOriginal().toString("E, d MMM"));
 
                     if (!homeworkDataModel.getCompleted()) {
-//                Timber.d(getViewHolderPosition(baseViewHolder) + " quiz not completed");
-//                Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(View.VISIBLE)");
 
                         if (today.getDayOfYear() > quizDay)
                             holder.dueWhen.setText("Overdue!");
@@ -275,18 +491,14 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
                             holder.dueWhen.setText("Due Next Week!");
                         else holder.dueWhen.setText("Upcoming!");
                         holder.dueWhen.setVisibility(View.VISIBLE);
-//                Timber.d(getViewHolderPosition(baseViewHolder) + ":" + dueWhen.getText().toString());
 
                     } else {
                         holder.dueWhen.setVisibility(GONE);
-//                Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(GONE)");
 
                     }
 
 
                 } else {
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(GONE)");
-//            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate.setVisibility(GONE)");
 
                     holder.dueWhen.setVisibility(GONE);
                     holder.dueDate.setVisibility(GONE);
@@ -371,9 +583,9 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
         MainVH(View itemView, MainAdapter adapter) {
             super(itemView);
             itemView.setOnClickListener(this);
+            this.adapter = adapter;
             this.title = itemView.findViewById(R.id.title);
             this.caret = itemView.findViewById(R.id.caret);
-            this.adapter = adapter;
             colorView = itemView.findViewById(R.id.color);
             courseName = itemView.findViewById(R.id.course_name);
             quizTitle = itemView.findViewById(R.id.quiz_title);
