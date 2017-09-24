@@ -1,56 +1,29 @@
 package com.sensei.assistant.Activities.Dashboard;
 
-import android.content.Intent;
-import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.zagum.switchicon.SwitchIconView;
-import com.sensei.assistant.Activities.Assignments.AssignmentDetailActivity;
-import com.sensei.assistant.Activities.Courses.AddCourseActivity;
-import com.sensei.assistant.Activities.Homework.HomeworkDetailActivity;
-import com.sensei.assistant.Activities.Quizzes.AddQuizActivity;
-import com.sensei.assistant.Activities.Quizzes.QuizDetailActivity;
-import com.sensei.assistant.Activities.Quizzes.QuizzesListActivity;
 import com.sensei.assistant.Adapters.DashboardAssignmentAdapter;
 import com.sensei.assistant.Adapters.DashboardHomeworkAdapter;
 import com.sensei.assistant.Adapters.DashboardQuizAdapter;
 import com.sensei.assistant.Adapters.MainAdapter;
 import com.sensei.assistant.DataHandlers.CourseDataHandler;
-import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
-import com.sensei.assistant.DataModelClasses.CourseDataModel;
-import com.sensei.assistant.DataModelClasses.HomeworkDataModel;
-import com.sensei.assistant.DataModelClasses.QuizDataModel;
 import com.sensei.assistant.R;
 import com.squareup.otto.Subscribe;
 
-import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import timber.log.Timber;
 
-import static android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
-import static com.chad.library.adapter.base.BaseQuickAdapter.SLIDEIN_LEFT;
 import static com.sensei.assistant.Application.MyApplication.bus;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
@@ -104,7 +77,7 @@ public class DashboardTasksFragment extends Fragment {
 
 //        placeholder = view.findViewById(R.id.placeholder);
         recyclerView = view.findViewById(R.id.recyclerview);
-        adapter = new MainAdapter(getCourseDataInstance().getListOfIncompleteQuizzes(),
+        adapter = new MainAdapter(getActivity(), getCourseDataInstance().getListOfIncompleteQuizzes(),
                 getCourseDataInstance().getListOfIncompleteAssignments(),
                 getCourseDataInstance().getListOfIncompleteHomework());
 
@@ -447,6 +420,7 @@ public class DashboardTasksFragment extends Fragment {
 
 //        updateData();
 
+
         String getIntent = getActivity().getIntent().getStringExtra("string");
 
 
@@ -461,8 +435,9 @@ public class DashboardTasksFragment extends Fragment {
             }, 1000);
         }
 
-        adapter.notifyDataSetChanged();
-        adapter.expandAllSections();
+        adapter.updateData(getCourseDataInstance().getListOfIncompleteQuizzes(),
+                getCourseDataInstance().getListOfIncompleteAssignments(),
+                getCourseDataInstance().getListOfIncompleteHomework());
 
 
     }

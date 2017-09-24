@@ -41,15 +41,17 @@ import static com.sensei.assistant.DataModelClasses.TaskItem.TYPE_QUIZ;
 public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH> {
 
 
-    public MainAdapter(List<QuizDataModel> quizList, List<AssignmentDataModel> assignmentList, List<HomeworkDataModel> homeworkList) {
+    public MainAdapter(Context context, List<QuizDataModel> quizList, List<AssignmentDataModel> assignmentList, List<HomeworkDataModel> homeworkList) {
         this.quizList = quizList;
         this.homeworkList = homeworkList;
         this.assignmentList = assignmentList;
+        this.context = context;
     }
 
     List<QuizDataModel> quizList;
     List<AssignmentDataModel> assignmentList;
     List<HomeworkDataModel> homeworkList;
+    private Context context;
 
     @Override
     public int getSectionCount() {
@@ -99,6 +101,14 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
 
         switch (section) {
             case TYPE_QUIZ:
+
+
+                holder.markAsDone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 QuizDataModel quizDataModel = quizList.get(relativePosition);
 
 
@@ -284,7 +294,8 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
 
 
                 holder.markAsDone.setIconEnabled(homeworkDataModel.getCompleted(), false);
-                break;        }
+                break;
+        }
 
 
     }
@@ -303,6 +314,16 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
             return 2;
 
         return super.getItemViewType(section, relativePosition, absolutePosition);
+    }
+
+    public void updateData(List<QuizDataModel> quizList, List<AssignmentDataModel> assignmentList, List<HomeworkDataModel> homeworkList) {
+        this.quizList.clear();
+        this.quizList.addAll(quizList);
+        this.assignmentList.clear();
+        this.assignmentList.addAll(assignmentList);
+        this.homeworkList.clear();
+        this.homeworkList.addAll(homeworkList);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -336,15 +357,15 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
         View colorView;
         TextView courseName;
         TextView quizTitle;
-        final TextView dueDate;
+        TextView dueDate;
         TextView dueTime;
-        final TextView dueWhen;
-        final SwitchIconView markAsDone;
+        TextView dueWhen;
+        SwitchIconView markAsDone;
+        TextView title;
+        ImageView caret;
+        MainAdapter adapter;
 
 
-        final TextView title;
-        final ImageView caret;
-        final MainAdapter adapter;
 //        Toast toast;
 
         MainVH(View itemView, MainAdapter adapter) {
@@ -360,11 +381,11 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
             dueTime = itemView.findViewById(R.id.due_time);
             dueWhen = itemView.findViewById(R.id.due_when);
             markAsDone = itemView.findViewById(R.id.done_checkbox);
+
         }
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "Clicked", Toast.LENGTH_SHORT);
             if (isFooter()) {
                 // ignore footer clicks
                 return;
