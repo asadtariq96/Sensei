@@ -150,8 +150,13 @@ public class AssignmentsListActivity extends AppCompatActivity {
 
     @Subscribe
     public void answerAvailable(CourseDataHandler.DataChangedEvent event) {
-        adapter.setNewData(getCourseDataInstance().getListOfAssignments());
-        Timber.d("event received");
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.setNewData(getCourseDataInstance().getListOfAssignments());
+            }
+        }, 1000);        Timber.d("event received");
     }
 
     public void onStart() {

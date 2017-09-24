@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -91,6 +92,15 @@ public class DashboardClassesFragment extends Fragment {
         });
 
 
+//        Button button = new Button(getContext());
+//        button.setText("");
+//        button.setEnabled(false);
+//        button.setVisibility(View.GONE);
+
+
+
+
+
     }
 
     @Override
@@ -101,6 +111,7 @@ public class DashboardClassesFragment extends Fragment {
     }
 
     public void onStart() {
+        Timber.d("onStart");
         super.onStart();
         getCourseDataInstance().registerDashboardClassesFragment(DashboardClassesFragment.this);
         adapter.setNewData(getCourseDataInstance().getListOfClassesForCurrentDay());
@@ -114,6 +125,8 @@ public class DashboardClassesFragment extends Fragment {
     }
 
     public void onStop() {
+        Timber.d("onStop");
+
         super.onStop();
         getCourseDataInstance().unregisterDashboardClassesFragment();
         bus.unregister(DashboardClassesFragment.this);

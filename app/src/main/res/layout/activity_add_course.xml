@@ -40,6 +40,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <ScrollView
+            android:id="@+id/scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white">
@@ -346,10 +347,10 @@
                             android:textSize="10sp"
                             android:textStyle="bold" />
 
-                        <android.support.v4.widget.Space
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
+                        <!--<android.support.v4.widget.Space-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_weight="1" />-->
 
                         <ToggleButton
                             android:id="@+id/toggle_sat"
@@ -360,7 +361,8 @@
                             android:textOff="SAT"
                             android:textOn="SAT"
                             android:textSize="10sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:visibility="gone" />
 
                         <!--<android.support.v4.widget.Space-->
                         <!--android:layout_width="0dp"-->
@@ -436,7 +438,6 @@
                                 android:background="@color/transparent"
                                 android:drawableLeft="@drawable/ic_add_circle_outline_black_24dp"
                                 android:drawablePadding="8dp"
-
                                 android:fontFamily="sans-serif"
                                 android:foreground="?android:attr/selectableItemBackground"
                                 android:gravity="center_vertical"
@@ -788,7 +789,6 @@
                                 android:textColor="@color/colorPrimaryText"
                                 android:textSize="16sp" />
                         </LinearLayout>
-
 
 
                     </LinearLayout>

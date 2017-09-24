@@ -1,8 +1,14 @@
 package com.sensei.assistant.Activities.TimeTable;
 
+import android.Manifest;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -29,6 +35,8 @@ import com.sensei.assistant.Utils.NavigationDrawerSetup;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +44,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import pub.devrel.easypermissions.EasyPermissions;
 import timber.log.Timber;
 
 import static com.sensei.assistant.Application.Constants.DEFAULT_START_TIME;
@@ -43,6 +52,7 @@ import static com.sensei.assistant.Application.Constants.getDayLength;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 public class TimetableActivity extends AppCompatActivity implements MonthLoader.MonthChangeListener {
+    private static final int RC_STORAGE = 784;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
@@ -208,6 +218,48 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
                 || (event.getEndTime().get(Calendar.YEAR) == year && event.getEndTime().get(Calendar.MONTH) == month - 1);
     }
 
+    public Bitmap screenShot(View view) {
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(),
+                view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
+    }
+
+    public void store(Bitmap bm, String fileName) {
+        final String dirPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Screenshots";
+        File dir = new File(dirPath);
+        if (!dir.exists())
+            dir.mkdirs();
+        File file = new File(dirPath, fileName);
+        try {
+            FileOutputStream fOut = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        shareImage(file);
+    }
+
+    private void shareImage(File file) {
+        Uri uri = Uri.fromFile(file);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "");
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, "");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        try {
+            startActivity(Intent.createChooser(intent, "Share Screenshot"));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(TimetableActivity.this, "No App Available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -224,9 +276,27 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
         if (item.getItemId() == R.id.refresh) {
             weekView.notifyDatasetChanged();
         }
+        if (item.getItemId() == R.id.screenshot) {
+            Timber.d("screenshot");
+            String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            if (EasyPermissions.hasPermissions(this, perms)) {
+
+                store(screenShot(findViewById(R.id.rootview)), DateTime.now().toString() + ".jpg");
+            } else {
+                EasyPermissions.requestPermissions(this, "Please grant permission to save screenshot", RC_STORAGE, perms);
+            }
+        }
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
 }

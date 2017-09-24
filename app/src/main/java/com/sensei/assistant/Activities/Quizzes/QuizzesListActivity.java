@@ -65,7 +65,7 @@ public class QuizzesListActivity extends AppCompatActivity {
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         addQuizFAB = findViewById(R.id.add_quiz);
-        adapter = new DashboardQuizAdapter(R.layout.quiz_layout, getCourseDataInstance().getListOfQuizzes());
+        adapter = new DashboardQuizAdapter(R.layout.quiz_layout, getCourseDataInstance().getListOfQuizzes(), false);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -115,7 +115,6 @@ public class QuizzesListActivity extends AppCompatActivity {
                 startActivity(new Intent(QuizzesListActivity.this, AddQuizActivity.class));
             }
         });
-
 
 
         final View rootview = findViewById(R.id.rootview);
@@ -168,7 +167,13 @@ public class QuizzesListActivity extends AppCompatActivity {
 
     @Subscribe
     public void answerAvailable(CourseDataHandler.DataChangedEvent event) {
-        adapter.setNewData(getCourseDataInstance().getListOfQuizzes());
+        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                adapter.setNewData(getCourseDataInstance().getListOfQuizzes());
+//            }
+//        }, 1000);
         Timber.d("event received");
     }
 
@@ -177,7 +182,13 @@ public class QuizzesListActivity extends AppCompatActivity {
         super.onStart();
 //        coursesRef.addValueEventListener(valueEventListener);
         navigationDrawerSetup.ConfigureDrawer();
-        adapter.setNewData(getCourseDataInstance().getListOfQuizzes());
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.setNewData(getCourseDataInstance().getListOfQuizzes());
+            }
+        }, 1000);
     }
 
     public void onResume() {

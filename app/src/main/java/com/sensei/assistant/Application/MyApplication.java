@@ -11,7 +11,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
-import io.branch.referral.Branch;
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -45,6 +44,7 @@ public class MyApplication extends android.app.Application {
     public static DatabaseReference homeworkReference;
     public static String UID;
     public static Bus bus;
+    public static boolean isUserSettingsLoaded = false;
 
     public static Context getContext() {
         return mContext;
@@ -54,7 +54,6 @@ public class MyApplication extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        Branch.getAutoInstance(this);
 
 
         Fabric.with(this, new Crashlytics());
@@ -96,6 +95,7 @@ public class MyApplication extends android.app.Application {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 //                Log.d("ApplicationClass", "onAuthStateChanged");
                 Timber.d("onAuthStateChanged");
+                isUserSettingsLoaded = false;
                 firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
                     UID = firebaseUser.getUid();

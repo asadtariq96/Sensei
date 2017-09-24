@@ -11,11 +11,14 @@ import android.view.animation.Interpolator;
 
 import com.github.clans.fab.FloatingActionMenu;
 
+import io.github.kobakei.materialfabspeeddial.FabSpeedDial;
+import io.github.kobakei.materialfabspeeddial.FabSpeedDialMenu;
+
 /**
  * Created by Asad on 05-Jan-17.
  */
 
-public class ScrollFAMBehaviour extends CoordinatorLayout.Behavior<FloatingActionMenu> {
+public class ScrollFAMBehaviour extends CoordinatorLayout.Behavior<FabSpeedDial> {
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
     private boolean isAnimatingOut = false;
 
@@ -24,12 +27,12 @@ public class ScrollFAMBehaviour extends CoordinatorLayout.Behavior<FloatingActio
     }
 
     @Override
-    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionMenu child, View directTargetChild, View target, int nestedScrollAxes) {
+    public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, FabSpeedDial child, View directTargetChild, View target, int nestedScrollAxes) {
         return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL || super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target, nestedScrollAxes);
     }
 
     @Override
-    public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionMenu child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+    public void onNestedScroll(CoordinatorLayout coordinatorLayout, FabSpeedDial child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
 
         if (dyConsumed > 0 && !this.isAnimatingOut && child.getVisibility() == View.VISIBLE) {
@@ -39,7 +42,7 @@ public class ScrollFAMBehaviour extends CoordinatorLayout.Behavior<FloatingActio
         }
     }
 
-    private void animateOut(final FloatingActionMenu menu) {
+    private void animateOut(final FabSpeedDial menu) {
         ViewCompat.animate(menu).scaleX(0.0F).scaleY(0.0F).alpha(0.0F).setInterpolator(INTERPOLATOR).withLayer().setListener(new ViewPropertyAnimatorListener() {
 
             public void onAnimationStart(View view) {
@@ -58,7 +61,7 @@ public class ScrollFAMBehaviour extends CoordinatorLayout.Behavior<FloatingActio
         }).start();
     }
 
-    public void animateIn(FloatingActionMenu menu) {
+    public void animateIn(FabSpeedDial menu) {
         menu.setVisibility(View.VISIBLE);
 
         ViewCompat.animate(menu).scaleX(1.0F).scaleY(1.0F).alpha(1.0F).setInterpolator(INTERPOLATOR).withLayer().setListener(null).start();

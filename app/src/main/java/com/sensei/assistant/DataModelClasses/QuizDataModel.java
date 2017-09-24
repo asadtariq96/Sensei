@@ -10,7 +10,7 @@ import org.joda.time.LocalTime;
  * Created by Asad on 19-Jan-17.
  */
 
-public class QuizDataModel {
+public class QuizDataModel implements TaskItem {
     private String dueDate;
     private String dueTime;
     private String reminderTime;
@@ -109,5 +109,10 @@ public class QuizDataModel {
         result = 31 * result + quizTitle.hashCode();
         result = 31 * result + (quizDescription != null ? quizDescription.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int getListItemType() {
+        return 1;
     }
 }

@@ -15,8 +15,6 @@ import com.sensei.assistant.R;
 
 import org.json.JSONObject;
 
-import io.branch.referral.Branch;
-import io.branch.referral.BranchError;
 
 import static com.sensei.assistant.Application.MyApplication.firebaseUser;
 

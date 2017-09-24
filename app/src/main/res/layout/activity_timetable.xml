@@ -39,15 +39,17 @@
         </android.support.design.widget.AppBarLayout>
 
         <RelativeLayout
+            android:id="@+id/rootview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <com.alamkanak.weekview.WeekView
                 android:id="@+id/weekView"
-                android:layout_marginEnd="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginEnd="2dp"
                 app:columnGap="4dp"
                 app:dayBackgroundColor="#05000000"
                 app:eventCornerRadius="2dp"
@@ -60,8 +62,8 @@
                 app:headerRowBackgroundColor="#ffefefef"
                 app:headerRowPadding="12dp"
                 app:hourHeight="60dp"
-                app:showNowLine="true"
                 app:noOfVisibleDays="5"
+                app:showNowLine="true"
                 app:textSize="12sp"
                 app:todayBackgroundColor="#1848adff" />
         </RelativeLayout>

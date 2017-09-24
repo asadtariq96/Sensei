@@ -36,10 +36,6 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
 
-
-
-
-
             </android.support.v7.widget.Toolbar>
 
 
@@ -132,13 +128,46 @@
                                 android:layout_marginTop="16dp"
                                 android:paddingLeft="8dp"
                                 android:paddingRight="8dp"
-                                android:text="Add a new Semester" />
+                                android:text="Add a new semester" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:background="@color/md_grey_300" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/end_current_semester"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:foreground="?android:selectableItemBackground"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                android:layout_marginTop="16dp"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:text="End current semester" />
 
                             <!--<View-->
                             <!--android:layout_width="match_parent"-->
                             <!--android:layout_height="1dp"-->
+                            <!--android:layout_marginLeft="8dp"-->
+                            <!--android:layout_marginRight="8dp"-->
                             <!--android:layout_marginTop="8dp"-->
-                            <!--android:background="@color/md_grey_300" />-->
+                            <!--android:background="@color/md_grey_300"-->
+
+                            <!--/>-->
+
+
                         </LinearLayout>
 
 
@@ -342,7 +371,6 @@
                             android:orientation="vertical">
 
 
-
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -357,21 +385,21 @@
                                 android:textSize="14sp" />
 
                             <View
-                                android:visibility="gone"
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:background="@color/md_grey_300" />
+                                android:background="@color/md_grey_300"
+                                android:visibility="gone" />
 
                         </LinearLayout>
 
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:id="@+id/link_google_account"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
-                            android:foreground="?android:selectableItemBackground">
+                            android:foreground="?android:selectableItemBackground"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="match_parent"

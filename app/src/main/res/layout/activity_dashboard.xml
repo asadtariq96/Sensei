@@ -56,59 +56,79 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-
-        <com.github.clans.fab.FloatingActionMenu xmlns:fab="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/fab_menu"
+        <io.github.kobakei.materialfabspeeddial.FabSpeedDial
+            android:id="@+id/fabmenu"
             android:layout_width="match_parent"
+            app:layout_behavior="com.sensei.assistant.ScrollBehaviour.ScrollBehaviour"
             android:layout_height="match_parent"
-            android:layout_gravity="bottom|end"
+            app:fab_extraMargin="-8dp"
+            app:fab_fabDrawableTint="@color/white"
+            app:fab_menu="@menu/fab"
+            app:fab_miniFabDrawableTint="@color/white"
+            app:fab_miniFabTextColor="@color/white"
+            app:fab_useTouchGuard="true" />
 
-            android:elevation="6dp"
-            android:paddingBottom="8dp"
-            android:paddingRight="8dp"
-            fab:layout_behavior="com.sensei.assistant.ScrollBehaviour.ScrollFAMBehaviour"
-            fab:menu_animationDelayPerItem="10"
-            fab:menu_backgroundColor="#eeF5F5F5"
-            fab:menu_fab_size="normal"
-            fab:menu_icon="@drawable/ic_add_white_24dp"
-            fab:menu_labels_colorNormal="@color/white"
-            fab:menu_labels_colorPressed="@color/md_grey_300"
-            fab:menu_labels_textColor="@color/colorSecondaryText">
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fab_hidden"-->
+            <!--android:visibility="invisible"-->
+            <!--android:layout_width="56dp"-->
+            <!--android:layout_height="56dp"-->
+            <!--android:layout_gravity="bottom|right"-->
+            <!--android:layout_margin="8dp" />-->
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fab_course"
-                android:layout_width="wrap_content"
 
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_white_24dp"
-                fab:fab_label="Course"
-                fab:fab_size="mini" />
+        <!--<com.github.clans.fab.FloatingActionMenu xmlns:fab="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/fab_menu"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom|end"-->
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fab_quiz"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_white_24dp"
-                fab:fab_label="Quiz"
-                fab:fab_size="mini" />
+        <!--android:elevation="6dp"-->
+        <!--android:paddingBottom="8dp"-->
+        <!--android:paddingRight="8dp"-->
+        <!--fab:layout_behavior="com.sensei.assistant.ScrollBehaviour.ScrollFAMBehaviour"-->
+        <!--fab:menu_animationDelayPerItem="10"-->
+        <!--fab:menu_backgroundColor="#eeF5F5F5"-->
+        <!--fab:menu_fab_size="normal"-->
+        <!--fab:menu_icon="@drawable/ic_add_white_24dp"-->
+        <!--fab:menu_labels_colorNormal="@color/white"-->
+        <!--fab:menu_labels_colorPressed="@color/md_grey_300"-->
+        <!--fab:menu_labels_textColor="@color/colorSecondaryText">-->
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fab_assignment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_white_24dp"
-                fab:fab_label="Assignment"
-                fab:fab_size="mini" />
+        <!--<com.github.clans.fab.FloatingActionButton-->
+        <!--android:id="@+id/fab_course"-->
+        <!--android:layout_width="wrap_content"-->
 
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fab_homework"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_white_24dp"
-                fab:fab_label="Homework"
-                fab:fab_size="mini" />
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_add_white_24dp"-->
+        <!--fab:fab_label="Course"-->
+        <!--fab:fab_size="mini" />-->
 
-        </com.github.clans.fab.FloatingActionMenu>
+        <!--<com.github.clans.fab.FloatingActionButton-->
+        <!--android:id="@+id/fab_quiz"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_add_white_24dp"-->
+        <!--fab:fab_label="Quiz"-->
+        <!--fab:fab_size="mini" />-->
+
+        <!--<com.github.clans.fab.FloatingActionButton-->
+        <!--android:id="@+id/fab_assignment"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_add_white_24dp"-->
+        <!--fab:fab_label="Assignment"-->
+        <!--fab:fab_size="mini" />-->
+
+        <!--<com.github.clans.fab.FloatingActionButton-->
+        <!--android:id="@+id/fab_homework"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/ic_add_white_24dp"-->
+        <!--fab:fab_label="Homework"-->
+        <!--fab:fab_size="mini" />-->
+
+        <!--</com.github.clans.fab.FloatingActionMenu>-->
         <!--<android.support.design.widget.FloatingActionButton-->
         <!--android:layout_width="40dp"-->
         <!--android:layout_height="40dp"-->

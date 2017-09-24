@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/course"
+        android:icon="@drawable/ic_navdrawer_courses"
+        android:orderInCategory="1"
+        android:title="Course" />
+    <item
+        android:id="@+id/quiz"
+
+        android:icon="@drawable/ic_navdrawer_quiz"
+        android:iconTint="@color/white"
+        android:orderInCategory="2"
+        android:title="Quiz" />
+    <item
+        android:id="@+id/assignment"
+
+        android:icon="@drawable/ic_assessment_black_24dp"
+        android:iconTint="@color/white"
+        android:orderInCategory="3"
+        android:title="Assignment" />
+    <item
+        android:id="@+id/homework"
+
+        android:icon="@drawable/ic_navdrawer_homework"
+        android:iconTint="@color/white"
+        android:orderInCategory="3"
+        android:title="Homework" />
+
+
+</menu>

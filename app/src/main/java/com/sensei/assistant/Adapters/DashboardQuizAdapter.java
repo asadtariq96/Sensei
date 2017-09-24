@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
@@ -19,6 +20,7 @@ import org.joda.time.LocalDate;
 import java.util.List;
 
 import cn.refactor.library.SmoothCheckBox;
+import timber.log.Timber;
 
 import static android.view.View.GONE;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
@@ -29,13 +31,13 @@ import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataI
 
 public class DashboardQuizAdapter extends BaseItemDraggableAdapter<QuizDataModel, BaseViewHolder> {
 
+    private boolean isDashboard = false;
 
 
-    public DashboardQuizAdapter(int layoutResId, List<QuizDataModel> data) {
+    public DashboardQuizAdapter(int layoutResId, List<QuizDataModel> data, boolean isDashboard) {
         super(layoutResId, data);
+        this.isDashboard = isDashboard;
     }
-
-
 
 
     @Override
@@ -44,7 +46,7 @@ public class DashboardQuizAdapter extends BaseItemDraggableAdapter<QuizDataModel
         View colorView;
         TextView courseName;
         TextView quizTitle;
-        TextView dueDate;
+        final TextView dueDate;
         TextView dueTime;
         final TextView dueWhen;
         final SwitchIconView markAsDone;
@@ -60,25 +62,10 @@ public class DashboardQuizAdapter extends BaseItemDraggableAdapter<QuizDataModel
 
         baseViewHolder.addOnClickListener(markAsDone.getId());
 
-
         CourseDataModel parentCourse = getCourseDataInstance().getCourse(quizDataModel);
-
-
         courseName.setText(parentCourse.getCourseName());
-
         colorView.setBackgroundColor(parentCourse.getCourseColorCode());
-
         quizTitle.setText(quizDataModel.getQuizTitle());
-
-//        if (quizDataModel.getDueDate() != null) {
-//            dueWhen.setVisibility(View.VISIBLE);
-//            dueDate.setVisibility(View.VISIBLE);
-//            dueDate.setText(quizDataModel.getDueDateOriginal().toString("E, d MMM"));
-//        } else {
-//            dueDate.setVisibility(View.GONE);
-//            dueWhen.setVisibility(GONE);
-//        }
-
 
         if (quizDataModel.getDueTime() != null) {
             dueTime.setVisibility(View.VISIBLE);
@@ -87,57 +74,65 @@ public class DashboardQuizAdapter extends BaseItemDraggableAdapter<QuizDataModel
             dueTime.setVisibility(View.GONE);
         }
 
-        LocalDate today = new LocalDate();
-        LocalDate thisWeekEnd = today.dayOfWeek().withMaximumValue();
-        LocalDate nextWeekEnd = thisWeekEnd.plusDays(7);
+        final LocalDate today = new LocalDate();
 
         if (quizDataModel.getDueDate() != null) {
-
+            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate!=null");
             int quizDay = quizDataModel.getDueDateOriginal().getDayOfYear();
-            dueWhen.setVisibility(View.VISIBLE);
+            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate.setVisibility(View.VISIBLE)");
             dueDate.setVisibility(View.VISIBLE);
             dueDate.setText(quizDataModel.getDueDateOriginal().toString("E, d MMM"));
 
+            if (!quizDataModel.getCompleted()) {
+                Timber.d(getViewHolderPosition(baseViewHolder) + " quiz not completed");
+                Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(View.VISIBLE)");
 
-            if (today.getDayOfYear() > quizDay)
-                dueWhen.setText("Overdue!");
-            else if (quizDay == today.getDayOfYear())
-                dueWhen.setText("Due Today!");
-            else if (quizDay == today.plusDays(1).getDayOfYear())
-                dueWhen.setText("Due Tomorrow!");
-            else if (quizDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.getWeekOfWeekyear())
-                dueWhen.setText("Due This Week!");
-            else if (quizDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.plusWeeks(1).getWeekOfWeekyear())
-                dueWhen.setText("Due Next Week!");
-            else dueWhen.setText("Upcoming!");
+                if (today.getDayOfYear() > quizDay)
+                    dueWhen.setText("Overdue!");
+                else if (quizDay == today.getDayOfYear())
+                    dueWhen.setText("Due Today!");
+                else if (quizDay == today.plusDays(1).getDayOfYear())
+                    dueWhen.setText("Due Tomorrow!");
+                else if (quizDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.getWeekOfWeekyear())
+                    dueWhen.setText("Due This Week!");
+                else if (quizDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.plusWeeks(1).getWeekOfWeekyear())
+                    dueWhen.setText("Due Next Week!");
+                else dueWhen.setText("Upcoming!");
+                dueWhen.setVisibility(View.VISIBLE);
+                Timber.d(getViewHolderPosition(baseViewHolder)+":"+dueWhen.getText().toString());
+
+            } else {
+                dueWhen.setVisibility(GONE);
+                Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(GONE)");
+
+            }
+
 
         } else {
-            dueDate.setVisibility(GONE);
+            Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(GONE)");
+            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate.setVisibility(GONE)");
+
             dueWhen.setVisibility(GONE);
+            dueDate.setVisibility(GONE);
         }
 
 
         markAsDone.setIconEnabled(quizDataModel.getCompleted(), false);
 
-        if (quizDataModel.getCompleted()) {
-
-            dueWhen.setVisibility(GONE);
-        } else {
-            if (quizDataModel.getDueDate() != null) {
-                dueWhen.setVisibility(View.VISIBLE);
-            } else
-                dueWhen.setVisibility(GONE);
-        }
 
         markAsDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 markAsDone.switchState(true);
 //                notifyDataSetChanged();
+
+                Timber.d("markAsDoneState " + markAsDone.isIconEnabled());
                 getCourseDataInstance().updateTaskCompleted(quizDataModel, markAsDone.isIconEnabled());
-                if (markAsDone.isIconEnabled()) { //MARK AS INCOMPLETE
+                quizDataModel.setCompleted(markAsDone.isIconEnabled());
+
+                if (markAsDone.isIconEnabled()) { //MARK AS COMPLETE
                     dueWhen.animate()
-//                            .translationY(view.getHeight())
                             .alpha(0.0f)
                             .setDuration(250)
                             .setListener(new AnimatorListenerAdapter() {
@@ -145,17 +140,17 @@ public class DashboardQuizAdapter extends BaseItemDraggableAdapter<QuizDataModel
                                 public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
                                     dueWhen.setVisibility(GONE);
+//                                    if(isDashboard){
+//                                        remove(baseViewHolder.getAdapterPosition());
+//                                    }
 
                                 }
                             });
 
 
-//                    dueWhen.setVisibility(View.GONE);
-                } else {   //MARK AS DONE
+                } else {   //MARK AS INCOMPLETE
 
-//                    dueWhen.setVisibility(View.VISIBLE);
                     dueWhen.animate()
-//                            .translationY(-view.getHeight())
                             .alpha(1f)
                             .setDuration(250)
                             .setListener(new AnimatorListenerAdapter() {
@@ -163,15 +158,55 @@ public class DashboardQuizAdapter extends BaseItemDraggableAdapter<QuizDataModel
                                 public void onAnimationEnd(Animator animation) {
                                     super.onAnimationEnd(animation);
                                     if (quizDataModel.getDueDate() != null) {
-                                        dueWhen.setVisibility(View.VISIBLE);
+                                        LocalDate today = new LocalDate();
+
+                                        if (quizDataModel.getDueDate() != null) {
+                                            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate!=null");
+                                            int quizDay = quizDataModel.getDueDateOriginal().getDayOfYear();
+                                            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate.setVisibility(View.VISIBLE)");
+                                            dueDate.setVisibility(View.VISIBLE);
+                                            dueDate.setText(quizDataModel.getDueDateOriginal().toString("E, d MMM"));
+
+                                            if (!quizDataModel.getCompleted()) {
+                                                Timber.d(getViewHolderPosition(baseViewHolder) + " quiz not completed");
+                                                Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(View.VISIBLE)");
+
+                                                if (today.getDayOfYear() > quizDay)
+                                                    dueWhen.setText("Overdue!");
+                                                else if (quizDay == today.getDayOfYear())
+                                                    dueWhen.setText("Due Today!");
+                                                else if (quizDay == today.plusDays(1).getDayOfYear())
+                                                    dueWhen.setText("Due Tomorrow!");
+                                                else if (quizDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.getWeekOfWeekyear())
+                                                    dueWhen.setText("Due This Week!");
+                                                else if (quizDataModel.getDueDateOriginal().getWeekOfWeekyear() == today.plusWeeks(1).getWeekOfWeekyear())
+                                                    dueWhen.setText("Due Next Week!");
+                                                else dueWhen.setText("Upcoming!");
+
+                                                dueWhen.setVisibility(View.VISIBLE);
+                                                Timber.d(getViewHolderPosition(baseViewHolder)+":"+dueWhen.getText().toString());
+
+
+                                            } else {
+                                                dueWhen.setVisibility(GONE);
+                                                Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(GONE)");
+
+                                            }
+
+
+                                        } else {
+                                            Timber.d(getViewHolderPosition(baseViewHolder) + " dueWhen.setVisibility(GONE)");
+                                            Timber.d(getViewHolderPosition(baseViewHolder) + " dueDate.setVisibility(GONE)");
+
+                                            dueWhen.setVisibility(GONE);
+                                            dueDate.setVisibility(GONE);
+                                        }
                                     }
-//                                    dueWhen.setVisibility(View.VISIBLE);
                                 }
                             });
 
 
                 }
-//                setNewData(getCourseDataInstance().getListOfQuizzes());
 
 
             }

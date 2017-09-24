@@ -1,10 +1,16 @@
 package com.sensei.assistant.Activities.Courses;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.net.wifi.hotspot2.pps.Credential;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,14 +25,21 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
+import com.sensei.assistant.Activities.Dashboard.DashboardActivity;
+import com.sensei.assistant.Activities.Quizzes.AddQuizActivity;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.R;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -40,6 +53,13 @@ import java.util.List;
 
 import com.sensei.assistant.Application.Constants;
 import com.sensei.assistant.DataModelClasses.ClassDataModel;
+
+import co.mobiwise.materialintro.animation.MaterialIntroListener;
+import co.mobiwise.materialintro.shape.Focus;
+import co.mobiwise.materialintro.shape.FocusGravity;
+import co.mobiwise.materialintro.shape.ShapeType;
+import co.mobiwise.materialintro.view.MaterialIntroView;
+import timber.log.Timber;
 
 import static com.sensei.assistant.Application.Constants.COLORS_LIST;
 import static com.sensei.assistant.Application.Constants.DEFAULT_START_TIME;
@@ -82,6 +102,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
     LinearLayout Thursday;
     LinearLayout Friday;
     LinearLayout Saturday;
+    ScrollView scrollView;
 
     List<ClassDataModel> ClassesList = new ArrayList<>();
     List<LinearLayout> ContainerList;
@@ -91,6 +112,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
+
 
 //        ValueEventListener valueEventListener = new ValueEventListener() {
 //            @Override
@@ -122,6 +144,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
         CourseAbbreviation = (TextInputEditText) findViewById(R.id.course_abbreviation);
         CourseInstructor = (TextInputEditText) findViewById(R.id.course_instructor);
         CreditHours = (TextInputEditText) findViewById(R.id.credit_hours);
+        scrollView = findViewById(R.id.scrollview);
         CourseName.setHorizontallyScrolling(false);
         CourseName.setMaxLines(Integer.MAX_VALUE);
         CourseAbbreviation.setHorizontallyScrolling(false);
@@ -130,6 +153,8 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
         CourseInstructor.setMaxLines(1);
         CreditHours.setHorizontallyScrolling(false);
         CreditHours.setMaxLines(1);
+
+
         CreditHours.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -188,12 +213,15 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
         Friday = (LinearLayout) findViewById(R.id.friday);
         Saturday = (LinearLayout) findViewById(R.id.saturday);
 
-        MonToggle.setOnClickListener(new View.OnClickListener() {
+        MonToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
 
                 if (MonToggle.isChecked()) {
                     Monday.setVisibility(View.VISIBLE);
+                    MondayAdd.getParent().requestChildFocus(MondayAdd, MondayAdd);
+
                 } else {
                     Monday.setVisibility(View.GONE);
                     deleteCoursesForThatDay(1);
@@ -202,16 +230,29 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
             }
         });
 
-        TueToggle.setOnClickListener(new View.OnClickListener() {
+
+        TueToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (TueToggle.isChecked()) {
                     Tuesday.setVisibility(View.VISIBLE);
+                    TuesdayAdd.getParent().requestChildFocus(TuesdayAdd, TuesdayAdd);
+
                 } else {
                     Tuesday.setVisibility(View.GONE);
                     deleteCoursesForThatDay(2);
                 }
             }
+
+//            @Override
+//            public void onClick(View view) {
+//                if (TueToggle.isChecked()) {
+//                    Tuesday.setVisibility(View.VISIBLE);
+//                } else {
+//                    Tuesday.setVisibility(View.GONE);
+//                    deleteCoursesForThatDay(2);
+//                }
+//            }
         });
 
         WedToggle.setOnClickListener(new View.OnClickListener() {
@@ -219,6 +260,8 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
             public void onClick(View view) {
                 if (WedToggle.isChecked()) {
                     Wednesday.setVisibility(View.VISIBLE);
+                    WednesdayAdd.getParent().requestChildFocus(WednesdayAdd, WednesdayAdd);
+
                 } else {
                     Wednesday.setVisibility(View.GONE);
                     deleteCoursesForThatDay(3);
@@ -231,6 +274,8 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
             public void onClick(View view) {
                 if (ThuToggle.isChecked()) {
                     Thursday.setVisibility(View.VISIBLE);
+                    ThursdayAdd.getParent().requestChildFocus(ThursdayAdd, ThursdayAdd);
+
                 } else {
                     Thursday.setVisibility(View.GONE);
                     deleteCoursesForThatDay(4);
@@ -243,6 +288,8 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
             public void onClick(View view) {
                 if (FriToggle.isChecked()) {
                     Friday.setVisibility(View.VISIBLE);
+                    FridayAdd.getParent().requestChildFocus(FridayAdd, FridayAdd);
+
                 } else {
                     Friday.setVisibility(View.GONE);
                     deleteCoursesForThatDay(5);
@@ -441,7 +488,25 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
             }
         });
 
+//        new MaterialIntroView.Builder(this)
+//                .enableDotAnimation(false)
+//                .enableIcon(false)
+//                .setFocusGravity(FocusGravity.CENTER)
+//                .setFocusType(Focus.NORMAL)
+//                .setShape(ShapeType.RECTANGLE)
+//                .setDelayMillis(500)
+//                .enableFadeAnimation(true)
+//                .dismissOnTouch(true)
+//                .performClick(false)
+//                .setInfoText("Enter the name of course")
+////                .setShapeType(ShapeType.CIRCLE)
+//                .setTarget(CourseName)
+//                .setUsageId("coursename") //THIS SHOULD BE UNIQUE ID
+//                .show();
+
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -453,15 +518,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
             case R.id.save_item:
 
 
-                CourseDataModel courseDataModel = new CourseDataModel(CourseName.getText().toString().trim(),
-                        CourseAbbreviation.getText().toString().trim(),
-                        ((ColorDrawable) ColorBox.getBackground()).getColor(),
-                        CourseInstructor.getText().toString().trim(),
-                        (CreditHours.getText().toString().isEmpty() ? 0 : Integer.valueOf(CreditHours.getText().toString()))
-                );
-
-
-                getCourseDataInstance().addCourse(courseDataModel, ClassesList);
+                saveCourse();
 
 
 //                databaseReference.child("courses")
@@ -484,14 +541,159 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
         return super.onOptionsItemSelected(item);
     }
 
+    private void saveCourse() {
+        CourseDataModel courseDataModel = new CourseDataModel(CourseName.getText().toString().trim(),
+                CourseAbbreviation.getText().toString().trim(),
+                ((ColorDrawable) ColorBox.getBackground()).getColor(),
+                CourseInstructor.getText().toString().trim(),
+                (CreditHours.getText().toString().isEmpty() ? 0 : Integer.valueOf(CreditHours.getText().toString()))
+        );
+
+
+        getCourseDataInstance().addCourse(courseDataModel, ClassesList);
+    }
+
+    private void showTutorial() {
+        String getIntent = getIntent().getStringExtra("string");
+
+        if (getIntent != null) {
+            CourseName.setText("Test Course");
+            CourseAbbreviation.setText("TC");
+            CourseInstructor.setText("John Doe");
+            CreditHours.setText("4");
+            SaveMenu.setEnabled(true);
+
+            TapTargetView.showFor(this,                 // `this` is an Activity
+                    TapTarget.forView(MonToggle, "Press this button to add classes for Monday!")
+                            .drawShadow(true)                   // Whether to draw a drop shadow or not
+                            .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                            .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
+                    new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                        @Override
+                        public void onTargetClick(TapTargetView view) {
+                            super.onTargetClick(view);      // This call is optional
+                            MonToggle.setChecked(true);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    TapTargetView.showFor(AddCourseActivity.this,                 // `this` is an Activity
+                                            TapTarget.forBounds(getBounds(MondayAdd), "Press this button to add a new class!")
+                                                    .outerCircleColor(R.color.md_red_A400)
+                                                    .drawShadow(true)                   // Whether to draw a drop shadow or not
+                                                    .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                                    .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
+                                            new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                                                @Override
+                                                public void onTargetClick(TapTargetView view) {
+                                                    super.onTargetClick(view);      // This call is optional
+                                                    MondayAdd.performClick();
+
+                                                    TapTargetView.showFor(AddCourseActivity.this,                 // `this` is an Activity
+                                                            TapTarget.forToolbarMenuItem((Toolbar) findViewById(R.id.toolbar), R.id.save_item, "Press this button to save this course!")
+                                                                    .outerCircleColor(R.color.md_deep_purple_A400)
+                                                                    // Whether tapping outside the outer circle dismisses the view
+                                                                    .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
+                                                            new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+                                                                @Override
+                                                                public void onTargetClick(TapTargetView view) {
+                                                                    super.onTargetClick(view);      // This call is optional
+                                                                    saveCourse();
+                                                                    AddCourseActivity.this.finish();
+                                                                    startActivity(new Intent(AddCourseActivity.this, AddQuizActivity.class).putExtra("string", "intro"));
+
+                                                                }
+                                                            });
+
+                                                }
+                                            });
+
+
+                                }
+                            }, 500);
+//                            MonToggle.setChecked(true);
+//                            fabSpeedDialMenu.openMenu();
+//                            TapTargetView.showFor(DashboardActivity.this,                 // `this` is an Activity
+//                                    TapTarget.forView(fabSpeedDialMenu.getMiniFab(0), "Press this button to add a new course!")
+//                                            .drawShadow(true)                   // Whether to draw a drop shadow or not
+//                                            .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+//                                            .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
+//                                    new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
+//                                        @Override
+//                                        public void onTargetClick(TapTargetView view) {
+//                                            super.onTargetClick(view);      // This call is optional
+//                                            startActivity(new Intent(DashboardActivity.this, AddCourseActivity.class).putExtra("string", "intro"));
+//                                            fabSpeedDialMenu.closeMenu();
+//                                        }
+//                                    });
+                        }
+                    });
+
+//            final TapTarget target0 = TapTarget.forView(MonToggle, "We have already filled the text fields for you, but you can still change them!", "Press this button to add classes for Monday!")
+//                    .cancelable(false)
+//                    .transparentTarget(true);
+//
+//
+////            final TapTarget target1 = TapTarget.forBounds(MondayAdd.getClipBounds(), "")
+////                    .cancelable(true)
+////                    .transparentTarget(true);
+////
+////
+////            final TapTarget target2 = TapTarget.forView(findViewById(R.id.save_item), "When you are done adding classes, press this button to save this course! ")
+////                    .cancelable(true)
+////                    .transparentTarget(true);
+//
+//            new TapTargetSequence(this)
+//                    .targets(target0)
+//                    .continueOnCancel(true)
+//                    .listener(new TapTargetSequence.Listener() {
+//                        @Override
+//                        public void onSequenceFinish() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+//                            if(lastTarget==target0){
+//                                MonToggle.setChecked(true);
+//
+//                            }
+//
+//                        }
+//
+//                        @Override
+//                        public void onSequenceCanceled(TapTarget lastTarget) {
+//
+//                        }
+//                    })
+//                    .start();
+
+        }
+    }
+
+    private Rect getBounds(View view) {
+        int[] l = new int[2];
+        view.getLocationOnScreen(l);
+        Rect rect = new Rect(l[0] + view.getPaddingLeft(), l[1], l[0] + view.getPaddingLeft() + 20, l[1] + view.getHeight());
+        return rect;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_save_menu, menu);
         SaveMenu = menu.getItem(0);
         SaveMenu.setEnabled(false);
-        return super.onCreateOptionsMenu(menu);
 
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                showTutorial();
+
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
 
     }
 

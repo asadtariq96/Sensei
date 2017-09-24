@@ -2,6 +2,7 @@ package com.sensei.assistant.Utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -312,6 +313,14 @@ public class NavigationDrawerSetup extends AppCompatActivity {
                     String photoUrl = "https://graph.facebook.com/" + facebookUserId + "/picture?height=500";
 
                     Picasso.with(HostActivity).load(photoUrl).placeholder(R.drawable.ic_profile).into(profile_pic);
+
+                } else if (providerId.equals("google.com")) {
+                    String name = profile.getDisplayName();
+                    nav_header_name.setVisibility(View.VISIBLE);
+                    nav_header_name.setText(name);
+                    Uri photoUrl = profile.getPhotoUrl();
+                    Picasso.with(HostActivity).load(photoUrl).placeholder(R.drawable.ic_profile).into(profile_pic);
+
 
                 }
             }

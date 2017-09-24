@@ -4,16 +4,19 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sensei.assistant.Activities.Courses.CoursesListActivity;
 import com.sensei.assistant.Activities.Dashboard.DashboardClassesFragment;
 import com.sensei.assistant.Application.Constants;
+import com.sensei.assistant.Authentication.SignInActivity;
 import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
 import com.sensei.assistant.DataModelClasses.ClassDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.DataModelClasses.HomeworkDataModel;
 import com.sensei.assistant.DataModelClasses.QuizDataModel;
 import com.sensei.assistant.DataModelClasses.SemesterDataModel;
+import com.sensei.assistant.DataModelClasses.TaskItem;
 import com.sensei.assistant.DataModelClasses.UserSettings;
 
 import org.joda.time.DateTime;
@@ -39,6 +42,7 @@ import static com.sensei.assistant.Application.MyApplication.coursesReference;
 import static com.sensei.assistant.Application.MyApplication.databaseReference;
 import static com.sensei.assistant.Application.MyApplication.firebaseUser;
 import static com.sensei.assistant.Application.MyApplication.homeworkReference;
+import static com.sensei.assistant.Application.MyApplication.isUserSettingsLoaded;
 import static com.sensei.assistant.Application.MyApplication.quizzesReference;
 import static com.sensei.assistant.Application.MyApplication.semestersReference;
 import static com.sensei.assistant.Application.MyApplication.settingsReference;
@@ -55,6 +59,8 @@ public class CourseDataHandler {
     private ChildEventListener quizzesChildEventListener;
     private ChildEventListener assignmentsChildEventListener;
     private ChildEventListener homeworkChildEventListener;
+    private UserSettings userSettings;
+    private SemesterDataModel selectedSemester;
 
     private CourseDataHandler() {
     }
@@ -92,6 +98,16 @@ public class CourseDataHandler {
 
     private DashboardClassesFragment dashboardClassesFragment = null;
 
+    private SignInActivity signInActivityInstance = null;
+
+    public void registerSignInActivityInstance(SignInActivity signInActivity) {
+        this.signInActivityInstance = signInActivity;
+    }
+
+    public void unregisterSignInActivityInstance() {
+        this.signInActivityInstance = null;
+    }
+
     public void registerCoursesActivity(CoursesListActivity coursesActivity) {
         this.coursesActivityInstance = coursesActivity;
     }
@@ -112,20 +128,44 @@ public class CourseDataHandler {
 
     public void getUserSettings() {
 
-        settingsReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        Timber.d("getUserSettings");
+
+        settingsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+                if (dataSnapshot.exists()) { //EXISTING USER
+                    Timber.d("dataSnapshot.exists");
 
-                    UserSettings userSettings = dataSnapshot.getValue(UserSettings.class);
+                    userSettings = dataSnapshot.getValue(UserSettings.class);
                     Constants.DEFAULT_START_TIME = new LocalTime().parse(userSettings.getStartTime());
                     Constants.DEFAULT_END_TIME = new LocalTime().parse(userSettings.getEndTime());
                     Constants.DEFAULT_BREAK_LENGTH = userSettings.getBreakBetweenClasses();
                     Constants.DEFAULT_CLASS_LENGTH = userSettings.getClassLength();
                     Constants.SELECTED_SEMESTER = userSettings.getSelectedSemester();
+                    Query selectedSemesterNameQuery = semestersReference.orderByKey().equalTo(userSettings.getSelectedSemester());
+                    selectedSemesterNameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Timber.d("onDataChange selectedSemesterNameQuery");
+
+                            Constants.SELECTED_SEMESTER_NAME = dataSnapshot.child(userSettings.getSelectedSemester()).getValue(SemesterDataModel.class).getSemesterName();
+                            bus.post(new DataChangedEvent(true));
+//                            selectedSemesterText.setText(Constants.SELECTED_SEMESTER_NAME);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    isUserSettingsLoaded = true;
+                    if (signInActivityInstance != null)
+                        signInActivityInstance.launchDashboardActivity();
                     getSemesters();
                     getCourses();
 
+                    //NEW USER
                 } else addNewUserToDatabase();
 
             }
@@ -142,14 +182,16 @@ public class CourseDataHandler {
 
     public void getSemesters() {
 //        SemesterMap.clear();
-
+        Timber.d("getSemesters");
         semestersReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     SemesterDataModel semesterDataModel = snapshot.getValue(SemesterDataModel.class);
                     if (snapshot.getKey().equals(Constants.SELECTED_SEMESTER)) {
+                        Timber.d("Selected Semester: " + Constants.SELECTED_SEMESTER);
                         Constants.SELECTED_SEMESTER_NAME = semesterDataModel.getSemesterName();
+                        selectedSemester = semesterDataModel;
                     }
                 }
             }
@@ -164,6 +206,7 @@ public class CourseDataHandler {
     }
 
     public void getCourses() {
+        Timber.d("getCourses");
 
         removeListeners();
 
@@ -497,11 +540,20 @@ public class CourseDataHandler {
     public List<ClassDataModel> getListOfClassesForCurrentDay() {
         DateTime dateTime = new DateTime();
         List<ClassDataModel> tempList = new ArrayList<>();
-        for (ClassDataModel classDataModel : getAllClasses()) {
-            if (classDataModel.getDayOfWeek() == dateTime.getDayOfWeek() && !new LocalTime().isAfter(classDataModel.getEndTimeOriginal()))
-                tempList.add(classDataModel);
+        if (selectedSemester.getEndDate().isEmpty()) {
+            for (ClassDataModel classDataModel : getAllClasses()) {
+                if (classDataModel.getDayOfWeek() == dateTime.getDayOfWeek() && !new LocalTime().isAfter(classDataModel.getEndTimeOriginal()))
+                    tempList.add(classDataModel);
+            }
+            Collections.sort(tempList, new classTimeComparator());
+        } else if (!dateTime.toLocalDate().isAfter(new LocalDate(selectedSemester.getEndDate()))) {
+            for (ClassDataModel classDataModel : getAllClasses()) {
+                if (classDataModel.getDayOfWeek() == dateTime.getDayOfWeek() && !new LocalTime().isAfter(classDataModel.getEndTimeOriginal()))
+                    tempList.add(classDataModel);
+            }
+            Collections.sort(tempList, new classTimeComparator());
         }
-        Collections.sort(tempList, new classTimeComparator());
+
 
         return tempList;
     }
@@ -530,14 +582,33 @@ public class CourseDataHandler {
             tempList.addAll(courseDataModel.getQuizzes());
 
         Collections.sort(tempList, new quizCompleteComparator());
-
+//        Collections.sort(tempList, new quizDueComparator());
         return tempList;
     }
 
+//    public Map<Integer,List<TaskItem>> getMapOfTasks(){
+//        HashMap<Integer, List<TaskItem>> map = new HashMap<>();
+//        map.put(0,getListOfIncompleteQuizzes());
+//        map.put(1,getListOfIncompleteAssignments());
+//        map.put(2,getListOfIncompleteHomework());
+//
+//        return map;
+//    }
+
+
     public List<QuizDataModel> getListOfIncompleteQuizzes() {
+        DateTime dateTime = new DateTime();
         List<QuizDataModel> tempList = new ArrayList<>();
-        for (CourseDataModel courseDataModel : CoursesList)
-            tempList.addAll(courseDataModel.getIncompleteQuizzes());
+
+        if (selectedSemester.getEndDate().isEmpty()) {
+            for (CourseDataModel courseDataModel : CoursesList)
+                tempList.addAll(courseDataModel.getIncompleteQuizzes());
+        } else if (!dateTime.toLocalDate().isAfter(new LocalDate(selectedSemester.getEndDate()))) {
+            for (CourseDataModel courseDataModel : CoursesList)
+                tempList.addAll(courseDataModel.getIncompleteQuizzes());
+
+        }
+//        Collections.sort(tempList, new quizDueComparator());
         return tempList;
     }
 
@@ -570,8 +641,17 @@ public class CourseDataHandler {
 
     public List<AssignmentDataModel> getListOfIncompleteAssignments() {
         List<AssignmentDataModel> tempList = new ArrayList<>();
-        for (CourseDataModel courseDataModel : CoursesList)
-            tempList.addAll(courseDataModel.getIncompleteAssignments());
+        DateTime dateTime = new DateTime();
+
+        if (selectedSemester.getEndDate().isEmpty()) {
+
+            for (CourseDataModel courseDataModel : CoursesList)
+                tempList.addAll(courseDataModel.getIncompleteAssignments());
+        } else if (!dateTime.toLocalDate().isAfter(new LocalDate(selectedSemester.getEndDate()))) {
+            for (CourseDataModel courseDataModel : CoursesList)
+                tempList.addAll(courseDataModel.getIncompleteAssignments());
+
+        }
         return tempList;
     }
 
@@ -604,8 +684,17 @@ public class CourseDataHandler {
 
     public List<HomeworkDataModel> getListOfIncompleteHomework() {
         List<HomeworkDataModel> tempList = new ArrayList<>();
-        for (CourseDataModel courseDataModel : CoursesList)
-            tempList.addAll(courseDataModel.getIncompleteHomework());
+        DateTime dateTime = new DateTime();
+
+        if (selectedSemester.getEndDate().isEmpty()) {
+
+            for (CourseDataModel courseDataModel : CoursesList)
+                tempList.addAll(courseDataModel.getIncompleteHomework());
+        } else if (!dateTime.toLocalDate().isAfter(new LocalDate(selectedSemester.getEndDate()))) {
+            for (CourseDataModel courseDataModel : CoursesList)
+                tempList.addAll(courseDataModel.getIncompleteHomework());
+
+        }
         return tempList;
     }
 
@@ -643,6 +732,7 @@ public class CourseDataHandler {
 
     }
 
+
     public static class quizCompleteComparator implements Comparator<QuizDataModel> {
 
 
@@ -650,6 +740,19 @@ public class CourseDataHandler {
         public int compare(QuizDataModel left, QuizDataModel right) {
             return left.getCompleted().compareTo(right.getCompleted());
         }
+    }
+
+    public static class quizDueComparator implements Comparator<QuizDataModel> {
+        public int compare(QuizDataModel left, QuizDataModel right) {
+            if (left.getDueDateOriginal() != null && right.getDueDateOriginal() != null) {
+                return left.getDueDateOriginal().compareTo(right.getDueDateOriginal());
+            } else if (left.getDueDateOriginal() != null && right.getDueDateOriginal() == null) {
+                return -1;
+            } else if (left.getDueDateOriginal() == null && right.getDueDateOriginal() != null) {
+                return 1;
+            } else return 0;
+        }
+
     }
 
     public String getCourseID(CourseDataModel value) {
@@ -895,9 +998,12 @@ public class CourseDataHandler {
 
 
     public void addNewUserToDatabase() {
+
+        Timber.d("addNewUserToDatabase");
+
         DatabaseReference newUserRef = databaseReference.child("settings").child(UID);
 
-        UserSettings userSettings = new UserSettings();
+        userSettings = new UserSettings();
         userSettings.setBreakBetweenClasses(10);
         userSettings.setClassLength(50);
         userSettings.setEndTime(new LocalTime(16, 30, 0).toString());
@@ -911,11 +1017,18 @@ public class CourseDataHandler {
                 .setValue(new SemesterDataModel("Default", new LocalDate().toString(), ""));
 
         newUserRef.setValue(userSettings);
+        isUserSettingsLoaded = true;
+        if (signInActivityInstance != null)
+            signInActivityInstance.launchDashboardActivity();
+        getSemesters();
+        getCourses();
 
 
     }
 
     public void removeListeners() {
+//        Timber.d("removeListeners");
+
         for (Map.Entry<DatabaseReference, ChildEventListener> entry : childEventListenerHashMap.entrySet()) {
             DatabaseReference ref = entry.getKey();
             ChildEventListener listener = entry.getValue();
@@ -937,18 +1050,18 @@ public class CourseDataHandler {
             if (quiz == 1) {
                 stringBuilder.append(quiz + " quiz");
             } else
-                stringBuilder.append(quiz + " quizzes");
+                stringBuilder.append(quiz + "quizzes");
 
         }
         if (assignment != 0) {
-            stringBuilder.append(", ");
+            stringBuilder.append(" - ");
             if (assignment == 1) {
                 stringBuilder.append(assignment + " assignment");
             } else
                 stringBuilder.append(assignment + " assignments");
         }
         if (homework != 0) {
-            stringBuilder.append(", ");
+            stringBuilder.append(" - ");
             if (homework == 1) {
                 stringBuilder.append(homework + " homework");
             } else
@@ -960,11 +1073,38 @@ public class CourseDataHandler {
 
     }
 
+    public void setUserSettings(UserSettings userSettings) {
+        this.userSettings = userSettings;
+    }
+
+    public SemesterDataModel getSelectedSemester() {
+        return selectedSemester;
+    }
+
+    public void setSelectedSemester(SemesterDataModel selectedSemester) {
+        this.selectedSemester = selectedSemester;
+    }
 
     public static class DataChangedEvent {
         boolean var;
 
         public DataChangedEvent(boolean var) {
+            this.var = var;
+        }
+
+        public boolean isVar() {
+            return var;
+        }
+
+        public void setVar(boolean var) {
+            this.var = var;
+        }
+    }
+
+    public static class TaskMarkedAsDone {
+        boolean var;
+
+        public TaskMarkedAsDone(boolean var) {
             this.var = var;
         }
 

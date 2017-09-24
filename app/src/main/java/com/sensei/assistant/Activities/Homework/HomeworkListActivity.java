@@ -165,7 +165,13 @@ public class HomeworkListActivity extends AppCompatActivity {
 
     @Subscribe
     public void answerAvailable(CourseDataHandler.DataChangedEvent event) {
-        adapter.setNewData(getCourseDataInstance().getListOfHomework());
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                adapter.setNewData(getCourseDataInstance().getListOfHomework());
+            }
+        }, 1000);
         Timber.d("event received");
     }
 
@@ -173,7 +179,7 @@ public class HomeworkListActivity extends AppCompatActivity {
         super.onStart();
 //        coursesRef.addValueEventListener(valueEventListener);
         navigationDrawerSetup.ConfigureDrawer();
-        adapter.setNewData(getCourseDataInstance().getListOfHomework());
+//        adapter.setNewData(getCourseDataInstance().getListOfHomework());
     }
 
     public void onResume() {

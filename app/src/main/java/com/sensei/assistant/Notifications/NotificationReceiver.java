@@ -11,6 +11,7 @@ import com.sensei.assistant.Activities.Dashboard.DashboardActivity;
 import com.sensei.assistant.R;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import timber.log.Timber;
 
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
@@ -22,6 +23,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        Timber.d("onReceive");
         if (getCourseDataInstance().getDailyNotificationString() != null) {
 
             PugNotification.with(context)

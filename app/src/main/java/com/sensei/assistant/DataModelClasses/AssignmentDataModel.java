@@ -6,11 +6,13 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
+import io.fabric.sdk.android.services.concurrency.Task;
+
 /**
  * Created by Asad on 19-Jan-17.
  */
 
-public class AssignmentDataModel {
+public class AssignmentDataModel implements TaskItem {
     private String dueDate;
     private String dueTime;
     private String reminderTime;
@@ -107,5 +109,10 @@ public class AssignmentDataModel {
         result = 31 * result + assignmentTitle.hashCode();
         result = 31 * result + (assignmentDescription != null ? assignmentDescription.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public int getListItemType() {
+        return 2;
     }
 }

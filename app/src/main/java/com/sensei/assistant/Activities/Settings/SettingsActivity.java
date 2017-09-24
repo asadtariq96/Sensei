@@ -1,6 +1,7 @@
 package com.sensei.assistant.Activities.Settings;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
@@ -44,10 +45,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sensei.assistant.Application.Constants;
+import com.sensei.assistant.DataHandlers.CourseDataHandler;
 import com.sensei.assistant.DataModelClasses.SemesterDataModel;
 import com.sensei.assistant.DataModelClasses.UserSettings;
 import com.sensei.assistant.R;
 import com.sensei.assistant.Utils.NavigationDrawerSetup;
+import com.squareup.otto.Subscribe;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -72,6 +75,7 @@ import static com.sensei.assistant.Application.Constants.DEFAULT_END_TIME;
 import static com.sensei.assistant.Application.Constants.DEFAULT_START_TIME;
 import static com.sensei.assistant.Application.Constants.SELECTED_SEMESTER;
 import static com.sensei.assistant.Application.MyApplication.UID;
+import static com.sensei.assistant.Application.MyApplication.bus;
 import static com.sensei.assistant.Application.MyApplication.databaseReference;
 import static com.sensei.assistant.Application.MyApplication.firebaseUser;
 import static com.sensei.assistant.Application.MyApplication.mAuth;
@@ -92,6 +96,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     LinearLayout dayStartTime;
     LinearLayout dayEndTime;
     LinearLayout newSemester;
+    LinearLayout endCurrentSemester;
     LinearLayout linkFacebook;
     LinearLayout linkGoogle;
     TextView selectedSemesterText;
@@ -118,6 +123,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        bus.register(this);
         mCallbackManager = CallbackManager.Factory.create();
 
 
@@ -135,6 +141,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         dayStartTime = (LinearLayout) findViewById(R.id.day_start_time);
         dayEndTime = (LinearLayout) findViewById(R.id.day_end_time);
         newSemester = (LinearLayout) findViewById(R.id.add_new_semester);
+        endCurrentSemester = (LinearLayout) findViewById(R.id.end_current_semester);
         linkFacebook = (LinearLayout) findViewById(R.id.link_facebook_account);
         linkGoogle = (LinearLayout) findViewById(R.id.link_google_account);
 
@@ -144,12 +151,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         dayStartTimeText = (TextView) findViewById(R.id.day_start_time_text);
         dayEndTimeText = (TextView) findViewById(R.id.day_end_time_text);
 
+
         selectedSemester.setOnClickListener(this);
         classLength.setOnClickListener(this);
         breakLength.setOnClickListener(this);
         dayStartTime.setOnClickListener(this);
         dayEndTime.setOnClickListener(this);
         newSemester.setOnClickListener(this);
+        endCurrentSemester.setOnClickListener(this);
         linkFacebook.setOnClickListener(this);
         linkGoogle.setOnClickListener(this);
 
@@ -182,47 +191,52 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
 
 
-        settingsReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                final UserSettings userSettings = dataSnapshot.getValue(UserSettings.class);
-                Constants.DEFAULT_START_TIME = new LocalTime().parse(userSettings.getStartTime());
-                Constants.DEFAULT_END_TIME = new LocalTime().parse(userSettings.getEndTime());
-                Constants.DEFAULT_BREAK_LENGTH = userSettings.getBreakBetweenClasses();
-                Constants.DEFAULT_CLASS_LENGTH = userSettings.getClassLength();
-
-
-                if (!Objects.equals(userSettings.getSelectedSemester(), Constants.SELECTED_SEMESTER))
-
-                {
-                    Constants.SELECTED_SEMESTER = userSettings.getSelectedSemester();
-
-                    Query selectedSemesterNameQuery = semestersReference.orderByKey().equalTo(userSettings.getSelectedSemester());
-                    selectedSemesterNameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            Constants.SELECTED_SEMESTER_NAME = dataSnapshot.child(userSettings.getSelectedSemester()).getValue(SemesterDataModel.class).getSemesterName();
-                            selectedSemesterText.setText(Constants.SELECTED_SEMESTER_NAME);
-                            getCourseDataInstance().getCourses();
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                }
-
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        settingsReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Timber.d("settingsRef valueEventListener onDataChange");
+//                final UserSettings userSettings = dataSnapshot.getValue(UserSettings.class);
+//                Constants.DEFAULT_START_TIME = new LocalTime().parse(userSettings.getStartTime());
+//                Constants.DEFAULT_END_TIME = new LocalTime().parse(userSettings.getEndTime());
+//                Constants.DEFAULT_BREAK_LENGTH = userSettings.getBreakBetweenClasses();
+//                Constants.DEFAULT_CLASS_LENGTH = userSettings.getClassLength();
+//
+//
+//                if (!Objects.equals(userSettings.getSelectedSemester(), Constants.SELECTED_SEMESTER))
+//
+//                {
+//                    Timber.d("!Objects.equals(userSettings.getSelectedSemester(), Constants.SELECTED_SEMESTER)");
+//
+//                    Constants.SELECTED_SEMESTER = userSettings.getSelectedSemester();
+//
+//                    Query selectedSemesterNameQuery = semestersReference.orderByKey().equalTo(userSettings.getSelectedSemester());
+//                    selectedSemesterNameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            Timber.d("onDataChange selectedSemesterNameQuery");
+//
+//                            Constants.SELECTED_SEMESTER_NAME = dataSnapshot.child(userSettings.getSelectedSemester()).getValue(SemesterDataModel.class).getSemesterName();
+//                            selectedSemesterText.setText(Constants.SELECTED_SEMESTER_NAME);
+//                            getCourseDataInstance().getCourses();
+//
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         semestersReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -230,6 +244,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 SemesterList.clear();
                 SemesterMap.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    Timber.d("dataSnapslot.getChildren count %d", dataSnapshot.getChildrenCount());
                     SemesterList.add(postSnapshot.getValue(SemesterDataModel.class));
                     SemesterMap.put(postSnapshot.getKey(), postSnapshot.getValue(SemesterDataModel.class));
                 }
@@ -254,6 +269,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         navigationView.getMenu().getItem(8).setChecked(true);
     }
 
+    @Subscribe
+    public void answerAvailable(CourseDataHandler.DataChangedEvent event) {
+        Timber.d("event received");
+        selectedSemesterText.setText(Constants.SELECTED_SEMESTER_NAME);
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -274,6 +295,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.add_new_semester:
                 addNewSemester();
+                break;
+
+            case R.id.end_current_semester:
+                endCurrentSemester();
                 break;
             case R.id.link_facebook_account:
                 if (firebaseUser.getProviders().contains(("facebook.com")))
@@ -297,6 +322,27 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
         }
+    }
+
+    private void endCurrentSemester() {
+        final MaterialDialog addNewSemesterDialog = new MaterialDialog.Builder(this)
+                .title("End current semester")
+                .content("Are you sure you want to end the current semester? You will not get any updates in dashboard after ending the semester.")
+                .positiveText("Yes")
+                .negativeText("Cancel")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Timber.d("Selected Semester " + SELECTED_SEMESTER);
+                        Timber.d(new LocalDate().toString());
+                        Timber.d(semestersReference.toString());
+                        semestersReference.child(Constants.SELECTED_SEMESTER).child("endDate").setValue(new LocalDate().toString());
+
+
+                    }
+                })
+                .negativeText("Cancel")
+                .show();
     }
 
     private void linkGoogleAccount() {
@@ -478,6 +524,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     void changeCurrentSemester() {
+        Timber.d("changeCurrentSemester");
 
 
         final SemesterAdapter adapter = new SemesterAdapter(SemesterList, SemesterMap);

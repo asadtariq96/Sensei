@@ -5,11 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -30,13 +33,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.sensei.assistant.Activities.Dashboard.DashboardActivity;
 import com.sensei.assistant.R;
 
 import timber.log.Timber;
 
+import static com.sensei.assistant.Application.MyApplication.isUserSettingsLoaded;
 import static com.sensei.assistant.Application.MyApplication.mAuth;
+import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 
 public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -51,6 +57,9 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     //    SignInButton googleSignInButton;
     CallbackManager mCallbackManager;
     public GoogleApiClient mGoogleApiClient;
+    TextView forgotPassword;
+    TextView signup;
+    MaterialDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,11 +106,58 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             }
         });
 
+        forgotPassword = findViewById(R.id.forgot_password);
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialDialog.Builder(SignInActivity.this)
+                        .title("Forgot password?")
+                        .content("Please enter your email and we will send you a password recovery link!")
+                        .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS)
+                        .autoDismiss(false)
+                        .input("email", null, new MaterialDialog.InputCallback() {
+                            @Override
+                            public void onInput(final MaterialDialog dialog, CharSequence input) {
+
+
+                                final MaterialDialog progressDialog = new MaterialDialog.Builder(SignInActivity.this)
+                                        .content("Please wait..")
+                                        .progress(true, 0)
+                                        .show();
+
+                                FirebaseAuth.getInstance().sendPasswordResetEmail(input.toString().trim())
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                progressDialog.dismiss();
+                                                if (task.isSuccessful()) {
+                                                    Log.d("EMAIL", "Email sent.");
+                                                    dialog.dismiss();
+                                                    Toast.makeText(SignInActivity.this, "Email sent!", Toast.LENGTH_SHORT).show();
+                                                } else
+                                                    Toast.makeText(SignInActivity.this, "Error. Please try again.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
+                        }).show();
+            }
+        });
+
         facebookLogin = (Button) findViewById(R.id.login_facebook);
         facebookLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 loginButton.performClick();
+            }
+        });
+
+        signup = findViewById(R.id.signup);
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SignInActivity.this.finish();
+                startActivity(new Intent(SignInActivity.this, SignupActivity.class));
+
             }
         });
 
@@ -173,6 +229,13 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 signIn();
             }
         });
+
+        progressDialog = new MaterialDialog.Builder(SignInActivity.this)
+                .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
+                .content("Signing in...")
+                .build();
     }
 
 
@@ -195,14 +258,15 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
     private void signIn() {
 
-        final MaterialDialog materialDialog = new MaterialDialog.Builder(SignInActivity.this)
-                .title("Signing In")
-                .content("Please Wait")
-                .progress(true, 0)
-                .canceledOnTouchOutside(false)
-                .build();
+//        final MaterialDialog materialDialog = new MaterialDialog.Builder(SignInActivity.this)
+//                .title("Signing In")
+//                .content("Please Wait")
+//                .progress(true, 0)
+//                .canceledOnTouchOutside(false)
+//                .cancelable(false)
+//                .build();
 
-        materialDialog.show();
+        progressDialog.show();
 
 
         mAuth.signInWithEmailAndPassword(Email.getText().toString().trim(), Password.getText().toString())
@@ -213,16 +277,14 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 //                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
                         if (task.isSuccessful()) {
-                            startActivity(new Intent(SignInActivity.this, DashboardActivity.class));
-                            SignInActivity.this.finish();
-                            materialDialog.dismiss();
+                            launchDashboardActivity();
                         } else {
 //                            Log.w(TAG, "signInWithEmail:failed", task.getException());
                             Timber.d("signInWithEmail:failed" + task.getException());
 
                             Toast.makeText(SignInActivity.this, "Authentication Failed",
                                     Toast.LENGTH_SHORT).show();
-                            materialDialog.dismiss();
+                            progressDialog.dismiss();
 
                         }
 
@@ -236,18 +298,31 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onStart() {
         super.onStart();
+        getCourseDataInstance().registerSignInActivityInstance(SignInActivity.this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        getCourseDataInstance().unregisterSignInActivityInstance();
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
+
+
         Timber.d("handleFacebookAccessToken:" + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
 
+//        final MaterialDialog materialDialog = new MaterialDialog.Builder(SignInActivity.this)
+//                .title("Signing In")
+//                .content("Please Wait")
+//                .progress(true, 0)
+//                .canceledOnTouchOutside(false)
+//                .cancelable(false)
+//                .build();
+
+        progressDialog.show();
 
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -255,8 +330,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
                         if (task.isSuccessful()) {
-                            startActivity(new Intent(SignInActivity.this, DashboardActivity.class));
-                            SignInActivity.this.finish();
+                            launchDashboardActivity();
                         }
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
@@ -265,6 +339,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                             Timber.d("signInWithCredential" + task.getException().toString());
                             Toast.makeText(SignInActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
 
                         // ...
@@ -299,12 +374,6 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
         Timber.d("firebaseAuthWithGoogle:" + account.getId());
 
-        final MaterialDialog progressDialog = new MaterialDialog.Builder(SignInActivity.this)
-                .progress(true, 0)
-                .canceledOnTouchOutside(false)
-                .cancelable(false)
-                .content("Signing in...")
-                .build();
 
         progressDialog.show();
 
@@ -313,15 +382,13 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
 
 
                         Timber.d("signInWithCredential:onComplete:" + task.isSuccessful());
 
                         if (task.isSuccessful()) {
 
-                            startActivity(new Intent(SignInActivity.this, DashboardActivity.class));
-                            SignInActivity.this.finish();
+                            launchDashboardActivity();
                         }
 
                         // If sign in fails, display a message to the user. If sign in succeeds
@@ -340,6 +407,18 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+
+    public void launchDashboardActivity() {
+
+        if (isUserSettingsLoaded) {
+            progressDialog.dismiss();
+            SignInActivity.this.finish();
+            startActivity(new Intent(SignInActivity.this, DashboardActivity.class));
+        }
+
 
     }
 }
