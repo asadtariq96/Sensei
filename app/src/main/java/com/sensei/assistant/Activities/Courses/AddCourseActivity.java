@@ -566,7 +566,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
             TapTargetView.showFor(this,                 // `this` is an Activity
                     TapTarget.forView(MonToggle, "Press this button to add classes for Monday!")
                             .drawShadow(true)                   // Whether to draw a drop shadow or not
-                            .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                             .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
                     new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
                         @Override
@@ -581,7 +581,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
                                             TapTarget.forBounds(getBounds(MondayAdd), "Press this button to add a new class!")
                                                     .outerCircleColor(R.color.md_red_A400)
                                                     .drawShadow(true)                   // Whether to draw a drop shadow or not
-                                                    .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                                    .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                                                     .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
                                             new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
                                                 @Override
@@ -592,6 +592,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
                                                     TapTargetView.showFor(AddCourseActivity.this,                 // `this` is an Activity
                                                             TapTarget.forToolbarMenuItem((Toolbar) findViewById(R.id.toolbar), R.id.save_item, "Press this button to save this course!")
                                                                     .outerCircleColor(R.color.md_deep_purple_A400)
+                                                                    .cancelable(true)
                                                                     // Whether tapping outside the outer circle dismisses the view
                                                                     .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
                                                             new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels

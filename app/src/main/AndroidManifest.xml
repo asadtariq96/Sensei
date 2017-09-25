@@ -4,6 +4,8 @@
     package="com.sensei.assistant">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -41,7 +43,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.Courses.CoursesListActivity" />
-        <activity android:name=".Activities.TimeTable.TimetableActivity" />
+        <activity
+            android:name=".Activities.TimeTable.TimetableActivity"
+            android:exported="true" />
         <activity android:name=".Activities.Classes.ClassDetailsActivity" />
         <activity android:name=".Activities.Classes.EditClassDetailsActivity" />
 

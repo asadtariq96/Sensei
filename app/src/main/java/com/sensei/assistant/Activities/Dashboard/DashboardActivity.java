@@ -46,6 +46,7 @@ import com.sensei.assistant.Activities.Assignments.AddAssignmentActivity;
 import com.sensei.assistant.Activities.Homework.AddHomeworkActivity;
 import com.sensei.assistant.Activities.Quizzes.AddQuizActivity;
 import com.sensei.assistant.Activities.Courses.AddCourseActivity;
+import com.sensei.assistant.Activities.TimeTable.TimetableActivity;
 import com.sensei.assistant.Notifications.NotificationReceiver;
 import com.sensei.assistant.R;
 import com.sensei.assistant.Utils.NavigationDrawerSetup;
@@ -206,10 +207,14 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 //                .cancelable(false)
 //                .transparentTarget(true);
         if (!getSharedPreferences(PREFS_NAME, 0).getBoolean("firstrun", false)) {
+
+            createShortcutOfApp();
+
             TapTargetView.showFor(this,                 // `this` is an Activity
                     TapTarget.forView(fabSpeedDialMenu.getMainFab(), "Welcome to Sensei!", "Let's start by adding a new course!")
                             .drawShadow(true)                   // Whether to draw a drop shadow or not
-                            .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                            .cancelable(true)
+                            // Whether tapping outside the outer circle dismisses the view
                             .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
                     new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
                         @Override
@@ -220,7 +225,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                                     TapTarget.forView(fabSpeedDialMenu.getMiniFab(0), "Press this button to add a new course!")
                                             .drawShadow(true)                   // Whether to draw a drop shadow or not
                                             .outerCircleColor(R.color.md_deep_purple_700)
-                                            .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
+                                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
                                             .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
                                     new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
                                         @Override
@@ -341,6 +346,26 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 //                .show();
 
 
+    }
+
+    private void createShortcutOfApp() {
+
+        Intent shortcutIntent = new Intent(getApplicationContext(),
+                TimetableActivity.class);
+        shortcutIntent.setAction(Intent.ACTION_MAIN);
+
+        Intent addIntent = new Intent();
+        addIntent
+                .putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "Sensei Timetable");
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+                Intent.ShortcutIconResource.fromContext(getApplicationContext(),
+                        R.mipmap.ic_timetable));
+
+        addIntent
+                .setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        addIntent.putExtra("duplicate", false);  //may it's already there so   don't duplicate
+        getApplicationContext().sendBroadcast(addIntent);
     }
 
     void setNotification() {
