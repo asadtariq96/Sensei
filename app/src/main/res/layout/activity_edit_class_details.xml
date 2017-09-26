@@ -215,10 +215,10 @@
                     android:layout_weight="1"
                     android:clickable="true"
                     android:foreground="?android:selectableItemBackground"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:focusable="true">
 
                     <TextView
-                        android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
@@ -244,7 +244,8 @@
                     android:clickable="true"
 
                     android:foreground="?android:selectableItemBackground"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:focusable="true">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -393,7 +394,8 @@
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
                 android:text="DELETE"
-                android:textColor="@color/delete_button_text" />
+                android:textColor="@color/delete_button_text"
+                android:focusable="true" />
 
 
         </LinearLayout>

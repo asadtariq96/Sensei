@@ -294,7 +294,7 @@ public class CircleCheckBox extends View {
                     tick_y_two = tick_y;
                 }
 
-                float  inc_tick = tick_third_ * 1.7f / (total_time / increment);
+                float inc_tick = tick_third_ * 1.7f / (total_time / increment);
 
                 tick_x_two += inc_tick;
                 tick_y_two -= inc_tick;

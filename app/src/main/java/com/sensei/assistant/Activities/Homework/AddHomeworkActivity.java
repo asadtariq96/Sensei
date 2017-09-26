@@ -2,10 +2,10 @@ package com.sensei.assistant.Activities.Homework;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,19 +18,18 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
+import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.DataModelClasses.HomeworkDataModel;
 import com.sensei.assistant.R;
+import com.sensei.assistant.Utils.DateTimeDialogBuilder;
 import com.thebluealliance.spectrum.internal.ColorCircleDrawable;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-
-import com.sensei.assistant.DataModelClasses.CourseDataModel;
-import com.sensei.assistant.Utils.DateTimeDialogBuilder;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
 
@@ -59,7 +58,7 @@ public class AddHomeworkActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_homework);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Add Homework");
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
@@ -69,12 +68,12 @@ public class AddHomeworkActivity extends AppCompatActivity {
         homeworkDataModel.setCompleted(false);
 
 
-        CourseName = (TextInputEditText) findViewById(R.id.course);
-        Reminder = (TextInputEditText) findViewById(R.id.reminder);
-        DueDate = (TextInputEditText) findViewById(R.id.due_date);
-        DueTime = (TextInputEditText) findViewById(R.id.due_time);
-        Title = (TextInputEditText) findViewById(R.id.title);
-        Description = (TextInputEditText) findViewById(R.id.description);
+        CourseName = findViewById(R.id.course);
+        Reminder = findViewById(R.id.reminder);
+        DueDate = findViewById(R.id.due_date);
+        DueTime = findViewById(R.id.due_time);
+        Title = findViewById(R.id.title);
+        Description = findViewById(R.id.description);
 
         Title.setHorizontallyScrolling(false);
         Title.setMaxLines(Integer.MAX_VALUE);
@@ -266,6 +265,7 @@ public class AddHomeworkActivity extends AppCompatActivity {
 
             case R.id.save_item:
 
+//                if (DueDate.getText().toString().equals("") && !DueTime.getText().toString().isEmpty())
                 if (DueDate.getText().toString().equals("") && !DueTime.getText().toString().isEmpty())
                     Toast.makeText(this, "Please set a due date.", Toast.LENGTH_SHORT).show();
                 else

@@ -18,10 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-import java.util.ArrayList;
-import java.util.Collection;
-
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.facebook.AccessToken;
@@ -39,6 +35,9 @@ import com.sensei.assistant.Activities.TimeTable.TimetableActivity;
 import com.sensei.assistant.Authentication.SignInActivity;
 import com.sensei.assistant.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static android.view.View.GONE;
 import static com.sensei.assistant.Application.MyApplication.firebaseUser;
@@ -287,14 +286,14 @@ public class NavigationDrawerSetup extends AppCompatActivity {
 
         View headerView = navigationView.getHeaderView(0);
 
-        ImageView profile_pic = (ImageView) headerView.findViewById(R.id.nav_header_pic);
+        ImageView profile_pic = headerView.findViewById(R.id.nav_header_pic);
         //
 //
-        TextView nav_header_email = (TextView) headerView.findViewById(R.id.nav_header_email);
+        TextView nav_header_email = headerView.findViewById(R.id.nav_header_email);
         if (firebaseUser != null)
             nav_header_email.setText(firebaseUser.getEmail());
 
-        TextView nav_header_name = (TextView) headerView.findViewById(R.id.nav_header_name);
+        TextView nav_header_name = headerView.findViewById(R.id.nav_header_name);
         nav_header_name.setVisibility(GONE);
         if (firebaseUser != null) {
 

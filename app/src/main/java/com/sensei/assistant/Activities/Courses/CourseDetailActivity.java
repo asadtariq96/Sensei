@@ -3,14 +3,12 @@ package com.sensei.assistant.Activities.Courses;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,11 +21,8 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemLongClickListener;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.sensei.assistant.Activities.Classes.AddClassActivity;
 import com.sensei.assistant.Activities.Classes.ClassDetailsActivity;
 import com.sensei.assistant.Adapters.CourseClassesAdapter;
@@ -64,18 +59,18 @@ public class CourseDetailActivity extends AppCompatActivity {
         courseDataModel = getCourseDataInstance().CoursesID.get(courseID);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Course Details");
         getSupportActionBar().setSubtitle(courseDataModel.getCourseAbbreviation());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CourseName = (TextView) findViewById(R.id.course_name);
-        CourseInstructor = (TextView) findViewById(R.id.course_instructor);
-        CreditHours = (TextView) findViewById(R.id.credit_hours);
+        CourseName = findViewById(R.id.course_name);
+        CourseInstructor = findViewById(R.id.course_instructor);
+        CreditHours = findViewById(R.id.credit_hours);
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.classes_recyclerview);
+        recyclerView = findViewById(R.id.classes_recyclerview);
 
         adapter = new CourseClassesAdapter(R.layout.class_layout, getCourseDataInstance().getListOfClassesForCourse(courseDataModel));
 

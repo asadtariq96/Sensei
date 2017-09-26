@@ -5,9 +5,10 @@ package com.sensei.assistant.DataModelClasses;
  */
 
 public interface TaskItem {
-    int TYPE_QUIZ =0;
+    int TYPE_QUIZ = 0;
     int TYPE_ASSIGNMENT = 1;
     int TYPE_HOMEWORK = 2;
+
     int getListItemType();
 
 }

@@ -3,9 +3,9 @@ package com.sensei.assistant.Activities.Classes;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -66,7 +66,7 @@ public class EditClassDetailsActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(courseDataModel.getDarkerColor());
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Edit Class");
         getSupportActionBar().setSubtitle(courseDataModel.getCourseAbbreviation());
@@ -108,7 +108,7 @@ public class EditClassDetailsActivity extends AppCompatActivity {
             }
         };
 
-        daysOfWeek = (RadioGroup) findViewById(R.id.toggle_group);
+        daysOfWeek = findViewById(R.id.toggle_group);
         daysOfWeek.setOnCheckedChangeListener(ToggleListener);
         switch (classDataModel.getDayOfWeek()) {
             case 1:
@@ -131,18 +131,18 @@ public class EditClassDetailsActivity extends AppCompatActivity {
                 break;
         }
 
-        classLocation = (EditText) findViewById(R.id.location);
-        StartTime = (TextView) findViewById(R.id.start_time);
-        EndTime = (TextView) findViewById(R.id.end_time);
-        classType = (RadioGroup) findViewById(R.id.class_type);
+        classLocation = findViewById(R.id.location);
+        StartTime = findViewById(R.id.start_time);
+        EndTime = findViewById(R.id.end_time);
+        classType = findViewById(R.id.class_type);
 
         classLocation.setText(classDataModel.getLocation());
         StartTime.setText(classDataModel.getStartTimeOriginal().toString("h:mm a"));
         EndTime.setText(classDataModel.getEndTimeOriginal().toString("h:mm a"));
         classType.check(classDataModel.getClassType() == "LECTURE" ? R.id.rb_lecture : R.id.rb_lab);
 
-        StartTimeContainer = (LinearLayout) findViewById(R.id.start_time_container);
-        EndTimeContainer = (LinearLayout) findViewById(R.id.end_time_container);
+        StartTimeContainer = findViewById(R.id.start_time_container);
+        EndTimeContainer = findViewById(R.id.end_time_container);
 
         StartTimeContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -209,7 +209,7 @@ public class EditClassDetailsActivity extends AppCompatActivity {
         });
 
 
-        deleteClassBtn = (Button) findViewById(R.id.delete_class);
+        deleteClassBtn = findViewById(R.id.delete_class);
         deleteClassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

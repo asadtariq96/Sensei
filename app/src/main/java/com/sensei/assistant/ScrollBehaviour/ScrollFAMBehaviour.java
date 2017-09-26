@@ -9,10 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Interpolator;
 
-import com.github.clans.fab.FloatingActionMenu;
-
 import io.github.kobakei.materialfabspeeddial.FabSpeedDial;
-import io.github.kobakei.materialfabspeeddial.FabSpeedDialMenu;
 
 /**
  * Created by Asad on 05-Jan-17.

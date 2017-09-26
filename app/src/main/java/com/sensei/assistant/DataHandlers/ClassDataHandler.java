@@ -30,7 +30,7 @@ public class ClassDataHandler {
         return instance;
     }
 
-    public void addChildListener(){
+    public void addChildListener() {
         childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

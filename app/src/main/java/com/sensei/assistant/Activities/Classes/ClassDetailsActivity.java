@@ -2,8 +2,8 @@ package com.sensei.assistant.Activities.Classes;
 
 import android.content.Intent;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,18 +58,18 @@ public class ClassDetailsActivity extends AppCompatActivity {
             window.setStatusBarColor(courseDataModel.getDarkerColor());
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Class Details");
         getSupportActionBar().setSubtitle(courseDataModel.getCourseAbbreviation());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        classLocation = (TextView) findViewById(location);
-        StartTime = (TextView) findViewById(R.id.start_time);
-        EndTime = (TextView) findViewById(R.id.end_time);
-        classType = (TextView) findViewById(R.id.class_type);
-        daysOfWeek = (RadioGroup) findViewById(R.id.toggle_group);
+        classLocation = findViewById(location);
+        StartTime = findViewById(R.id.start_time);
+        EndTime = findViewById(R.id.end_time);
+        classType = findViewById(R.id.class_type);
+        daysOfWeek = findViewById(R.id.toggle_group);
 
 //        Timber.d("onCreate, calling updateFields");
 //        updateFields();
@@ -180,7 +180,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
         }
     }
 
-    public void clearChecked(){
+    public void clearChecked() {
         for (int j = 1; j < daysOfWeek.getChildCount(); j = j + 2) {
             final ToggleButton view = (ToggleButton) daysOfWeek.getChildAt(j);
             view.setChecked(false);

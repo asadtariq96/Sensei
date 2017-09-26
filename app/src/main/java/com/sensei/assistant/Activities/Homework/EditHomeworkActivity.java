@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -76,7 +76,7 @@ public class EditHomeworkActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(courseDataModel.getDarkerColor());
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Edit Homework");
         getSupportActionBar().setSubtitle(courseDataModel.getCourseAbbreviation());
@@ -86,11 +86,11 @@ public class EditHomeworkActivity extends AppCompatActivity {
 
 
 //        CourseName = (TextInputEditText) findViewById(R.id.course);
-        Reminder = (TextInputEditText) findViewById(R.id.reminder);
-        DueDate = (TextInputEditText) findViewById(R.id.due_date);
-        DueTime = (TextInputEditText) findViewById(R.id.due_time);
-        Title = (TextInputEditText) findViewById(R.id.title);
-        Description = (TextInputEditText) findViewById(R.id.description);
+        Reminder = findViewById(R.id.reminder);
+        DueDate = findViewById(R.id.due_date);
+        DueTime = findViewById(R.id.due_time);
+        Title = findViewById(R.id.title);
+        Description = findViewById(R.id.description);
 
         Title.setHorizontallyScrolling(false);
         Title.setMaxLines(Integer.MAX_VALUE);
@@ -259,7 +259,7 @@ public class EditHomeworkActivity extends AppCompatActivity {
         if (homeworkDataModel.getHomeworkDescription() != null)
             Description.setText(homeworkDataModel.getHomeworkDescription());
 
-        deleteButton = (Button) findViewById(R.id.delete_quiz);
+        deleteButton = findViewById(R.id.delete_quiz);
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

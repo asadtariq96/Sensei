@@ -94,7 +94,8 @@
                             android:paddingBottom="2dp"
                             android:paddingEnd="4dp"
                             android:paddingTop="2dp"
-                            android:visibility="visible">
+                            android:visibility="visible"
+                            android:focusable="true">
 
                             <ImageView
                                 android:id="@+id/icon"
@@ -160,7 +161,6 @@
                     android:background="@color/md_grey_300" />
 
                 <EditText
-                    android:id="@+id/details"
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -184,7 +184,6 @@
 
 
         <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="#F5F5F5"
@@ -248,6 +247,7 @@
         android:layout_marginBottom="64dp"
         android:layout_marginEnd="16dp"
         android:clickable="true"
-        android:src="@drawable/ic_save_white_36dp" />
+        android:src="@drawable/ic_save_white_36dp"
+        android:focusable="true" />
 
 </android.support.design.widget.CoordinatorLayout>

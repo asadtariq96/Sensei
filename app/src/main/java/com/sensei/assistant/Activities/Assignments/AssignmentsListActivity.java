@@ -2,12 +2,12 @@ package com.sensei.assistant.Activities.Assignments;
 
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +23,6 @@ import com.sensei.assistant.Adapters.DashboardAssignmentAdapter;
 import com.sensei.assistant.DataHandlers.CourseDataHandler;
 import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
-import com.sensei.assistant.DataModelClasses.QuizDataModel;
 import com.sensei.assistant.R;
 import com.sensei.assistant.Utils.NavigationDrawerSetup;
 import com.squareup.otto.Subscribe;
@@ -35,12 +34,9 @@ import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataI
 
 public class AssignmentsListActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
-    private RecyclerView recyclerView;
     public DashboardAssignmentAdapter adapter;
-    private FloatingActionButton addAssignmentFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +45,15 @@ public class AssignmentsListActivity extends AppCompatActivity {
 
         bus.register(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Assignments");
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        addAssignmentFAB = findViewById(R.id.add_assignment);
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        FloatingActionButton addAssignmentFAB = findViewById(R.id.add_assignment);
         adapter = new DashboardAssignmentAdapter(R.layout.quiz_layout, getCourseDataInstance().getListOfAssignments());
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -128,6 +124,13 @@ public class AssignmentsListActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 getCourseDataInstance().addAssignment(courseDataModel, assignmentDataModel);
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.setNewData(getCourseDataInstance().getListOfAssignments());
+                                    }
+                                }, 1000);
                             }
                         })
                         .show(); // Don’t forget to show!
@@ -156,7 +159,8 @@ public class AssignmentsListActivity extends AppCompatActivity {
             public void run() {
                 adapter.setNewData(getCourseDataInstance().getListOfAssignments());
             }
-        }, 1000);        Timber.d("event received");
+        }, 1000);
+        Timber.d("event received");
     }
 
     public void onStart() {

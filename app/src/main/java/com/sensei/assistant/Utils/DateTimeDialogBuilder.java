@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.sensei.assistant.Activities.Assignments.AddAssignmentActivity;
+import com.sensei.assistant.Activities.Homework.AddHomeworkActivity;
+import com.sensei.assistant.Activities.Quizzes.AddQuizActivity;
 import com.sensei.assistant.R;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -26,10 +29,6 @@ import org.joda.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import com.sensei.assistant.Activities.Assignments.AddAssignmentActivity;
-import com.sensei.assistant.Activities.Quizzes.AddQuizActivity;
-import com.sensei.assistant.Activities.Homework.AddHomeworkActivity;
 
 import static com.sensei.assistant.R.id.date;
 
@@ -146,7 +145,7 @@ public class DateTimeDialogBuilder {
                 LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View v = vi.inflate(android.R.layout.simple_spinner_item, null);
                 v.setPadding(0, v.getPaddingTop(), v.getPaddingRight(), v.getPaddingBottom());
-                final TextView t = (TextView) v.findViewById(android.R.id.text1);
+                final TextView t = v.findViewById(android.R.id.text1);
                 t.setText(myDateList.get(position).getValue());
                 return v;
             }
@@ -165,7 +164,7 @@ public class DateTimeDialogBuilder {
                 LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View v = vi.inflate(android.R.layout.simple_spinner_item, null);
                 v.setPadding(0, v.getPaddingTop(), v.getPaddingRight(), v.getPaddingBottom());
-                final TextView t = (TextView) v.findViewById(android.R.id.text1);
+                final TextView t = v.findViewById(android.R.id.text1);
                 t.setText(myTimeList.get(position).getValue());
                 return v;
             }
@@ -175,8 +174,8 @@ public class DateTimeDialogBuilder {
                 LayoutInflater vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View v = vi.inflate(R.layout.time_dropdown_row, null);
                 v.setPadding(0, v.getPaddingTop(), v.getPaddingRight(), v.getPaddingBottom());
-                final TextView t = (TextView) v.findViewById(R.id.text1);
-                final TextView t2 = (TextView) v.findViewById(R.id.text2);
+                final TextView t = v.findViewById(R.id.text1);
+                final TextView t2 = v.findViewById(R.id.text2);
                 t.setText(myTimeList.get(position).getText());
                 if (position != 4)
                     t2.setText(myTimeList.get(position).getValue());
@@ -189,7 +188,7 @@ public class DateTimeDialogBuilder {
     }
 
     private void initSpinners() {
-        dateSpinner = (NDSpinner) view.findViewById(date);
+        dateSpinner = view.findViewById(date);
         dateSpinner.setAdapter(dateAdapter);
         dateSpinner.setTag(0);
         dateSpinner.setSelection(0);
@@ -215,7 +214,7 @@ public class DateTimeDialogBuilder {
             }
         });
 
-        timeSpinner = (NDSpinner) view.findViewById(R.id.time);
+        timeSpinner = view.findViewById(R.id.time);
         timeSpinner.setAdapter(timeAdapter);
         timeSpinner.setTag(0);
         timeSpinner.setSelection(0);
@@ -551,7 +550,7 @@ public class DateTimeDialogBuilder {
     public void DueDatePicker(final TextInputEditText DueDate, final AddQuizActivity activity) {
         DatePickerDialog.OnDateSetListener onDateSetListener;
 
-        onDateSetListener =new DatePickerDialog.OnDateSetListener() {
+        onDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePickerDialog datePickerDialog, int year, int monthOfYear, int dayOfMonth) {

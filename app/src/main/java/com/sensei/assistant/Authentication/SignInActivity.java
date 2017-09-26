@@ -1,9 +1,9 @@
 package com.sensei.assistant.Authentication;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -78,11 +78,11 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        Email = (EditText) findViewById(R.id.email_edittext);
-        Password = (EditText) findViewById(R.id.password_edittext);
-        Signin = (Button) findViewById(R.id.btn_signin);
+        Email = findViewById(R.id.email_edittext);
+        Password = findViewById(R.id.password_edittext);
+        Signin = findViewById(R.id.btn_signin);
 
-        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -131,7 +131,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 progressDialog.dismiss();
                                                 if (task.isSuccessful()) {
-                                                    Log.d("EMAIL", "Email sent.");
+                                                    Timber.d("EMAIL", "Email sent.");
                                                     dialog.dismiss();
                                                     Toast.makeText(SignInActivity.this, "Email sent!", Toast.LENGTH_SHORT).show();
                                                 } else
@@ -143,7 +143,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
             }
         });
 
-        facebookLogin = (Button) findViewById(R.id.login_facebook);
+        facebookLogin = findViewById(R.id.login_facebook);
         facebookLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,7 +170,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 //            }
 //        });
 
-        googleLogin = (Button) findViewById(R.id.login_google);
+        googleLogin = findViewById(R.id.login_google);
         googleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

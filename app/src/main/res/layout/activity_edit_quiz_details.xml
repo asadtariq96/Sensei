@@ -251,7 +251,8 @@
             android:clickable="true"
             android:foreground="?android:selectableItemBackground"
             android:text="DELETE"
-            android:textColor="@color/delete_button_text" />
+            android:textColor="@color/delete_button_text"
+            android:focusable="true" />
     </LinearLayout>
 
 

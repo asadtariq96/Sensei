@@ -3,11 +3,9 @@ package com.sensei.assistant.Adapters;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.zagum.switchicon.SwitchIconView;
 import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
@@ -17,8 +15,6 @@ import com.sensei.assistant.R;
 import org.joda.time.LocalDate;
 
 import java.util.List;
-
-import cn.refactor.library.SmoothCheckBox;
 
 import static android.view.View.GONE;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;

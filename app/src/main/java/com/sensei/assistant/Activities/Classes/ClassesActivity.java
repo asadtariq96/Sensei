@@ -1,19 +1,19 @@
 package com.sensei.assistant.Activities.Classes;
 
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
-import com.sensei.assistant.Activities.Dashboard.DashboardActivity;
 import com.sensei.assistant.Activities.Classes.ClassesActivityFragments.FridayFragment;
 import com.sensei.assistant.Activities.Classes.ClassesActivityFragments.MondayFragment;
 import com.sensei.assistant.Activities.Classes.ClassesActivityFragments.ThursdayFragment;
 import com.sensei.assistant.Activities.Classes.ClassesActivityFragments.TuesdayFragment;
 import com.sensei.assistant.Activities.Classes.ClassesActivityFragments.WednesdayFragment;
+import com.sensei.assistant.Activities.Dashboard.DashboardActivity;
 import com.sensei.assistant.R;
 import com.sensei.assistant.Utils.NavigationDrawerSetup;
 
@@ -23,7 +23,6 @@ import timber.log.Timber;
 
 public class ClassesActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
 
@@ -33,18 +32,18 @@ public class ClassesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classes);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Classes");
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        ViewPager viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab);
+        TabLayout tabLayout = findViewById(R.id.tab);
         tabLayout.setupWithViewPager(viewPager);
 
         Timber.d("setCurrentItem " + (new LocalDate().getDayOfWeek() - 1));

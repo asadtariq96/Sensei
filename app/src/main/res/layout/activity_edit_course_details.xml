@@ -52,7 +52,6 @@
 
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/course_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
@@ -195,7 +194,8 @@
                 android:layout_height="60dp"
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:focusable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -254,7 +254,8 @@
                 android:clickable="true"
                 android:foreground="?android:selectableItemBackground"
                 android:text="DELETE"
-                android:textColor="@color/delete_button_text" />
+                android:textColor="@color/delete_button_text"
+                android:focusable="true" />
 
 
         </LinearLayout>

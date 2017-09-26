@@ -65,7 +65,8 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:focusable="true">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -96,7 +97,8 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:focusable="true">
 
                     <TextView
                         android:layout_width="wrap_content"

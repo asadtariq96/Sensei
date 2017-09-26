@@ -26,7 +26,8 @@
                 android:background="?android:selectableItemBackground"
 
                 android:clickable="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:focusable="true">
 
                 <View
                     android:id="@+id/color"
@@ -169,7 +170,8 @@
                 android:background="?android:selectableItemBackground"
 
                 android:clickable="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:focusable="true">
 
                 <View
                     android:id="@+id/color"
@@ -312,7 +314,8 @@
                 android:background="?android:selectableItemBackground"
 
                 android:clickable="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:focusable="true">
 
                 <View
                     android:id="@+id/color"
@@ -455,7 +458,8 @@
                 android:background="?android:selectableItemBackground"
 
                 android:clickable="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:focusable="true">
 
                 <View
                     android:id="@+id/color"
@@ -598,7 +602,8 @@
                 android:background="?android:selectableItemBackground"
 
                 android:clickable="true"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:focusable="true">
 
                 <View
                     android:id="@+id/color"

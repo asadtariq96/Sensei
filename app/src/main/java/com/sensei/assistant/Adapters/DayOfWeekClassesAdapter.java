@@ -11,7 +11,6 @@ import com.sensei.assistant.DataModelClasses.ClassDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.R;
 
-
 import java.util.List;
 
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
@@ -23,7 +22,6 @@ import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataI
 
 public class DayOfWeekClassesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final Context context;
     List<ClassDataModel> classesList;
 
     private class ClassViewHolder extends RecyclerView.ViewHolder {
@@ -41,12 +39,12 @@ public class DayOfWeekClassesAdapter extends RecyclerView.Adapter<RecyclerView.V
             this.context = context;
 
             colorView = itemView.findViewById(R.id.color);
-            courseName = (TextView) itemView.findViewById(R.id.course_name);
-            mDuration = (TextView) itemView.findViewById(R.id.duration);
-            mLocation = (TextView) itemView.findViewById(R.id.location);
-            mTime = (TextView) itemView.findViewById(R.id.time);
-            RemainingTime = (TextView) itemView.findViewById(R.id.remaining_time);
-            classType = (TextView) itemView.findViewById(R.id.class_type);
+            courseName = itemView.findViewById(R.id.course_name);
+            mDuration = itemView.findViewById(R.id.duration);
+            mLocation = itemView.findViewById(R.id.location);
+            mTime = itemView.findViewById(R.id.time);
+            RemainingTime = itemView.findViewById(R.id.remaining_time);
+            classType = itemView.findViewById(R.id.class_type);
 
 
         }
@@ -55,7 +53,7 @@ public class DayOfWeekClassesAdapter extends RecyclerView.Adapter<RecyclerView.V
 
 
     public DayOfWeekClassesAdapter(Context context, List<ClassDataModel> classesList) {
-        this.context = context;
+        Context context1 = context;
         this.classesList = classesList;
 
     }

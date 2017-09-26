@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,21 +25,19 @@ import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.sensei.assistant.Activities.Courses.AddCourseActivity;
 import com.sensei.assistant.Activities.Dashboard.DashboardActivity;
+import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.DataModelClasses.QuizDataModel;
 import com.sensei.assistant.R;
+import com.sensei.assistant.Utils.DateTimeDialogBuilder;
 import com.thebluealliance.spectrum.internal.ColorCircleDrawable;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-
-import com.sensei.assistant.DataModelClasses.CourseDataModel;
-import com.sensei.assistant.Utils.DateTimeDialogBuilder;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.Calendar;
 
@@ -68,7 +66,7 @@ public class AddQuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_quiz);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Add Quiz");
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
@@ -78,12 +76,12 @@ public class AddQuizActivity extends AppCompatActivity {
         quizDataModel.setCompleted(false);
 
 
-        CourseName = (TextInputEditText) findViewById(R.id.course);
-        Reminder = (TextInputEditText) findViewById(R.id.reminder);
-        DueDate = (TextInputEditText) findViewById(R.id.due_date);
-        DueTime = (TextInputEditText) findViewById(R.id.due_time);
-        Title = (TextInputEditText) findViewById(R.id.title);
-        Description = (TextInputEditText) findViewById(R.id.description);
+        CourseName = findViewById(R.id.course);
+        Reminder = findViewById(R.id.reminder);
+        DueDate = findViewById(R.id.due_date);
+        DueTime = findViewById(R.id.due_time);
+        Title = findViewById(R.id.title);
+        Description = findViewById(R.id.description);
 
         Title.setHorizontallyScrolling(false);
         Title.setMaxLines(Integer.MAX_VALUE);
@@ -172,7 +170,7 @@ public class AddQuizActivity extends AppCompatActivity {
                                         public void onTargetClick(TapTargetView view) {
                                             super.onTargetClick(view);      // This call is optional
                                             addQuiz();
-                                            startActivity(new Intent(AddQuizActivity.this, DashboardActivity.class).putExtra("string","intro").setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT));
+                                            startActivity(new Intent(AddQuizActivity.this, DashboardActivity.class).putExtra("string", "intro").setFlags(FLAG_ACTIVITY_REORDER_TO_FRONT));
                                         }
                                     });
                         }

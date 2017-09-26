@@ -4,7 +4,6 @@ import android.graphics.Color;
 
 import com.google.firebase.database.Exclude;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -19,18 +19,10 @@ import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.github.clans.fab.FloatingActionButton;
-import com.sensei.assistant.Activities.Assignments.AddAssignmentActivity;
-import com.sensei.assistant.Activities.Assignments.AssignmentsListActivity;
-import com.sensei.assistant.Activities.Quizzes.QuizDetailActivity;
-import com.sensei.assistant.Activities.Quizzes.QuizzesListActivity;
-import com.sensei.assistant.Adapters.CoursesListAdapterBRVAH;
 import com.sensei.assistant.Adapters.DashboardHomeworkAdapter;
-import com.sensei.assistant.Adapters.DashboardQuizAdapter;
 import com.sensei.assistant.DataHandlers.CourseDataHandler;
-import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.DataModelClasses.HomeworkDataModel;
-import com.sensei.assistant.DataModelClasses.QuizDataModel;
 import com.sensei.assistant.R;
 import com.sensei.assistant.Utils.NavigationDrawerSetup;
 import com.squareup.otto.Subscribe;
@@ -43,12 +35,9 @@ import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataI
 public class HomeworkListActivity extends AppCompatActivity {
 
 
-    private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
-    private RecyclerView recyclerView;
     public DashboardHomeworkAdapter adapter;
-    private FloatingActionButton addHomeworkFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,15 +46,15 @@ public class HomeworkListActivity extends AppCompatActivity {
 
         bus.register(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Homework");
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        addHomeworkFAB = findViewById(R.id.add_homework);
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        FloatingActionButton addHomeworkFAB = findViewById(R.id.add_homework);
         adapter = new DashboardHomeworkAdapter(R.layout.quiz_layout, getCourseDataInstance().getListOfHomework());
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -142,6 +131,13 @@ public class HomeworkListActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 getCourseDataInstance().addHomework(courseDataModel, homeworkDataModel);
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.setNewData(getCourseDataInstance().getListOfHomework());
+                                    }
+                                }, 1000);
                             }
                         })
                         .show(); // Don’t forget to show!

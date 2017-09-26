@@ -10,13 +10,13 @@ import com.sensei.assistant.Activities.Courses.CoursesListActivity;
 import com.sensei.assistant.Activities.Dashboard.DashboardClassesFragment;
 import com.sensei.assistant.Application.Constants;
 import com.sensei.assistant.Authentication.SignInActivity;
+import com.sensei.assistant.Authentication.SignupActivity;
 import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
 import com.sensei.assistant.DataModelClasses.ClassDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.DataModelClasses.HomeworkDataModel;
 import com.sensei.assistant.DataModelClasses.QuizDataModel;
 import com.sensei.assistant.DataModelClasses.SemesterDataModel;
-import com.sensei.assistant.DataModelClasses.TaskItem;
 import com.sensei.assistant.DataModelClasses.UserSettings;
 
 import org.joda.time.DateTime;
@@ -59,7 +59,6 @@ import static org.joda.time.DateTimeConstants.WEDNESDAY;
 public class CourseDataHandler {
 
     private static CourseDataHandler instance = null;
-    private ChildEventListener coursesChildEventListener;
     private ChildEventListener classesChildEventListener;
     private ChildEventListener quizzesChildEventListener;
     private ChildEventListener assignmentsChildEventListener;
@@ -104,13 +103,22 @@ public class CourseDataHandler {
     private DashboardClassesFragment dashboardClassesFragment = null;
 
     private SignInActivity signInActivityInstance = null;
+    private SignupActivity signUpActivityInstance = null;
 
     public void registerSignInActivityInstance(SignInActivity signInActivity) {
         this.signInActivityInstance = signInActivity;
     }
 
+    public void registerSignUpActivityInstance(SignupActivity signupActivity) {
+        this.signUpActivityInstance = signupActivity;
+    }
+
     public void unregisterSignInActivityInstance() {
         this.signInActivityInstance = null;
+    }
+
+    public void unregisterSignUpActivityInstance() {
+        this.signUpActivityInstance = null;
     }
 
     public void registerCoursesActivity(CoursesListActivity coursesActivity) {
@@ -167,6 +175,8 @@ public class CourseDataHandler {
                     isUserSettingsLoaded = true;
                     if (signInActivityInstance != null)
                         signInActivityInstance.launchDashboardActivity();
+                    if (signUpActivityInstance != null)
+                        signUpActivityInstance.launchDashboardActivity();
                     getSemesters();
                     getCourses();
 
@@ -442,7 +452,7 @@ public class CourseDataHandler {
             }
         };
 
-        coursesChildEventListener = new ChildEventListener() {
+        ChildEventListener coursesChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(final DataSnapshot courseDataSnapshot, String s) {
 
@@ -534,10 +544,8 @@ public class CourseDataHandler {
     public List<ClassDataModel> getAllClasses() {
         List<ClassDataModel> classesList = new ArrayList<>();
         for (CourseDataModel course : CoursesList) {
-            for (ClassDataModel classDataModel : course.getClasses()) {
-//                if (!course.getClasses().contains(classDataModel))
-                classesList.add(classDataModel);
-            }
+            //                if (!course.getClasses().contains(classDataModel))
+            classesList.addAll(course.getClasses());
         }
         return classesList;
     }
@@ -1035,6 +1043,11 @@ public class CourseDataHandler {
         isUserSettingsLoaded = true;
         if (signInActivityInstance != null)
             signInActivityInstance.launchDashboardActivity();
+
+        if (signUpActivityInstance != null)
+            signUpActivityInstance.launchDashboardActivity();
+
+
         getSemesters();
         getCourses();
 

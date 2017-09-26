@@ -4,8 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,8 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.zagum.switchicon.SwitchIconView;
-import com.sensei.assistant.Activities.Assignments.AssignmentDetailActivity;
-import com.sensei.assistant.Activities.Assignments.EditAssignmentActivity;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.DataModelClasses.HomeworkDataModel;
 import com.sensei.assistant.R;
@@ -29,7 +27,6 @@ import org.joda.time.LocalDate;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
-import static com.sensei.assistant.Application.Constants.REQUEST_CODE_EDIT_ASSIGNMENT;
 import static com.sensei.assistant.Application.Constants.REQUEST_CODE_EDIT_HOMEWORK;
 import static com.sensei.assistant.Application.Constants.RESULT_CODE_FINISH_ACTIVITY;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
@@ -69,7 +66,7 @@ public class HomeworkDetailActivity extends AppCompatActivity {
             window.setStatusBarColor(courseDataModel.getDarkerColor());
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Homework Details");
         getSupportActionBar().setSubtitle(courseDataModel.getCourseAbbreviation());
@@ -77,13 +74,13 @@ public class HomeworkDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        dueDate = (TextView) findViewById(R.id.due_date);
-        dueTime = (TextView) findViewById(R.id.due_time);
-        dueWhen = (TextView) findViewById(R.id.due_when);
-        taskTitle = (TextView) findViewById(R.id.task_title);
-        taskDetails = (TextView) findViewById(R.id.task_details);
+        dueDate = findViewById(R.id.due_date);
+        dueTime = findViewById(R.id.due_time);
+        dueWhen = findViewById(R.id.due_when);
+        taskTitle = findViewById(R.id.task_title);
+        taskDetails = findViewById(R.id.task_details);
         markAsDone = findViewById(R.id.mark_as_done);
-        doneIconView = (SwitchIconView) findViewById(R.id.done_checkbox);
+        doneIconView = findViewById(R.id.done_checkbox);
         markAsDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

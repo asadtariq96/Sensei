@@ -11,18 +11,6 @@
 
     </style>
 
-    <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
-
-        <item name="tabTextAppearance">@style/TabTextAppearance</item>
-        <item name="tabSelectedTextColor">@color/colorAccent</item>
-    </style>
-
-    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/icons</item>
-        <item name="textAllCaps">true</item>
-    </style>
-
     <style name="TextLabel" parent="@android:style/TextAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/colorSecondaryText</item>

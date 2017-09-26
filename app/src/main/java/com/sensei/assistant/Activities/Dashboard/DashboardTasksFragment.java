@@ -1,7 +1,9 @@
 package com.sensei.assistant.Activities.Dashboard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,10 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.zagum.switchicon.SwitchIconView;
+import com.sensei.assistant.Activities.Courses.CoursesListActivity;
 import com.sensei.assistant.Adapters.DashboardAssignmentAdapter;
 import com.sensei.assistant.Adapters.DashboardHomeworkAdapter;
 import com.sensei.assistant.Adapters.DashboardQuizAdapter;
@@ -536,7 +540,7 @@ public class DashboardTasksFragment extends Fragment {
                                 switchIconView.performClick();
 
                             }
-                        }, 1500);
+                        }, 1000);
 
 
                         Handler handler = new Handler();
@@ -547,11 +551,18 @@ public class DashboardTasksFragment extends Fragment {
                                         .title("Congratulations!")
                                         .content("You have completed Sensei's tutorial! You can now delete the Test Course added previously!")
                                         .positiveText("OK")
+                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                            @Override
+                                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                                Intent intent = new Intent(getActivity(), CoursesListActivity.class);
+                                                getActivity().startActivity(intent);
+                                            }
+                                        })
                                         .autoDismiss(true)
                                         .build()
                                         .show();
                             }
-                        }, 1000);
+                        }, 1500);
 
                     }
 

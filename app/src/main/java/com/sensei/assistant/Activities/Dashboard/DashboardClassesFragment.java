@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
@@ -25,7 +24,6 @@ import timber.log.Timber;
 
 import static com.sensei.assistant.Application.MyApplication.bus;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
-import static com.sensei.assistant.R.id.weekView;
 
 
 /**
@@ -52,7 +50,7 @@ public class DashboardClassesFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         // Setup any handles to view objects here
         // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
+        recyclerView = view.findViewById(R.id.recyclerview);
 //        placeHolder = (TextView) view.findViewById(R.id.placeholder);
 //        dashboardClassesAdapter = new DashboardClassesAdapter(getContext());
         adapter = new DashboardClassesAdapterBRVAH(R.layout.class_layout, getCourseDataInstance().getListOfClassesForCurrentDay());
@@ -96,9 +94,6 @@ public class DashboardClassesFragment extends Fragment {
 //        button.setText("");
 //        button.setEnabled(false);
 //        button.setVisibility(View.GONE);
-
-
-
 
 
     }

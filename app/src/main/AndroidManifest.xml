@@ -22,7 +22,6 @@
 
         <activity android:name=".Activities.TaskDetailActivity" />
         <activity android:name=".Activities.Quizzes.QuizDetailActivityOld" />
-        <activity android:name=".Activities.Assignments.AssignmentDetailActivityOld" />
         <activity android:name=".Activities.Dashboard.DashboardActivity"></activity>
         <activity android:name=".Activities.Courses.AddCourseActivity" />
         <activity android:name=".Activities.Quizzes.AddQuizActivity" />

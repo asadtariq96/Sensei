@@ -2,17 +2,14 @@ package com.sensei.assistant.Activities.Courses;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-import android.net.wifi.hotspot2.pps.Credential;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -36,10 +33,10 @@ import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.sensei.assistant.Activities.Dashboard.DashboardActivity;
 import com.sensei.assistant.Activities.Quizzes.AddQuizActivity;
+import com.sensei.assistant.Application.Constants;
+import com.sensei.assistant.DataModelClasses.ClassDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.R;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -50,16 +47,6 @@ import org.joda.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import com.sensei.assistant.Application.Constants;
-import com.sensei.assistant.DataModelClasses.ClassDataModel;
-
-import co.mobiwise.materialintro.animation.MaterialIntroListener;
-import co.mobiwise.materialintro.shape.Focus;
-import co.mobiwise.materialintro.shape.FocusGravity;
-import co.mobiwise.materialintro.shape.ShapeType;
-import co.mobiwise.materialintro.view.MaterialIntroView;
-import timber.log.Timber;
 
 import static com.sensei.assistant.Application.Constants.COLORS_LIST;
 import static com.sensei.assistant.Application.Constants.DEFAULT_START_TIME;
@@ -131,7 +118,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
 //        courses.addValueEventListener(valueEventListener);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Add Course");
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
@@ -140,10 +127,10 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
         ColorBox = findViewById(R.id.color_box);
         ColorBox.setBackgroundColor(Constants.getRandomColor());
 
-        CourseName = (TextInputEditText) findViewById(R.id.course_name);
-        CourseAbbreviation = (TextInputEditText) findViewById(R.id.course_abbreviation);
-        CourseInstructor = (TextInputEditText) findViewById(R.id.course_instructor);
-        CreditHours = (TextInputEditText) findViewById(R.id.credit_hours);
+        CourseName = findViewById(R.id.course_name);
+        CourseAbbreviation = findViewById(R.id.course_abbreviation);
+        CourseInstructor = findViewById(R.id.course_instructor);
+        CreditHours = findViewById(R.id.credit_hours);
         scrollView = findViewById(R.id.scrollview);
         CourseName.setHorizontallyScrolling(false);
         CourseName.setMaxLines(Integer.MAX_VALUE);
@@ -199,19 +186,19 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
         CourseAbbreviation.addTextChangedListener(textWatcher);
 
 
-        MonToggle = (ToggleButton) findViewById(R.id.toggle_mon);
-        TueToggle = (ToggleButton) findViewById(R.id.toggle_tue);
-        WedToggle = (ToggleButton) findViewById(R.id.toggle_wed);
-        ThuToggle = (ToggleButton) findViewById(R.id.toggle_thu);
-        FriToggle = (ToggleButton) findViewById(R.id.toggle_fri);
-        SatToggle = (ToggleButton) findViewById(R.id.toggle_sat);
+        MonToggle = findViewById(R.id.toggle_mon);
+        TueToggle = findViewById(R.id.toggle_tue);
+        WedToggle = findViewById(R.id.toggle_wed);
+        ThuToggle = findViewById(R.id.toggle_thu);
+        FriToggle = findViewById(R.id.toggle_fri);
+        SatToggle = findViewById(R.id.toggle_sat);
 
-        Monday = (LinearLayout) findViewById(R.id.monday);
-        Tuesday = (LinearLayout) findViewById(R.id.tuesday);
-        Wednesday = (LinearLayout) findViewById(R.id.wednesday);
-        Thursday = (LinearLayout) findViewById(R.id.thursday);
-        Friday = (LinearLayout) findViewById(R.id.friday);
-        Saturday = (LinearLayout) findViewById(R.id.saturday);
+        Monday = findViewById(R.id.monday);
+        Tuesday = findViewById(R.id.tuesday);
+        Wednesday = findViewById(R.id.wednesday);
+        Thursday = findViewById(R.id.thursday);
+        Friday = findViewById(R.id.friday);
+        Saturday = findViewById(R.id.saturday);
 
         MonToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -310,18 +297,18 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
         });
 
 
-        MondayAdd = (Button) findViewById(R.id.monday_add);
-        MondayClassContainer = (LinearLayout) findViewById(monday_class_linear_layout);
-        TuesdayAdd = (Button) findViewById(R.id.tuesday_add);
-        TuesdayClassContainer = (LinearLayout) findViewById(tuesday_class_linear_layout);
-        WednesdayAdd = (Button) findViewById(R.id.wednesday_add);
-        WednesdayClassContainer = (LinearLayout) findViewById(wednesday_class_linear_layout);
-        ThursdayAdd = (Button) findViewById(R.id.thursday_add);
-        ThursdayClassContainer = (LinearLayout) findViewById(thursday_class_linear_layout);
-        FridayAdd = (Button) findViewById(R.id.friday_add);
-        FridayClassContainer = (LinearLayout) findViewById(friday_class_linear_layout);
-        SaturdayAdd = (Button) findViewById(R.id.saturday_add);
-        SaturdayClassContainer = (LinearLayout) findViewById(saturday_class_linear_layout);
+        MondayAdd = findViewById(R.id.monday_add);
+        MondayClassContainer = findViewById(monday_class_linear_layout);
+        TuesdayAdd = findViewById(R.id.tuesday_add);
+        TuesdayClassContainer = findViewById(tuesday_class_linear_layout);
+        WednesdayAdd = findViewById(R.id.wednesday_add);
+        WednesdayClassContainer = findViewById(wednesday_class_linear_layout);
+        ThursdayAdd = findViewById(R.id.thursday_add);
+        ThursdayClassContainer = findViewById(thursday_class_linear_layout);
+        FridayAdd = findViewById(R.id.friday_add);
+        FridayClassContainer = findViewById(friday_class_linear_layout);
+        SaturdayAdd = findViewById(R.id.saturday_add);
+        SaturdayClassContainer = findViewById(saturday_class_linear_layout);
 
 
         final LayoutInflater inflater = getLayoutInflater();
@@ -472,7 +459,7 @@ public class AddCourseActivity extends AppCompatActivity implements ColorChooser
         }
 
 
-        ColorSelector = (LinearLayout) findViewById(R.id.color_chooser);
+        ColorSelector = findViewById(R.id.color_chooser);
 
         ColorSelector.setOnClickListener(new View.OnClickListener() {
             @Override

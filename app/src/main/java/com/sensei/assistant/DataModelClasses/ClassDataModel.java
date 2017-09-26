@@ -19,7 +19,6 @@ public class ClassDataModel {
     }
 
 
-
     public ClassDataModel(int dayOfWeek, String startTime, String endTime, String location, ClassType classType) {
         this.startTime = startTime;
         this.endTime = endTime;

@@ -1,38 +1,36 @@
 package com.sensei.assistant.Authentication;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
-import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.util.Patterns;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.crashlytics.android.answers.SignUpEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
 import com.sensei.assistant.Activities.Dashboard.DashboardActivity;
 import com.sensei.assistant.R;
 
 import timber.log.Timber;
 
+import static com.sensei.assistant.Application.MyApplication.isUserSettingsLoaded;
 import static com.sensei.assistant.Application.MyApplication.mAuth;
+import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 public class SignupActivity extends AppCompatActivity {
 
     EditText Email, Password;
     Button signupBtn;
+    MaterialDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,14 +88,18 @@ public class SignupActivity extends AppCompatActivity {
                 signUp();
             }
         });
+
+        progressDialog = new MaterialDialog.Builder(SignupActivity.this)
+                .progress(true, 0)
+                .canceledOnTouchOutside(false)
+                .cancelable(false)
+                .content("Signing up...")
+                .build();
     }
 
     private void signUp() {
 
-        final MaterialDialog progressDialog = new MaterialDialog.Builder(SignupActivity.this)
-                .content("Please wait..")
-                .progress(true, 0)
-                .show();
+        progressDialog.show();
 
 
         mAuth.createUserWithEmailAndPassword(Email.getText().toString().trim(), Password.getText().toString())
@@ -105,13 +107,8 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            progressDialog.dismiss();
-                            startActivity(new Intent(SignupActivity.this, DashboardActivity.class));
-
-
-                            // Sign in success, update UI with the signed-in user's information
+                            launchDashboardActivity();
                             Timber.d("createUserWithEmail:success");
-                            SignupActivity.this.finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Timber.w("createUserWithEmail:failure", task.getException());
@@ -124,6 +121,30 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    public void launchDashboardActivity() {
+
+        if (isUserSettingsLoaded) {
+            progressDialog.dismiss();
+            SignupActivity.this.finish();
+            startActivity(new Intent(SignupActivity.this, DashboardActivity.class));
+        }
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getCourseDataInstance().registerSignUpActivityInstance(SignupActivity.this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getCourseDataInstance().unregisterSignUpActivityInstance();
+    }
+
 
     private int emailValidation() {
 

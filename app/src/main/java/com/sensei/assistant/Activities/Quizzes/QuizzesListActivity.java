@@ -2,15 +2,12 @@ package com.sensei.assistant.Activities.Quizzes;
 
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,12 +19,8 @@ import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.github.clans.fab.FloatingActionButton;
-import com.sensei.assistant.Activities.Classes.ClassDetailsActivity;
-import com.sensei.assistant.Activities.Courses.CourseDetailActivity;
-import com.sensei.assistant.Activities.Courses.CoursesListActivity;
 import com.sensei.assistant.Adapters.DashboardQuizAdapter;
 import com.sensei.assistant.DataHandlers.CourseDataHandler;
-import com.sensei.assistant.DataModelClasses.ClassDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.DataModelClasses.QuizDataModel;
 import com.sensei.assistant.R;
@@ -38,16 +31,12 @@ import timber.log.Timber;
 
 import static com.sensei.assistant.Application.MyApplication.bus;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
-import static org.joda.time.DateTimeConstants.MONDAY;
 
 public class QuizzesListActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
-    private RecyclerView recyclerView;
     public DashboardQuizAdapter adapter;
-    private FloatingActionButton addQuizFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,15 +45,15 @@ public class QuizzesListActivity extends AppCompatActivity {
         bus.register(this);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Quizzes");
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
-        addQuizFAB = findViewById(R.id.add_quiz);
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        FloatingActionButton addQuizFAB = findViewById(R.id.add_quiz);
         adapter = new DashboardQuizAdapter(R.layout.quiz_layout, getCourseDataInstance().getListOfQuizzes(), false);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -143,6 +132,13 @@ public class QuizzesListActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View view) {
                                 getCourseDataInstance().addQuiz(courseDataModel, quizDataModel);
+                                Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.setNewData(getCourseDataInstance().getListOfQuizzes());
+                                    }
+                                }, 1000);
 
                             }
                         })

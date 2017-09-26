@@ -3,17 +3,16 @@ package com.sensei.assistant.Activities.TimeTable;
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,7 +39,6 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,7 +51,6 @@ import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataI
 
 public class TimetableActivity extends AppCompatActivity implements MonthLoader.MonthChangeListener {
     private static final int RC_STORAGE = 784;
-    private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
     private WeekView weekView;
@@ -65,15 +62,15 @@ public class TimetableActivity extends AppCompatActivity implements MonthLoader.
         setContentView(R.layout.activity_timetable);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Timetable");
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
 
-        weekView = (WeekView) findViewById(R.id.weekView);
+        weekView = findViewById(R.id.weekView);
         weekView.setMonthChangeListener(this);
         weekView.setXScrollingSpeed(0.0f);
         DateTime dateTime = new DateTime().dayOfWeek().withMinimumValue();

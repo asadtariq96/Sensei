@@ -6,8 +6,6 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import io.fabric.sdk.android.services.concurrency.Task;
-
 /**
  * Created by Asad on 19-Jan-17.
  */

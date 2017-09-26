@@ -1,14 +1,13 @@
 package com.sensei.assistant.Activities.Settings;
 
 import android.content.Intent;
-import android.os.Handler;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,16 +37,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sensei.assistant.Application.Constants;
 import com.sensei.assistant.DataHandlers.CourseDataHandler;
 import com.sensei.assistant.DataModelClasses.SemesterDataModel;
-import com.sensei.assistant.DataModelClasses.UserSettings;
 import com.sensei.assistant.R;
 import com.sensei.assistant.Utils.NavigationDrawerSetup;
 import com.squareup.otto.Subscribe;
@@ -64,7 +60,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import timber.log.Timber;
 
@@ -81,12 +76,10 @@ import static com.sensei.assistant.Application.MyApplication.firebaseUser;
 import static com.sensei.assistant.Application.MyApplication.mAuth;
 import static com.sensei.assistant.Application.MyApplication.semestersReference;
 import static com.sensei.assistant.Application.MyApplication.settingsReference;
-import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener, NumberPickerDialogFragment.NumberPickerDialogHandlerV2, GoogleApiClient.OnConnectionFailedListener {
     private static final int RC_SIGN_IN = 34343;
-    private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
 
@@ -127,29 +120,29 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         mCallbackManager = CallbackManager.Factory.create();
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Settings");
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
 
-        selectedSemester = (LinearLayout) findViewById(R.id.selected_semester);
-        breakLength = (LinearLayout) findViewById(R.id.break_length);
-        classLength = (LinearLayout) findViewById(R.id.class_length);
-        dayStartTime = (LinearLayout) findViewById(R.id.day_start_time);
-        dayEndTime = (LinearLayout) findViewById(R.id.day_end_time);
-        newSemester = (LinearLayout) findViewById(R.id.add_new_semester);
-        endCurrentSemester = (LinearLayout) findViewById(R.id.end_current_semester);
-        linkFacebook = (LinearLayout) findViewById(R.id.link_facebook_account);
-        linkGoogle = (LinearLayout) findViewById(R.id.link_google_account);
+        selectedSemester = findViewById(R.id.selected_semester);
+        breakLength = findViewById(R.id.break_length);
+        classLength = findViewById(R.id.class_length);
+        dayStartTime = findViewById(R.id.day_start_time);
+        dayEndTime = findViewById(R.id.day_end_time);
+        newSemester = findViewById(R.id.add_new_semester);
+        endCurrentSemester = findViewById(R.id.end_current_semester);
+        linkFacebook = findViewById(R.id.link_facebook_account);
+        linkGoogle = findViewById(R.id.link_google_account);
 
-        selectedSemesterText = (TextView) findViewById(R.id.selected_semester_text);
-        breakLengthText = (TextView) findViewById(R.id.break_length_text);
-        classLengthText = (TextView) findViewById(R.id.class_length_text);
-        dayStartTimeText = (TextView) findViewById(R.id.day_start_time_text);
-        dayEndTimeText = (TextView) findViewById(R.id.day_end_time_text);
+        selectedSemesterText = findViewById(R.id.selected_semester_text);
+        breakLengthText = findViewById(R.id.break_length_text);
+        classLengthText = findViewById(R.id.class_length_text);
+        dayStartTimeText = findViewById(R.id.day_start_time_text);
+        dayEndTimeText = findViewById(R.id.day_end_time_text);
 
 
         selectedSemester.setOnClickListener(this);
@@ -168,7 +161,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         classLengthText.setText(Constants.DEFAULT_CLASS_LENGTH + " Minutes");
         dayStartTimeText.setText(DEFAULT_START_TIME.toString("h:mm a"));
         dayEndTimeText.setText(DEFAULT_END_TIME.toString("h:mm a"));
-        loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton = findViewById(R.id.login_button);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -422,12 +415,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
         final View view = addNewSemesterDialog.getCustomView();
-        semesterName = (TextInputEditText) view.findViewById(R.id.semester_name);
-        startDate = (LinearLayout) view.findViewById(R.id.start_date_container);
-        endDate = (LinearLayout) view.findViewById(R.id.end_date_container);
-        startDateText = (TextView) view.findViewById(R.id.start_date);
+        semesterName = view.findViewById(R.id.semester_name);
+        startDate = view.findViewById(R.id.start_date_container);
+        endDate = view.findViewById(R.id.end_date_container);
+        startDateText = view.findViewById(R.id.start_date);
         startDateText.setText(semesterStartDate.toString("EEE, dd MMM yyyy"));
-        endDateText = (TextView) view.findViewById(R.id.end_date);
+        endDateText = view.findViewById(R.id.end_date);
 
         semesterName.addTextChangedListener(new TextWatcher() {
             @Override

@@ -2,13 +2,10 @@ package com.sensei.assistant.Adapters;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.zagum.switchicon.SwitchIconView;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
@@ -19,7 +16,6 @@ import org.joda.time.LocalDate;
 
 import java.util.List;
 
-import cn.refactor.library.SmoothCheckBox;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
@@ -31,12 +27,10 @@ import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataI
 
 public class DashboardQuizAdapter extends BaseItemDraggableAdapter<QuizDataModel, BaseViewHolder> {
 
-    private boolean isDashboard = false;
-
 
     public DashboardQuizAdapter(int layoutResId, List<QuizDataModel> data, boolean isDashboard) {
         super(layoutResId, data);
-        this.isDashboard = isDashboard;
+        boolean isDashboard1 = isDashboard;
     }
 
 
@@ -99,7 +93,7 @@ public class DashboardQuizAdapter extends BaseItemDraggableAdapter<QuizDataModel
                     dueWhen.setText("Due Next Week!");
                 else dueWhen.setText("Upcoming!");
                 dueWhen.setVisibility(View.VISIBLE);
-                Timber.d(getViewHolderPosition(baseViewHolder)+":"+dueWhen.getText().toString());
+                Timber.d(getViewHolderPosition(baseViewHolder) + ":" + dueWhen.getText().toString());
 
             } else {
                 dueWhen.setVisibility(GONE);
@@ -184,7 +178,7 @@ public class DashboardQuizAdapter extends BaseItemDraggableAdapter<QuizDataModel
                                                 else dueWhen.setText("Upcoming!");
 
                                                 dueWhen.setVisibility(View.VISIBLE);
-                                                Timber.d(getViewHolderPosition(baseViewHolder)+":"+dueWhen.getText().toString());
+                                                Timber.d(getViewHolderPosition(baseViewHolder) + ":" + dueWhen.getText().toString());
 
 
                                             } else {

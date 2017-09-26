@@ -1,20 +1,14 @@
 package com.sensei.assistant.Startup;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.romainpiel.shimmer.Shimmer;
-import com.romainpiel.shimmer.ShimmerTextView;
 import com.sensei.assistant.Activities.Dashboard.DashboardActivity;
 import com.sensei.assistant.Authentication.SignInActivity;
 import com.sensei.assistant.R;
-
-import org.json.JSONObject;
-
 
 import static com.sensei.assistant.Application.MyApplication.firebaseUser;
 

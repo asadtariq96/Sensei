@@ -5,7 +5,6 @@
     android:layout_height="wrap_content">
 
     <com.lb.auto_fit_textview.AutoResizeTextView
-        android:id="@+id/placeholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="24dp"

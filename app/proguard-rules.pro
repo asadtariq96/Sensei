@@ -16,3 +16,19 @@
 #   public *;
 #}
 -keep class com.google.android.gms.ads.identifier.** { *; }
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
+-dontnote okhttp3.**
+-dontwarn retrofit.**
+-keep class retrofit.** { *; }
+-keepattributes Signature
+-keepattributes Exceptions
+-dontwarn okhttp.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn com.squareup.okhttp.**
+-ignorewarnings

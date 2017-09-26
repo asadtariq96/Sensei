@@ -91,7 +91,8 @@
                     app:si_enabled="false"
                     app:si_no_dash="true"
                     app:si_tint_color="@color/colorAccent"
-                    app:srcCompat="@drawable/ic_assignment_turned_in_black_36dp" />
+                    app:srcCompat="@drawable/ic_assignment_turned_in_black_36dp"
+                    android:focusable="true" />
 
 
             </LinearLayout>

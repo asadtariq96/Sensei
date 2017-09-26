@@ -3,11 +3,11 @@ package com.sensei.assistant.Activities.Courses;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -57,7 +57,7 @@ public class EditCourseDetailsActivity extends AppCompatActivity implements Colo
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(courseDataModel.getDarkerColor());
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Edit Course");
         getSupportActionBar().setSubtitle(courseDataModel.getCourseAbbreviation());
@@ -65,12 +65,12 @@ public class EditCourseDetailsActivity extends AppCompatActivity implements Colo
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CourseName = (TextInputEditText) findViewById(R.id.course_name);
+        CourseName = findViewById(R.id.course_name);
         CourseName.setHorizontallyScrolling(false);
         CourseName.setMaxLines(Integer.MAX_VALUE);
-        CourseAbbreviation = (TextInputEditText) findViewById(R.id.course_abbreviation);
-        CourseInstructor = (TextInputEditText) findViewById(R.id.course_instructor);
-        CreditHours = (TextInputEditText) findViewById(R.id.credit_hours);
+        CourseAbbreviation = findViewById(R.id.course_abbreviation);
+        CourseInstructor = findViewById(R.id.course_instructor);
+        CreditHours = findViewById(R.id.credit_hours);
         ColorBox = findViewById(R.id.color_box);
         ColorBox.setBackgroundColor(courseDataModel.getCourseColorCode());
 
@@ -79,7 +79,7 @@ public class EditCourseDetailsActivity extends AppCompatActivity implements Colo
         CourseInstructor.setText(courseDataModel.getInstructor());
         if (courseDataModel.getCreditHours() != 0)
             CreditHours.setText(String.valueOf(courseDataModel.getCreditHours()));
-        DeleteCourse = (Button) findViewById(R.id.delete_course);
+        DeleteCourse = findViewById(R.id.delete_course);
         DeleteCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,7 +107,7 @@ public class EditCourseDetailsActivity extends AppCompatActivity implements Colo
             }
         });
 
-        ColorSelector = (LinearLayout) findViewById(R.id.color_chooser);
+        ColorSelector = findViewById(R.id.color_chooser);
 
         ColorSelector.setOnClickListener(new View.OnClickListener() {
             @Override

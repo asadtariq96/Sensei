@@ -1,11 +1,11 @@
 package com.sensei.assistant.Activities.Courses;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +14,6 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.github.clans.fab.FloatingActionButton;
-import com.google.android.gms.appinvite.AppInvite;
 import com.sensei.assistant.Adapters.CoursesListAdapterBRVAH;
 import com.sensei.assistant.DataHandlers.CourseDataHandler;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
@@ -28,10 +27,8 @@ import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataI
 
 public class CoursesListActivity extends AppCompatActivity {
 
-    private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
-    private RecyclerView recyclerView;
     //    public CoursesListAdapter coursesListAdapter;
     public CoursesListAdapterBRVAH adapter;
     FloatingActionButton addCourse;
@@ -42,15 +39,15 @@ public class CoursesListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_courses);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Courses");
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
 
-        addCourse = (FloatingActionButton) findViewById(R.id.add_course);
+        addCourse = findViewById(R.id.add_course);
         addCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +55,7 @@ public class CoursesListActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
 //        coursesListAdapter = new CoursesListAdapter(CoursesListActivity.this);
         adapter = new CoursesListAdapterBRVAH(R.layout.course_layout, getCourseDataInstance().CoursesList);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -84,8 +81,6 @@ public class CoursesListActivity extends AppCompatActivity {
 //                startActivity(new Intent(CoursesListActivity.this, CourseDetailActivity.class   ));
             }
         });
-
-
 
 
     }

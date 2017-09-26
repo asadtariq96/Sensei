@@ -1,9 +1,9 @@
 package com.sensei.assistant.Activities.Quizzes;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sensei.assistant.R;
+import com.sensei.assistant.Utils.NDSpinner;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -30,8 +31,6 @@ import org.joda.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import com.sensei.assistant.Utils.NDSpinner;
 
 import static android.view.View.GONE;
 import static com.sensei.assistant.R.id.date;
@@ -46,13 +45,13 @@ public class QuizDetailActivityOld extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_detail);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Linear Circuit Analysis");
         toolbar.setSubtitle("Quiz");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ImageButton add = (ImageButton) findViewById(R.id.button_add);
+        ImageButton add = findViewById(R.id.button_add);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,7 +59,7 @@ public class QuizDetailActivityOld extends AppCompatActivity {
             }
         });
 
-        ImageButton options = (ImageButton) findViewById(R.id.button_options);
+        ImageButton options = findViewById(R.id.button_options);
         options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -228,7 +227,7 @@ public class QuizDetailActivityOld extends AppCompatActivity {
                 LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View v = vi.inflate(android.R.layout.simple_spinner_item, null);
                 v.setPadding(0, v.getPaddingTop(), v.getPaddingRight(), v.getPaddingBottom());
-                final TextView t = (TextView) v.findViewById(android.R.id.text1);
+                final TextView t = v.findViewById(android.R.id.text1);
                 t.setText(myDateList.get(position).getValue());
                 return v;
             }
@@ -236,7 +235,7 @@ public class QuizDetailActivityOld extends AppCompatActivity {
 
         dateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        final NDSpinner dateSpinner = (NDSpinner) view.findViewById(date);
+        final NDSpinner dateSpinner = view.findViewById(date);
         dateSpinner.setAdapter(dateAdapter);
         dateSpinner.setTag(0);
         dateSpinner.setSelection(0);
@@ -299,7 +298,7 @@ public class QuizDetailActivityOld extends AppCompatActivity {
                 LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View v = vi.inflate(android.R.layout.simple_spinner_item, null);
                 v.setPadding(0, v.getPaddingTop(), v.getPaddingRight(), v.getPaddingBottom());
-                final TextView t = (TextView) v.findViewById(android.R.id.text1);
+                final TextView t = v.findViewById(android.R.id.text1);
                 t.setText(myTimeList.get(position).getValue());
                 return v;
             }
@@ -309,8 +308,8 @@ public class QuizDetailActivityOld extends AppCompatActivity {
                 LayoutInflater vi = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 final View v = vi.inflate(R.layout.time_dropdown_row, null);
                 v.setPadding(0, v.getPaddingTop(), v.getPaddingRight(), v.getPaddingBottom());
-                final TextView t = (TextView) v.findViewById(R.id.text1);
-                final TextView t2 = (TextView) v.findViewById(R.id.text2);
+                final TextView t = v.findViewById(R.id.text1);
+                final TextView t2 = v.findViewById(R.id.text2);
                 t.setText(myTimeList.get(position).getText());
                 if (position != 4)
                     t2.setText(myTimeList.get(position).getValue());
@@ -321,7 +320,7 @@ public class QuizDetailActivityOld extends AppCompatActivity {
         timeAdapter.setDropDownViewResource(R.layout.time_dropdown_row);
 
 
-        final NDSpinner timeSpinner = (NDSpinner) view.findViewById(R.id.time);
+        final NDSpinner timeSpinner = view.findViewById(R.id.time);
         timeSpinner.setAdapter(timeAdapter);
         timeSpinner.setTag(0);
         timeSpinner.setSelection(0);

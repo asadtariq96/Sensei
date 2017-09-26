@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.R;
 
@@ -19,8 +18,6 @@ import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataI
 
 public class CoursesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final Context context;
-
     private class CourseViewHolder extends RecyclerView.ViewHolder {
         Context context;
         View colorView;
@@ -31,7 +28,7 @@ public class CoursesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.context = context;
 
             colorView = itemView.findViewById(R.id.color);
-            courseName = (TextView) itemView.findViewById(R.id.course_name);
+            courseName = itemView.findViewById(R.id.course_name);
 
 
         }
@@ -40,7 +37,7 @@ public class CoursesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     public CoursesListAdapter(Context context) {
-        this.context = context;
+        Context context1 = context;
 
     }
 

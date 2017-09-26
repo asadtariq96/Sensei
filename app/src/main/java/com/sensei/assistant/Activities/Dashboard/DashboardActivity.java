@@ -5,12 +5,9 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Typeface;
-import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -21,57 +18,36 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.google.android.gms.maps.model.Dash;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.dynamiclinks.DynamicLink;
-import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
-import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.sensei.assistant.Activities.Assignments.AddAssignmentActivity;
+import com.sensei.assistant.Activities.Courses.AddCourseActivity;
 import com.sensei.assistant.Activities.Homework.AddHomeworkActivity;
 import com.sensei.assistant.Activities.Quizzes.AddQuizActivity;
-import com.sensei.assistant.Activities.Courses.AddCourseActivity;
 import com.sensei.assistant.Activities.TimeTable.TimetableActivity;
+import com.sensei.assistant.DataModelClasses.ClassDataModel;
 import com.sensei.assistant.Notifications.NotificationReceiver;
 import com.sensei.assistant.R;
 import com.sensei.assistant.Utils.NavigationDrawerSetup;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
-import org.json.JSONException;
-import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import br.com.goncalves.pugnotification.notification.Load;
-import co.mobiwise.materialintro.animation.MaterialIntroListener;
-import co.mobiwise.materialintro.prefs.PreferencesManager;
-import co.mobiwise.materialintro.shape.Focus;
-import co.mobiwise.materialintro.shape.FocusGravity;
-import co.mobiwise.materialintro.shape.ShapeType;
-import co.mobiwise.materialintro.view.MaterialIntroView;
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import io.github.kobakei.materialfabspeeddial.FabSpeedDial;
-import io.github.kobakei.materialfabspeeddial.FabSpeedDialMenu;
 import timber.log.Timber;
 
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
-import static com.sensei.assistant.R.id.fabs_container;
-import static com.sensei.assistant.R.id.weekView;
 
 public class DashboardActivity extends AppCompatActivity implements View.OnClickListener {
     //    FloatingActionMenu floatingActionMenu;
@@ -296,11 +272,21 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         manager.setRepeating(AlarmManager.RTC_WAKEUP, dateTime.toCalendar(Locale.getDefault()).getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
-    void setClassNotifications(){
+    void setClassNotifications() {
+        for (ClassDataModel classDataModel : getCourseDataInstance().getListOfClassesForWeek()) {
+
+            int day = classDataModel.getDayOfWeek();
+            LocalTime localTime = classDataModel.getStartTimeOriginal().minusMinutes(15);
+            String course = getCourseDataInstance().getCourseOfClass(classDataModel).getCourseAbbreviation();
+            Load mLoad = PugNotification.with(DashboardActivity.this).load()
+                    .smallIcon(R.drawable.pugnotification_ic_launcher)
+                    .largeIcon(R.drawable.pugnotification_ic_launcher)
+                    .title(course + " class in 15 mins")
+
+                    .flags(Notification.DEFAULT_ALL);
+        }
 
     }
-
-
 
 
     void setNotificationForClass(Load load, long delay, String classID) {
@@ -327,7 +313,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
     public void onStart() {
         super.onStart();
         navigationDrawerSetup.ConfigureDrawer();
-        setNotification();
+//        setNotification();
 
 
     }

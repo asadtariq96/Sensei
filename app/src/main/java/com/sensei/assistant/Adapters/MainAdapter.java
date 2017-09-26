@@ -1,36 +1,29 @@
 package com.sensei.assistant.Adapters;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.afollestad.sectionedrecyclerview.ItemCoord;
 import com.afollestad.sectionedrecyclerview.SectionedRecyclerViewAdapter;
 import com.afollestad.sectionedrecyclerview.SectionedViewHolder;
 import com.github.zagum.switchicon.SwitchIconView;
+import com.sensei.assistant.Activities.Assignments.AssignmentDetailActivity;
 import com.sensei.assistant.Activities.Homework.HomeworkDetailActivity;
 import com.sensei.assistant.Activities.Quizzes.QuizDetailActivity;
 import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.DataModelClasses.HomeworkDataModel;
 import com.sensei.assistant.DataModelClasses.QuizDataModel;
-import com.sensei.assistant.DataModelClasses.TaskItem;
 import com.sensei.assistant.R;
 
 import org.joda.time.LocalDate;
 
 import java.util.List;
-import java.util.Map;
 
-import bolts.Task;
 import timber.log.Timber;
 
 import static android.view.View.GONE;
@@ -249,7 +242,7 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
                 ((View) holder.colorView.getParent()).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        final Intent intent = new Intent(context, QuizDetailActivity.class);
+                        final Intent intent = new Intent(context, AssignmentDetailActivity.class);
                         String courseID = getCourseDataInstance().getCourseID(getCourseDataInstance().getCourse(assignmentDataModel));
                         String assignmentID = getCourseDataInstance().getAssignmentID(assignmentDataModel);
                         intent.putExtra("courseID", courseID);
@@ -382,7 +375,7 @@ public class MainAdapter extends SectionedRecyclerViewAdapter<MainAdapter.MainVH
                 ((View) holder.colorView.getParent()).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        final Intent intent = new Intent(context, QuizDetailActivity.class);
+                        final Intent intent = new Intent(context, HomeworkDetailActivity.class);
                         String courseID = getCourseDataInstance().getCourseID(getCourseDataInstance().getCourse(homeworkDataModel));
                         String homeworkID = getCourseDataInstance().getHomeworkID(homeworkDataModel);
                         intent.putExtra("courseID", courseID);

@@ -44,7 +44,7 @@ public class MondayFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         Timber.d("onViewCreated");
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
+        recyclerView = view.findViewById(R.id.recyclerview);
         dayOfWeekClassesAdapter = new DayOfWeekClassesAdapter(getContext(), getCourseDataInstance().getListOfClassesForDayOfWeek(MONDAY));
 
 

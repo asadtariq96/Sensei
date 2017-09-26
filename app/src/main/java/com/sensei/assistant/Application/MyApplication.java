@@ -2,6 +2,7 @@ package com.sensei.assistant.Application;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -10,14 +11,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
-
-import io.fabric.sdk.android.Fabric;
-import timber.log.Timber;
+import com.sensei.assistant.BuildConfig;
+import com.squareup.otto.Bus;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
-import com.sensei.assistant.BuildConfig;
-import com.squareup.otto.Bus;
+import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
@@ -48,6 +48,12 @@ public class MyApplication extends android.app.Application {
 
     public static Context getContext() {
         return mContext;
+    }
+
+    @Override
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(context);
+        MultiDex.install(this);
     }
 
     @Override

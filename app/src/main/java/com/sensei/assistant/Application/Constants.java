@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import timber.log.Timber;
-
 /**
  * Created by Asad on 17-Dec-16.
  */
@@ -42,7 +40,7 @@ public class Constants {
 
     };
 
-    final public static int getRandomColor() {
+    public static int getRandomColor() {
 
         int rnd = new Random().nextInt(COLORS_LIST.length);
         return COLORS_LIST[rnd];

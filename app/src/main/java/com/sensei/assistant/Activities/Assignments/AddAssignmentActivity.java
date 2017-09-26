@@ -2,10 +2,10 @@ package com.sensei.assistant.Activities.Assignments;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,22 +19,20 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.sensei.assistant.DataModelClasses.AssignmentDataModel;
+import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.R;
+import com.sensei.assistant.Utils.DateTimeDialogBuilder;
 import com.thebluealliance.spectrum.internal.ColorCircleDrawable;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
-import com.sensei.assistant.DataModelClasses.CourseDataModel;
-import com.sensei.assistant.Utils.DateTimeDialogBuilder;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
-
 import java.util.Calendar;
 
-import static com.sensei.assistant.Application.MyApplication.coursesReference;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 
@@ -59,7 +57,7 @@ public class AddAssignmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_assignment);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Add Assignment");
         setSupportActionBar(toolbar);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
@@ -69,12 +67,12 @@ public class AddAssignmentActivity extends AppCompatActivity {
         assignmentDataModel.setCompleted(false);
 
 
-        CourseName = (TextInputEditText) findViewById(R.id.course);
-        Reminder = (TextInputEditText) findViewById(R.id.reminder);
-        DueDate = (TextInputEditText) findViewById(R.id.due_date);
-        DueTime = (TextInputEditText) findViewById(R.id.due_time);
-        Title = (TextInputEditText) findViewById(R.id.title);
-        Description = (TextInputEditText) findViewById(R.id.description);
+        CourseName = findViewById(R.id.course);
+        Reminder = findViewById(R.id.reminder);
+        DueDate = findViewById(R.id.due_date);
+        DueTime = findViewById(R.id.due_time);
+        Title = findViewById(R.id.title);
+        Description = findViewById(R.id.description);
 
         Title.setHorizontallyScrolling(false);
         Title.setMaxLines(Integer.MAX_VALUE);
@@ -218,13 +216,10 @@ public class AddAssignmentActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (!CourseName.getText().toString().equals("") &&
-                        !Title.getText().toString().trim().equals(""))
-                {
+                        !Title.getText().toString().trim().equals("")) {
                     if (SaveMenu != null)
                         SaveMenu.setEnabled(true);
-                }
-                else
-                {
+                } else {
                     if (SaveMenu != null)
                         SaveMenu.setEnabled(false);
                 }
@@ -250,7 +245,7 @@ public class AddAssignmentActivity extends AppCompatActivity {
 //                .child("assignments")
 //                .child(AssignmentID)
 //                .setValue(assignmentDataModel);
-        getCourseDataInstance().addAssignment(courseDataModel,assignmentDataModel);
+        getCourseDataInstance().addAssignment(courseDataModel, assignmentDataModel);
 
 
         AddAssignmentActivity.this.finish();

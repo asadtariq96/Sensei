@@ -86,9 +86,9 @@ class SemesterAdapter extends RecyclerView.Adapter<SemesterAdapter.ViewHolder> {
 
         ViewHolder(View itemView) {
             super(itemView);
-            semesterName = (TextView) itemView.findViewById(R.id.semester_name);
-            startDate = (TextView) itemView.findViewById(R.id.semester_start_date);
-            checkBox = (CheckBox) itemView.findViewById(R.id.checkbox);
+            semesterName = itemView.findViewById(R.id.semester_name);
+            startDate = itemView.findViewById(R.id.semester_start_date);
+            checkBox = itemView.findViewById(R.id.checkbox);
             itemView.setOnClickListener(this);
 
         }

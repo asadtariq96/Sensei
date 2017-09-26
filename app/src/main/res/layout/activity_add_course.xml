@@ -55,7 +55,6 @@
 
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/course_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="8dp"
@@ -204,7 +203,8 @@
                     android:layout_height="60dp"
                     android:clickable="true"
                     android:foreground="?android:selectableItemBackground"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:focusable="true">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -735,7 +735,6 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/sunday"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -762,7 +761,6 @@
                                 android:background="@color/colorPrimaryText" />
 
                             <LinearLayout
-                                android:id="@+id/sunday_class_linear_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:animateLayoutChanges="true"
@@ -773,7 +771,6 @@
 
                             <Button
 
-                                android:id="@+id/sunday_add"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@color/transparent"

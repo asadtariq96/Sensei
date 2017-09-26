@@ -1,9 +1,9 @@
 package com.sensei.assistant.Activities.GPA;
 
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -11,15 +11,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.sensei.assistant.DataModelClasses.ClassDataModel;
 import com.sensei.assistant.DataModelClasses.CourseDataModel;
 import com.sensei.assistant.R;
 import com.sensei.assistant.Utils.NavigationDrawerSetup;
@@ -36,12 +33,9 @@ import static com.sensei.assistant.Application.Constants.gradesMapSchemeB;
 import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 
 public class GPACalculatorActivity extends AppCompatActivity {
-    private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private NavigationDrawerSetup navigationDrawerSetup;
-    private RecyclerView recyclerView;
     private GPAadapter gpaAdapter;
-    private Button calculateGPA;
     private TextView gpaText;
     List<GPA> GPAList = new ArrayList<>();
     private ArrayAdapter<String> adapter;
@@ -56,7 +50,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gpacalculator);
         gradeScheme = 0;
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("GPA Calculator");
 
@@ -82,7 +76,7 @@ public class GPACalculatorActivity extends AppCompatActivity {
                         gradeScheme = which;
                         fillList();
                         gpaAdapter.setNewData(GPAList);
-                        Timber.d("Grade Scheme %d",gradeScheme);
+                        Timber.d("Grade Scheme %d", gradeScheme);
                         adapter = new ArrayAdapter<>(GPACalculatorActivity.this, android.R.layout.simple_spinner_item, (gradeScheme == 0 ? GradesListSchemeA : GradesListSchemeB));
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         return true;
@@ -92,14 +86,14 @@ public class GPACalculatorActivity extends AppCompatActivity {
                 .show();
 
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationDrawerSetup = new NavigationDrawerSetup(drawerLayout, toolbar, navigationView, this);
 
-        calculateGPA = (Button) findViewById(R.id.calculate_gpa);
-        gpaText = (TextView) findViewById(R.id.gpa);
+        Button calculateGPA = findViewById(R.id.calculate_gpa);
+        gpaText = findViewById(R.id.gpa);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        RecyclerView recyclerView = findViewById(R.id.recyclerview);
 
         gpaAdapter = new GPAadapter(R.layout.gpa_course_layout, GPAList);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -124,8 +118,6 @@ public class GPACalculatorActivity extends AppCompatActivity {
 
             }
         });
-
-
 
 
 //        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
