@@ -68,7 +68,11 @@
         <activity android:name=".Activities.Homework.HomeworkDetailActivity" />
         <activity android:name=".Activities.Homework.EditHomeworkActivity" />
 
-        <receiver android:name=".Notifications.NotificationReceiver" />
+        <receiver android:name=".Notifications.NotificationReceiver$ClassNotificationReceiver">
+            <intent-filter>
+                <action android:name="classNotification" />
+            </intent-filter>
+        </receiver>
 
         <!-- Branch install referrer tracking -->
 

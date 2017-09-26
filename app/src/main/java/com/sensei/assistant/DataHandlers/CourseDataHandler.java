@@ -46,6 +46,11 @@ import static com.sensei.assistant.Application.MyApplication.isUserSettingsLoade
 import static com.sensei.assistant.Application.MyApplication.quizzesReference;
 import static com.sensei.assistant.Application.MyApplication.semestersReference;
 import static com.sensei.assistant.Application.MyApplication.settingsReference;
+import static org.joda.time.DateTimeConstants.FRIDAY;
+import static org.joda.time.DateTimeConstants.MONDAY;
+import static org.joda.time.DateTimeConstants.THURSDAY;
+import static org.joda.time.DateTimeConstants.TUESDAY;
+import static org.joda.time.DateTimeConstants.WEDNESDAY;
 
 /**
  * Created by Asad on 08-Jan-17.
@@ -566,6 +571,16 @@ public class CourseDataHandler {
         }
         Collections.sort(tempList, new classTimeComparator());
 
+        return tempList;
+    }
+
+    public List<ClassDataModel> getListOfClassesForWeek() {
+        List<ClassDataModel> tempList = new ArrayList<>();
+        tempList.addAll(getListOfClassesForDayOfWeek(MONDAY));
+        tempList.addAll(getListOfClassesForDayOfWeek(TUESDAY));
+        tempList.addAll(getListOfClassesForDayOfWeek(WEDNESDAY));
+        tempList.addAll(getListOfClassesForDayOfWeek(THURSDAY));
+        tempList.addAll(getListOfClassesForDayOfWeek(FRIDAY));
         return tempList;
     }
 

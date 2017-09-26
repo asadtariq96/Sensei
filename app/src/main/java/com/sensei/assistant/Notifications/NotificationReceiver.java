@@ -19,7 +19,17 @@ import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataI
  * Created by Asad on 9/20/2017.
  */
 
-public class NotificationReceiver extends BroadcastReceiver {
+public class NotificationReceiver
+{
+
+    public static class ClassNotificationReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -36,6 +46,9 @@ public class NotificationReceiver extends BroadcastReceiver {
                     .click(DashboardActivity.class)
                     .simple()
                     .build();
+
+
+
         }
 //        Toast.makeText(context, "I'm running, quizzes:" + size, Toast.LENGTH_SHORT).show();
 

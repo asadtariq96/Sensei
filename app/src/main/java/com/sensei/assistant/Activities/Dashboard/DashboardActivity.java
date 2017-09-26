@@ -1,6 +1,7 @@
 package com.sensei.assistant.Activities.Dashboard;
 
 import android.app.AlarmManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -56,6 +58,7 @@ import org.joda.time.LocalTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import br.com.goncalves.pugnotification.notification.Load;
 import co.mobiwise.materialintro.animation.MaterialIntroListener;
 import co.mobiwise.materialintro.prefs.PreferencesManager;
 import co.mobiwise.materialintro.shape.Focus;
@@ -66,6 +69,7 @@ import io.github.kobakei.materialfabspeeddial.FabSpeedDial;
 import io.github.kobakei.materialfabspeeddial.FabSpeedDialMenu;
 import timber.log.Timber;
 
+import static com.sensei.assistant.DataHandlers.CourseDataHandler.getCourseDataInstance;
 import static com.sensei.assistant.R.id.fabs_container;
 import static com.sensei.assistant.R.id.weekView;
 
@@ -213,7 +217,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
             TapTargetView.showFor(this,                 // `this` is an Activity
                     TapTarget.forView(fabSpeedDialMenu.getMainFab(), "Welcome to Sensei!", "Let's start by adding a new course!")
                             .drawShadow(true)                   // Whether to draw a drop shadow or not
-                            .cancelable(true)
+                            .cancelable(false)
                             // Whether tapping outside the outer circle dismisses the view
                             .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
                     new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
@@ -225,7 +229,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
                                     TapTarget.forView(fabSpeedDialMenu.getMiniFab(0), "Press this button to add a new course!")
                                             .drawShadow(true)                   // Whether to draw a drop shadow or not
                                             .outerCircleColor(R.color.md_deep_purple_700)
-                                            .cancelable(true)                  // Whether tapping outside the outer circle dismisses the view
+                                            .cancelable(false)                  // Whether tapping outside the outer circle dismisses the view
                                             .transparentTarget(true),           // Specify whether the target is transparent (displays the content underneath)
                                     new TapTargetView.Listener() {          // The listener can listen for regular clicks, long clicks or cancels
                                         @Override
@@ -242,111 +246,22 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
         getSharedPreferences(PREFS_NAME, 0).edit().putBoolean("firstrun", true).apply();
 
 
-//        new TapTargetSequence(this)
-//                .targets(target0, target1)
-//                .listener(new TapTargetSequence.Listener() {
-//                    // This listener will tell us when interesting(tm) events happen in regards
-//                    // to the sequence
-//                    @Override
-//                    public void onSequenceFinish() {
-//                        // Yay
-//                    }
-//
-//                    @Override
-//                    public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-//                        Timber.d("onSequenceStep");
-//                        if (lastTarget == target0) {
-//
-////                            fabSpeedDialMenu.openMenu();
-//                        }
-//                        if (lastTarget == target1) {
-//                            fabSpeedDialMenu.closeMenu();
-//                            Handler handler = new Handler();
-//                            handler.postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    startActivity(new Intent(DashboardActivity.this, AddCourseActivity.class).putExtra("string", "intro"));
-//                                }
-//                            }, 500);
-//                            fabSpeedDialMenu.closeMenu();
-//                        }
-//
-//                    }
-//
-//
-//                    @Override
-//                    public void onSequenceCanceled(TapTarget lastTarget) {
-//                        // Boo
-//                    }
-//                }).start();
-
-
-//        new MaterialIntroView.Builder(this)
-//                .enableDotAnimation(false)
-//                .enableIcon(false)
-//                .setFocusGravity(FocusGravity.CENTER)
-//                .setFocusType(Focus.MINIMUM)
-//                .setDelayMillis(500)
-//                .enableFadeAnimation(true)
-//                .performClick(true)
-//                .setInfoText("Welcome to Sensei!\nLet's start by adding a course!")
-////                .setShapeType(ShapeType.CIRCLE)
-//                .setTarget(fabSpeedDialMenu.getMainFab())
-//                .setUsageId("fab") //THIS SHOULD BE UNIQUE ID
-//                .setListener(new MaterialIntroListener() {
-//                    @Override
-//                    public void onUserClicked(String materialIntroViewId) {
-//                        new MaterialIntroView.Builder(DashboardActivity.this)
-//                                .enableDotAnimation(false)
-//                                .enableIcon(false)
-//                                .setFocusGravity(FocusGravity.CENTER)
-//                                .setFocusType(Focus.MINIMUM)
-//                                .setDelayMillis(0)
-//                                .enableFadeAnimation(true)
-//                                .performClick(true)
-//                                .setInfoText("Press this button to add a new course!")
-////                .setShapeType(ShapeType.CIRCLE)
-//                                .setTarget(fabSpeedDialMenu.getMiniFab(0))
-//                                .setUsageId("fab_course") //THIS SHOULD BE UNIQUE ID
-////                                .setListener(new MaterialIntroListener() {
-////                                    @Override
-////                                    public void onUserClicked(String materialIntroViewId) {
-////                                        startActivity(new Intent(DashboardActivity.this, AddCourseActivity.class));
-////
-////                                    }
-////                                })
-//                                .show();
-//                    }
-//                })
-//                .show();
-
-//        ShowcaseConfig config = new ShowcaseConfig();
-//        config.setDelay(500); // half second between each showcase view
-
-//        MaterialShowcaseView.resetSingleUse(this, SHOWCASE_ID);
-//        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
-//
-//        sequence.setConfig(config);
-//
-//        sequence.addSequenceItem(fabSpeedDialMenu.getMainFab(),
-//                "Welcome to Sensei!\nLet's start by adding a new course!", "GOT IT");
-//
-//        sequence.addSequenceItem(fabSpeedDialMenu.getMiniFab(0),
-//                "Click this button to add a new course!", "GOT IT");
-//
-//        sequence.start();
-
-
-//        new MaterialShowcaseView.Builder(this)
-//                .setTarget(fabSpeedDialMenu.getMainFab())
-////                .setDismissText("GOT IT")
-//                .setContentText()
-////                .setDelay(withDelay) // optional but starting animations immediately in onCreate can make them choppy
-////                .singleUse(SHOWCASE_ID) // provide a unique ID used to ensure it is only shown once
-//                .show();
-
-
     }
+
+//    private void scheduleFirstNotification(Notification notification, long delay) {
+//        Intent notificationIntent = new Intent(this, PushNotifReceiver.FirstPushNotif.class);
+//        //we need a unique identifier for each notification
+//        int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
+//        //we need to set an action for each notification, and then define a class in the Manifest that uses this action
+//        //as a filter
+//        notificationIntent.setAction("first_notif_action");
+//        notificationIntent.putExtra(PushNotifReceiver.NOTIFICATION_ID, uniqueInt);
+//        notificationIntent.putExtra(PushNotifReceiver.NOTIFICATION, notification);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+//    }
 
     private void createShortcutOfApp() {
 
@@ -370,7 +285,7 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
     void setNotification() {
         Intent notificationIntent = new Intent(DashboardActivity.this, NotificationReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(DashboardActivity.this, 0, notificationIntent, 0);
+        pendingIntent = PendingIntent.getBroadcast(DashboardActivity.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         DateTime dateTime = new DateTime().withHourOfDay(18).withMinuteOfHour(0);
         DateTime now = DateTime.now();
@@ -379,6 +294,25 @@ public class DashboardActivity extends AppCompatActivity implements View.OnClick
 
         Timber.d(dateTime.toString());
         manager.setRepeating(AlarmManager.RTC_WAKEUP, dateTime.toCalendar(Locale.getDefault()).getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    void setClassNotifications(){
+
+    }
+
+
+
+
+    void setNotificationForClass(Load load, long delay, String classID) {
+        Intent notificationIntent = new Intent(DashboardActivity.this, NotificationReceiver.ClassNotificationReceiver.class);
+        notificationIntent.putExtra("classID", classID);
+        pendingIntent = PendingIntent.getBroadcast(DashboardActivity.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
