@@ -32,14 +32,25 @@ dependencies {
 }
 
 android {
+    signingConfigs {
+        key {
+            keyAlias 'key_asad'
+            keyPassword 'android'
+            storeFile file('D:/KeyStore/key.jks')
+            storePassword 'android'
+        }
+    }
+    lintOptions{
+        checkReleaseBuilds false
+    }
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId 'com.sensei.assistant'
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 1
-        versionName "0.0.1"
+        versionCode 3
+        versionName "0.0.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -47,7 +58,7 @@ android {
     buildTypes {
         release {
 
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
         }
@@ -116,11 +127,8 @@ android {
 
 
     }
-
     productFlavors {
     }
-
     apply plugin: 'com.google.gms.google-services'
-
 }
 

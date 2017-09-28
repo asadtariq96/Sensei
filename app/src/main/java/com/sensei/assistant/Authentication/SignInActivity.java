@@ -337,8 +337,8 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Timber.d("signInWithCredential" + task.getException().toString());
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignInActivity.this, "Authentication failed." + task.getException().getMessage(),
+                                    Toast.LENGTH_LONG).show();
                             progressDialog.dismiss();
                         }
 

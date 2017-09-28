@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Handler;
 
 import timber.log.Timber;
 
@@ -164,7 +165,12 @@ public class CourseDataHandler {
                             Constants.SELECTED_SEMESTER_NAME = dataSnapshot.child(userSettings.getSelectedSemester()).getValue(SemesterDataModel.class).getSemesterName();
                             bus.post(new DataChangedEvent(true));
 //                            selectedSemesterText.setText(Constants.SELECTED_SEMESTER_NAME);
-
+                            isUserSettingsLoaded = true;
+                            if (signInActivityInstance != null)
+                                signInActivityInstance.launchDashboardActivity();
+                            if (signUpActivityInstance != null)
+                                signUpActivityInstance.launchDashboardActivity();
+                            getSemesters();
                         }
 
                         @Override
@@ -172,13 +178,7 @@ public class CourseDataHandler {
 
                         }
                     });
-                    isUserSettingsLoaded = true;
-                    if (signInActivityInstance != null)
-                        signInActivityInstance.launchDashboardActivity();
-                    if (signUpActivityInstance != null)
-                        signUpActivityInstance.launchDashboardActivity();
-                    getSemesters();
-                    getCourses();
+
 
                     //NEW USER
                 } else addNewUserToDatabase();
@@ -209,6 +209,8 @@ public class CourseDataHandler {
                         selectedSemester = semesterDataModel;
                     }
                 }
+                getCourses();
+
             }
 
             @Override
@@ -553,19 +555,20 @@ public class CourseDataHandler {
     public List<ClassDataModel> getListOfClassesForCurrentDay() {
         DateTime dateTime = new DateTime();
         List<ClassDataModel> tempList = new ArrayList<>();
-        if (selectedSemester.getEndDate().isEmpty()) {
-            for (ClassDataModel classDataModel : getAllClasses()) {
-                if (classDataModel.getDayOfWeek() == dateTime.getDayOfWeek() && !new LocalTime().isAfter(classDataModel.getEndTimeOriginal()))
-                    tempList.add(classDataModel);
+//        if (selectedSemester != null)
+            if (selectedSemester.getEndDate().isEmpty()) {
+                for (ClassDataModel classDataModel : getAllClasses()) {
+                    if (classDataModel.getDayOfWeek() == dateTime.getDayOfWeek() && !new LocalTime().isAfter(classDataModel.getEndTimeOriginal()))
+                        tempList.add(classDataModel);
+                }
+                Collections.sort(tempList, new classTimeComparator());
+            } else if (!dateTime.toLocalDate().isAfter(new LocalDate(selectedSemester.getEndDate()))) {
+                for (ClassDataModel classDataModel : getAllClasses()) {
+                    if (classDataModel.getDayOfWeek() == dateTime.getDayOfWeek() && !new LocalTime().isAfter(classDataModel.getEndTimeOriginal()))
+                        tempList.add(classDataModel);
+                }
+                Collections.sort(tempList, new classTimeComparator());
             }
-            Collections.sort(tempList, new classTimeComparator());
-        } else if (!dateTime.toLocalDate().isAfter(new LocalDate(selectedSemester.getEndDate()))) {
-            for (ClassDataModel classDataModel : getAllClasses()) {
-                if (classDataModel.getDayOfWeek() == dateTime.getDayOfWeek() && !new LocalTime().isAfter(classDataModel.getEndTimeOriginal()))
-                    tempList.add(classDataModel);
-            }
-            Collections.sort(tempList, new classTimeComparator());
-        }
 
 
         return tempList;
@@ -622,15 +625,16 @@ public class CourseDataHandler {
     public List<QuizDataModel> getListOfIncompleteQuizzes() {
         DateTime dateTime = new DateTime();
         List<QuizDataModel> tempList = new ArrayList<>();
+        if (selectedSemester != null)
 
-        if (selectedSemester.getEndDate().isEmpty()) {
-            for (CourseDataModel courseDataModel : CoursesList)
-                tempList.addAll(courseDataModel.getIncompleteQuizzes());
-        } else if (!dateTime.toLocalDate().isAfter(new LocalDate(selectedSemester.getEndDate()))) {
-            for (CourseDataModel courseDataModel : CoursesList)
-                tempList.addAll(courseDataModel.getIncompleteQuizzes());
+            if (selectedSemester.getEndDate().isEmpty()) {
+                for (CourseDataModel courseDataModel : CoursesList)
+                    tempList.addAll(courseDataModel.getIncompleteQuizzes());
+            } else if (!dateTime.toLocalDate().isAfter(new LocalDate(selectedSemester.getEndDate()))) {
+                for (CourseDataModel courseDataModel : CoursesList)
+                    tempList.addAll(courseDataModel.getIncompleteQuizzes());
 
-        }
+            }
 //        Collections.sort(tempList, new quizDueComparator());
         return tempList;
     }
@@ -1049,7 +1053,7 @@ public class CourseDataHandler {
 
 
         getSemesters();
-        getCourses();
+//        getCourses();
 
 
     }

@@ -150,6 +150,7 @@
 
 
         <Space
+            android:visibility="gone"
             android:layout_width="8dp"
             android:layout_height="wrap_content" />
 
@@ -174,6 +175,7 @@
             android:visibility="gone" />
 
         <Button
+
             android:id="@+id/login_google"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -184,7 +186,7 @@
             android:text="Google"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </LinearLayout>
 
     <!--<com.facebook.login.widget.LoginButton-->
