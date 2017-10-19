@@ -59,6 +59,8 @@ public class HomeworkDataModel implements TaskItem {
     }
 
     public String getHomeworkDescription() {
+        if (homeworkDescription.isEmpty())
+            return null;
         return homeworkDescription;
     }
 

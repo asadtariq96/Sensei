@@ -59,6 +59,8 @@ public class AssignmentDataModel implements TaskItem {
     }
 
     public String getAssignmentDescription() {
+        if (assignmentDescription.isEmpty())
+            return null;
         return assignmentDescription;
     }
 
